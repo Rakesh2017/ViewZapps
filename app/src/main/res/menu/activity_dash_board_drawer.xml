@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/profile_icon"
+            android:title="@string/profile" />
+        <item
+            android:id="@+id/nav_history"
+            android:icon="@drawable/history_icon"
+            android:title="@string/history" />
+        <item
+            android:id="@+id/nav_refer"
+            android:icon="@drawable/refer_icon"
+            android:title="@string/refer" />
+        <item
+            android:id="@+id/nav_friends"
+            android:icon="@drawable/friends_icon"
+            android:title="@string/friends" />
+        <item
+            android:id="@+id/nav_postYoursAds"
+            android:icon="@drawable/post_ad_icon"
+            android:title="@string/postYoursAds" />
+        <item
+            android:id="@+id/nav_aboutUs"
+            android:icon="@drawable/about_us_icon"
+            android:title="@string/aboutUs" />
+        <item
+            android:id="@+id/nav_rateUs"
+            android:icon="@drawable/rate_us_icon"
+            android:title="@string/rateUs" />
+    </group>
+
+    <!--<item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+        </menu>
+    </item>-->
+
+</menu>

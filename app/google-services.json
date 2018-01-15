@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1094700917534",
+    "firebase_url": "https://viewzapps.firebaseio.com",
+    "project_id": "viewzapps",
+    "storage_bucket": "viewzapps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1094700917534:android:b846e40e9850b6ea",
+        "android_client_info": {
+          "package_name": "enhabyto.com.viewzapps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1094700917534-61sc62n1vbfuq34rus5oqdevt1d2jsah.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "enhabyto.com.viewzapps",
+            "certificate_hash": "66b43d9fc53902e7791f60d63c3ddbb95ce17547"
+          }
+        },
+        {
+          "client_id": "1094700917534-th4ivttpi3lg2pnmpg54pqpigqpuo59f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSMEYkLYcXF9xaNgyA8i8pUGayNXaEk34"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1094700917534-th4ivttpi3lg2pnmpg54pqpigqpuo59f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

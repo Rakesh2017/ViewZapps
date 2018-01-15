@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="enhabyto.com.viewzapps.DashBoard">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/appColor"
+        android:theme="@style/MyCustomAppTheme.AppBarOverlay">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="40dp"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/appColor"
+                app:popupTheme="@style/MyCustomAppTheme.PopupOverlay" />
+
+            <ImageButton
+                android:layout_width="@dimen/appBarIcon"
+                android:layout_height="@dimen/appBarIcon"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/log_out"
+                tools:ignore="ContentDescription"
+                android:layout_marginEnd="12dp"
+                android:id="@+id/dash_logOut"
+                android:elevation="10dp"
+                />
+
+
+            <ImageButton
+                android:layout_width="@dimen/appBarIcon"
+                android:layout_height="@dimen/appBarIcon"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/dash_logOut"
+                android:background="@drawable/switch_user"
+                tools:ignore="ContentDescription"
+                android:layout_marginEnd="12dp"
+                android:elevation="10dp"
+                />
+
+
+        </RelativeLayout>
+
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_dash_board" />
+
+
+</android.support.design.widget.CoordinatorLayout>
