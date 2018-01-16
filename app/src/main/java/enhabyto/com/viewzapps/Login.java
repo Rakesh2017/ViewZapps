@@ -1,10 +1,12 @@
 package enhabyto.com.viewzapps;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -187,12 +189,16 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            Intent intent = new Intent(Login.this, DashBoard.class);
-                            startActivity(intent);
+                          //  Log.d(TAG, "signInWithCredential:success");
+                            // opening Dashboard Activity
+                            startActivity(new Intent(Login.this, DashBoard.class));
                             if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
                                 Auth.GoogleSignInApi.signOut(mGoogleApiClient);
                             }
+                            SharedPreferences sharedpreferences = getSharedPreferences("LogDetail", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putString("firstScreen", "DashBoard");
+                            editor.apply();
                             Login.this.finish();
 
 
@@ -273,7 +279,17 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         mGoogleApiClient.disconnect();
     }
 
+//    onStart
+    public void onStart(){
+        super.onStart();
+        SharedPreferences sharedpreferences = getSharedPreferences("LogDetail", MODE_PRIVATE);
+        String decider = sharedpreferences.getString("firstScreen", "");
+        if (TextUtils.equals(decider, "DashBoard")){
+            startActivity(new Intent(Login.this, DashBoard.class));
+            Login.this.finish();
+        }
 
+    }
 
 //end
 }

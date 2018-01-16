@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:id="@+id/fragment_container_dashboard"
     tools:context="enhabyto.com.viewzapps.DashBoard"
     tools:showIn="@layout/app_bar_dash_board">
 

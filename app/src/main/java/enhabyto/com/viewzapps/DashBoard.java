@@ -33,7 +33,6 @@ public class DashBoard extends AppCompatActivity
         setContentView(R.layout.activity_dash_board);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Toast.makeText(this, ""+mAuth.getUid(), Toast.LENGTH_SHORT).show();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -89,7 +88,7 @@ public class DashBoard extends AppCompatActivity
 
         switch (id){
             case R.id.nav_profile:
-
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_dashboard, new Profile()).addToBackStack("profileFragment").commit();
                 break;
         }
 

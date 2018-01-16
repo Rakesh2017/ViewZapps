@@ -8,9 +8,28 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="MyCustomTextStyleLarge" parent="@android:style/Theme.Light">
+    <style name="MyCustomTextStyleMedium" parent="@android:style/Theme.Light">
         <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/mediumSize</item>
+        <item name="android:fontFamily">ubuntu.ttf</item>
+    </style>
+
+
+    <style name="MyCustomTextStyleSmall" parent="@android:style/Theme.Light">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/smallSize</item>
+        <item name="android:fontFamily">ubuntu.ttf</item>
+    </style>
+
+
+    <style name="MyCustomEditTextStyle" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/mediumSize</item>
+        <item name="android:layout_marginStart">@dimen/activity_left_margin</item>
+        <item name="android:layout_marginEnd">@dimen/activity_right_margin</item>
+        <item name="android:padding">@dimen/textPadding</item>
+        <item name="android:drawablePadding">@dimen/drawablePadding</item>
         <item name="android:fontFamily">ubuntu.ttf</item>
     </style>
 
