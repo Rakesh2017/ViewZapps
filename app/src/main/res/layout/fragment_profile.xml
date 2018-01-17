@@ -1,8 +1,8 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/whiteSmoke"
+    android:background="@color/white"
     android:clickable="true"
     android:focusable="true"
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
@@ -14,22 +14,42 @@
         android:layout_height="match_parent">
 
         <ImageView
+            android:id="@+id/profile_headerImageView"
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:background="@color/appColor"
             tools:ignore="ContentDescription" />
 
-        <com.mikhaellopez.circularimageview.CircularImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="40dp"
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            app:civ_shadow="true"
-            app:civ_shadow_radius="10"
-            app:civ_shadow_color="@color/appColor"
-            android:id="@+id/profile_profileImage"
-            android:background="@drawable/default_profile_image"
-            />
+            android:id="@+id/profile_relativeLayout2"
+            android:layout_marginTop="40dp"
+            >
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerInParent="true"
+                app:civ_shadow="true"
+                app:civ_shadow_radius="10"
+                app:civ_shadow_color="@color/appColor"
+                android:id="@+id/profile_profileImage"
+                android:onClick="onClick"
+                />
+
+            <!--loading image-->
+            <com.victor.loading.rotate.RotateLoading
+                android:id="@+id/profile_rotateLoadingImage"
+                android:layout_width="@dimen/rotateLoadingWidth"
+                android:layout_height="@dimen/rotateLoadingHeight"
+                app:loading_width="@dimen/rotateLoadingBreadth"
+                app:loading_color="@color/black"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
+
 
         <!--name-->
 
@@ -39,9 +59,9 @@
             android:layout_height="wrap_content"
             android:text="@string/name"
             style="@style/MyCustomTextStyleMedium"
-            android:layout_below="@+id/profile_profileImage"
+            android:layout_below="@+id/profile_relativeLayout2"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginStart="@dimen/activity_left_margin"
+            android:layout_marginStart="@dimen/activity_start_margin"
             android:fontFamily="ubuntu"
             />
 
@@ -52,7 +72,7 @@
             android:layout_below="@+id/profile_nameTextView"
             style="@style/MyCustomEditTextStyle"
             android:background="@drawable/custom_rounded_rectangle_edit_text"
-            android:drawableStart="@drawable/name_mini_icon"
+            android:drawableEnd="@drawable/name_mini_icon"
             android:inputType="textCapWords"
             android:elevation="@dimen/elevation"
             tools:targetApi="lollipop"
@@ -69,7 +89,7 @@
             android:text="@string/email"
             style="@style/MyCustomTextStyleMedium"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginStart="@dimen/activity_left_margin"
+            android:layout_marginStart="@dimen/activity_start_margin"
             android:fontFamily="ubuntu"
             />
 
@@ -80,7 +100,7 @@
             android:layout_below="@+id/profile_emailTextView"
             style="@style/MyCustomEditTextStyle"
             android:background="@drawable/custom_rounded_rectangle_edit_text"
-            android:drawableStart="@drawable/mail_mini_icon"
+            android:drawableEnd="@drawable/mail_mini_icon"
             android:inputType="textEmailAddress"
             android:elevation="@dimen/elevation"
             tools:targetApi="lollipop"
@@ -97,7 +117,7 @@
             android:text="@string/phoneNumber"
             style="@style/MyCustomTextStyleMedium"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginStart="@dimen/activity_left_margin"
+            android:layout_marginStart="@dimen/activity_start_margin"
             android:fontFamily="ubuntu"
             />
 
@@ -108,7 +128,7 @@
             android:layout_below="@+id/profile_phoneTextView"
             style="@style/MyCustomEditTextStyle"
             android:background="@drawable/custom_rounded_rectangle_edit_text"
-            android:drawableStart="@drawable/phone_mini_icon"
+            android:drawableEnd="@drawable/phone_mini_icon"
             android:inputType="phone"
             android:elevation="@dimen/elevation"
             tools:targetApi="lollipop"
@@ -117,7 +137,7 @@
         <!--submit button-->
 
         <mehdi.sakout.fancybuttons.FancyButton
-            android:id="@+id/login_faceBookButton"
+            android:id="@+id/profile_submitButton"
             android:layout_below="@+id/profile_phoneEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -137,13 +157,25 @@
             style="@style/MyCustomTextStyleMedium"
             fancy:fb_textColor="@color/loginButtonColors"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginStart="@dimen/activity_left_margin"
-            android:layout_marginEnd="@dimen/activity_right_margin"
+            android:layout_marginStart="@dimen/activity_start_margin"
+            android:layout_marginEnd="@dimen/activity_end_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:elevation="5dp"
             tools:targetApi="lollipop" />
 
+        <!--loading image-->
+        <com.victor.loading.rotate.RotateLoading
+            android:id="@+id/profile_rotateLoading"
+            android:layout_width="@dimen/rotateLoadingWidth"
+            android:layout_height="@dimen/rotateLoadingHeight"
+            app:loading_width="@dimen/rotateLoadingBreadth"
+            app:loading_color="@color/black"
+            android:elevation="@dimen/elevation"
+            tools:targetApi="lollipop"
+            android:layout_centerInParent="true"/>
 
 
     </RelativeLayout>
 
-</FrameLayout>
+
+</android.support.v4.widget.NestedScrollView>

@@ -6,6 +6,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL"/>
 
     <application
         android:allowBackup="true"
@@ -15,7 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/MyCustomAppTheme"
         tools:replace="android:icon">
-        <activity android:name=".Login">
+        <activity android:name=".Login"
+            android:windowSoftInputMode="stateHidden"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +30,9 @@
         <activity
             android:name=".DashBoard"
             android:label="@string/title_activity_dash_board"
-            android:theme="@style/MyCustomAppTheme"></activity>
+            android:theme="@style/MyCustomAppTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            />
     </application>
 
 </manifest>

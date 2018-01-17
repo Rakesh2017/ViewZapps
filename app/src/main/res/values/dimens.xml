@@ -2,8 +2,8 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="activity_left_margin">16dp</dimen>
-    <dimen name="activity_right_margin">16dp</dimen>
+    <dimen name="activity_start_margin">16dp</dimen>
+    <dimen name="activity_end_margin">16dp</dimen>
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
@@ -15,5 +15,8 @@
     <dimen name="smallSize">14dp</dimen>
     <dimen name="drawablePadding">10dp</dimen>
     <dimen name="elevation">5dp</dimen>
+    <dimen name="rotateLoadingWidth">60dp</dimen>
+    <dimen name="rotateLoadingHeight">60dp</dimen>
+    <dimen name="rotateLoadingBreadth">3dp</dimen>
 
 </resources>

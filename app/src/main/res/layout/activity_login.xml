@@ -82,8 +82,8 @@
                 fancy:fb_textColor="@color/loginButtonColors"
                 android:layout_weight="1"
                 android:layout_marginTop="24dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/activity_start_margin"
+                android:layout_marginEnd="@dimen/activity_end_margin"
                 android:elevation="@dimen/elevation"
                 tools:targetApi="lollipop"
                 />
@@ -109,9 +109,9 @@
                 style="@style/MyCustomTextStyleMedium"
                 fancy:fb_textColor="@color/loginButtonColors"
                 android:layout_weight="1"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginStart="@dimen/activity_start_margin"
+                android:layout_marginEnd="@dimen/activity_end_margin"
                 android:elevation="@dimen/elevation"
                 tools:targetApi="lollipop" />
 
@@ -136,9 +136,9 @@
                 style="@style/MyCustomTextStyleMedium"
                 fancy:fb_textColor="@color/loginButtonColors"
                 android:layout_weight="1"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginStart="@dimen/activity_start_margin"
+                android:layout_marginEnd="@dimen/activity_end_margin"
                 android:layout_marginBottom="16dp"
                 android:elevation="@dimen/elevation"
                 tools:targetApi="lollipop" />
@@ -162,18 +162,16 @@
             />
 
 
-        <!--loading-->
-       <com.wang.avi.AVLoadingIndicatorView
-            android:id="@+id/login_avi"
-           android:layout_marginTop="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/AVLoadingIndicatorView"
-            app:indicatorName="BallClipRotateMultipleIndicator"
-            app:indicatorColor="@color/whiteSmoke"
-            android:layout_centerHorizontal="true"
-
-            />
+        <!--loading image-->
+        <com.victor.loading.rotate.RotateLoading
+            android:id="@+id/login_rotateLoading"
+            android:layout_width="@dimen/rotateLoadingWidth"
+            android:layout_height="@dimen/rotateLoadingHeight"
+            app:loading_width="@dimen/rotateLoadingBreadth"
+            app:loading_color="@color/black"
+            android:elevation="@dimen/elevation"
+            tools:targetApi="lollipop"
+            android:layout_centerInParent="true"/>
 
 
     </RelativeLayout>

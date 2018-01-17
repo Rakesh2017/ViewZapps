@@ -27,6 +27,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.victor.loading.rotate.RotateLoading;
 import com.wang.avi.AVLoadingIndicatorView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import mehdi.sakout.fancybuttons.FancyButton;
@@ -47,7 +48,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     private static final int RC_SIGN_IN = 9001;
     private FirebaseAuth mAuth;
     private static final String TAG = "GoogleActivity";
-    AVLoadingIndicatorView avi;
+    RotateLoading rotateLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +56,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         setContentView(R.layout.activity_login);
 
         //avlLoading
-        avi = findViewById(R.id.login_avi);
-        avi.hide();
+        rotateLoading = findViewById(R.id.login_rotateLoading);
 
         // imageViews
         loginTop_iv = findViewById(R.id.login_topImageView);
@@ -114,7 +114,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         switch (id){
             // google login
             case R.id.login_googleButton:
-                avi.show();
+                rotateLoading.start();
                 signIn();
               /*  new CheckNetworkConnection(Login.this, new CheckNetworkConnection.OnConnectionCallback() {
                     @Override
@@ -140,7 +140,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
-        avi.hide();
+        rotateLoading.stop();
     }
 
 
@@ -163,7 +163,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                         .setTitleText("Authentication Denied")
                         .setContentText("It seems like you have cancelled Authentication!")
                         .show();
-                avi.hide();
+                rotateLoading.stop();
                // updateUI(null);
                 // [END_EXCLUDE]
             }
@@ -178,7 +178,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
        // showProgressDialog();
-        avi.show();
+        rotateLoading.start();
         gifImageView.setVisibility(View.VISIBLE);
         // [END_EXCLUDE]
 
@@ -218,7 +218,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                         }
 
                         // [START_EXCLUDE]
-                          avi.hide();
+                        rotateLoading.stop();
 
                        // hideProgressDialog();
                         // [END_EXCLUDE]
