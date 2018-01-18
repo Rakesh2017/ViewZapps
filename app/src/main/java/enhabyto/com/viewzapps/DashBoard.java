@@ -1,6 +1,8 @@
 package enhabyto.com.viewzapps;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.io.File;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -103,6 +107,7 @@ public class DashBoard extends AppCompatActivity
         int id = v.getId();
 
         switch (id){
+            // logout button
             case R.id.dash_logOut:
 
                         new SweetAlertDialog(DashBoard.this, SweetAlertDialog.WARNING_TYPE)
@@ -112,20 +117,31 @@ public class DashBoard extends AppCompatActivity
                                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                     @Override
                                     public void onClick(final SweetAlertDialog sDialog) {
-                                        new CheckNetworkConnection(DashBoard.this, new CheckNetworkConnection.OnConnectionCallback() {
+                                        sDialog.dismissWithAnimation();
+                                        mAuth.signOut();
+                                        DashBoard.this.finish();
+                                        String myFile = "/viewZapp/image.jpg";
+                                        String myPath = Environment.getExternalStorageDirectory() + myFile;
+                                        File f = new File(myPath);
+                                        if (f.exists()) {
+                                            f.delete();
+                                        }
+                                        SharedPreferences sharedpreferences = getSharedPreferences("LogDetail", MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedpreferences.edit();
+                                        editor.putString("firstScreen", "Login");
+                                        editor.apply();
+                                       /* new CheckNetworkConnection(DashBoard.this, new CheckNetworkConnection.OnConnectionCallback() {
                                             @Override
                                             public void onConnectionSuccess() {
-                                                sDialog.dismissWithAnimation();
-                                                mAuth.signOut();
-                                                DashBoard.this.finish();
+
                                             }
 
                                             @Override
                                             public void onConnectionFail(String msg) {
-                                                new SweetNoInternetConnection().noInternet(DashBoard.this);
+                                               new SweetNoInternetConnection().noInternet(DashBoard.this);
 
                                             }
-                                        }).execute();
+                                        }).execute();*/
 
                                     }
                                 })

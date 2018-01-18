@@ -34,7 +34,7 @@
         android:layout_marginEnd="24dp"
         android:clickable="true"
         android:focusable="true"
-        android:elevation="10dp"
+        android:elevation="@dimen/elevation"
         tools:targetApi="lollipop"
         android:id="@+id/login_relativeLayout2"
         android:visibility="invisible"

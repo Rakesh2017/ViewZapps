@@ -1,12 +1,19 @@
 package enhabyto.com.viewzapps;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -15,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,18 +41,15 @@ import com.google.firebase.storage.UploadTask;
 import com.iceteck.silicompressorr.FileUtils;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.victor.loading.rotate.RotateLoading;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import id.zelory.compressor.Compressor;
 import mehdi.sakout.fancybuttons.FancyButton;
-
 import static android.app.Activity.RESULT_OK;
-
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,8 +64,9 @@ public class Profile extends Fragment implements View.OnClickListener {
     Uri ImageFilePath;
     RotateLoading rotateLoadingImage, rotateLoading;
     EditText name_et, email_et, phone_et;
-    String name_tx, email_tx, phone_tx;
+    String name_tx, email_tx, phone_tx, imageUrl;
     FancyButton submit_btn;
+
 
     private static final String EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"(),:;<>@\\[\\]\\\\]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$";
     private Pattern pattern = Pattern.compile(EMAIL_PATTERN);
@@ -75,7 +81,6 @@ public class Profile extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
         //circular image
         profileImage = view.findViewById(R.id.profile_profileImage);
         //rotate loading
@@ -87,10 +92,11 @@ public class Profile extends Fragment implements View.OnClickListener {
         phone_et = view.findViewById(R.id.profile_phoneEditText);
         //button
         submit_btn = view.findViewById(R.id.profile_submitButton);
-
         //function calls
         setImage();
-
+        //class calls
+        imageDownloadTask demoTask = new imageDownloadTask();
+        demoTask.doInBackground();
         //onclick listener
         profileImage.setOnClickListener(this);
         submit_btn.setOnClickListener(this);
@@ -180,6 +186,8 @@ public class Profile extends Fragment implements View.OnClickListener {
                                 new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
                                         .setTitleText("Picture Updated!")
                                         .show();
+                                imageDownloadTask demoTask = new imageDownloadTask();
+                                demoTask.doInBackground();
 
                             }
                         })  // addOnSuccessListener ends
@@ -210,24 +218,41 @@ public class Profile extends Fragment implements View.OnClickListener {
     }  // UploadImageFileToFirebaseStorage ends
 
     public void setImage(){
-        rotateLoadingImage.start();
+
+        //loading saved image from storage
+        String myFile = "/viewZapp/image.jpg";
+        String myPath = Environment.getExternalStorageDirectory()+myFile;
+        File imgFile = new  File(myPath);
+
+        if(imgFile.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            profileImage.setImageBitmap(myBitmap);
+        }
+        //rotateLoadingImage.start();
         if (getActivity() != null){
             databaseReference.child("users").child(mAuth.getUid())
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.hasChild("profile_image")){
+                            String newUrl = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
+                            SharedPreferences sharedpreferences = getActivity().getSharedPreferences("imageUrlCheck1", MODE_PRIVATE);
+                            String oldUrl = sharedpreferences.getString("imageUrl1", "");
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putString("imageUrl1", newUrl);
+                            editor.apply();
+
+                            if (dataSnapshot.hasChild("profile_image") && !TextUtils.equals(oldUrl, newUrl)){
                                 String url = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
                                 Glide.with(getActivity())
                                         .load(url)
                                         .into(profileImage);
                             }
-                            else {
+                            else if (!dataSnapshot.hasChild("profile_image")){
                                 Glide.with(getActivity())
                                         .load(R.drawable.default_profile_image)
                                         .into(profileImage);
                             }
-                            rotateLoadingImage.stop();
+                            //rotateLoadingImage.stop();
                         }
 
                         @Override
@@ -235,7 +260,7 @@ public class Profile extends Fragment implements View.OnClickListener {
                             Glide.with(getActivity())
                                     .load(R.drawable.default_profile_image)
                                     .into(profileImage);
-                            rotateLoadingImage.stop();
+                            //rotateLoadingImage.stop();
                         }
                     }); // database ends
         } // if ends
@@ -249,15 +274,16 @@ public class Profile extends Fragment implements View.OnClickListener {
                     .setTitleText("Please Enter name")
                     .setConfirmText("Okay")
                     .show();
-            return;
+           // return false;
         }
         if (!validateEmail(email_tx)){
             new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Invalid Email Format")
                     .setConfirmText("Okay")
                     .show();
-            return;
+         //  return false;
         }
+
 
     }// editTextValidations end
 
@@ -265,7 +291,7 @@ public class Profile extends Fragment implements View.OnClickListener {
     public boolean validateEmail(String email) {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
-    } // email validator
+    } // email validator ends
 
     public boolean checkPermissions() {
         if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -276,6 +302,60 @@ public class Profile extends Fragment implements View.OnClickListener {
         else return true;
     }
 
+//    background task
+    @SuppressLint("StaticFieldLeak")
+    class imageDownloadTask extends AsyncTask<Void, Void, Void> {
 
+        protected Void doInBackground(Void... arg0) {
+            databaseReference.child("users")
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String newUrl = dataSnapshot.child(mAuth.getUid()).child("profile_image").child("profile_image_url").getValue(String.class);
+                            SharedPreferences sharedpreferences = getActivity().getSharedPreferences("imageUrlCheck", MODE_PRIVATE);
+                            String oldUrl = sharedpreferences.getString("imageUrl", "");
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putString("imageUrl", newUrl);
+                            editor.apply();
+
+                            if (!TextUtils.isEmpty(newUrl) && !TextUtils.equals(newUrl, oldUrl)) { // url check
+                                DownloadManager mgr = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+                                Uri downloadUri = Uri.parse(newUrl);
+                                //download manager
+                                DownloadManager.Request request = new DownloadManager.Request(downloadUri);
+                                //path to store it
+                                String myFile = "/viewZapp/image.jpg";
+                                String myPath = Environment.getExternalStorageDirectory() + myFile;
+
+                                File f = new File(myPath);
+                                if (f.exists()) {
+                                    f.delete();
+                                }
+
+                                //downloading image from url
+                                request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI
+                                        | DownloadManager.Request.NETWORK_MOBILE)
+                                        .setVisibleInDownloadsUi(false)
+                                        .setNotificationVisibility(0)
+                                       // .setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)
+                                        .setDestinationInExternalPublicDir("viewZapp", "image.jpg");
+
+                                if (mgr != null) {
+                                    mgr.enqueue(request);
+                                }
+
+                            } // if url ends
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+            return null;
+
+        }
+    }  //imageDownloadTask ends
 // end
 }
