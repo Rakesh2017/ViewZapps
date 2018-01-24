@@ -18,5 +18,7 @@
     <dimen name="rotateLoadingWidth">60dp</dimen>
     <dimen name="rotateLoadingHeight">60dp</dimen>
     <dimen name="rotateLoadingBreadth">3dp</dimen>
+    <dimen name="headerMarginTop">24dp</dimen>
+    <dimen name="marginBetweenTags">4dp</dimen>
 
 </resources>

@@ -1,12 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:id="@+id/fragment_container_dashboard"
     tools:context="enhabyto.com.viewzapps.DashBoard"
+    android:background="@color/whiteSmoke"
     tools:showIn="@layout/app_bar_dash_board">
 
-</android.support.constraint.ConstraintLayout>
+
+    <!--youtube and facebook-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:layout_centerHorizontal="true"
+        android:padding="@dimen/book_padding"
+        >
+
+        <!--youtube-->
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>

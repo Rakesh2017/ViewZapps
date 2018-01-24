@@ -162,6 +162,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
                         .setTitleText("Authentication Denied")
                         .setContentText("It seems like you have cancelled Authentication!")
+                        .setConfirmText("Yes")
                         .show();
                 rotateLoading.stop();
                // updateUI(null);

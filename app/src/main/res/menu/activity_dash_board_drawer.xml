@@ -3,11 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"
+        >
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/profile_icon"
-            android:title="@string/profile" />
+            android:title="@string/profile"
+            />
         <item
             android:id="@+id/nav_history"
             android:icon="@drawable/history_icon"

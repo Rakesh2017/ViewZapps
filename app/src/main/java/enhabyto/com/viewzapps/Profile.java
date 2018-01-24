@@ -2,7 +2,6 @@ package enhabyto.com.viewzapps;
 
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
@@ -22,8 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -64,9 +61,8 @@ public class Profile extends Fragment implements View.OnClickListener {
     Uri ImageFilePath;
     RotateLoading rotateLoadingImage, rotateLoading;
     EditText name_et, email_et, phone_et;
-    String name_tx, email_tx, phone_tx, imageUrl;
+    String name_tx, email_tx, phone_tx;
     FancyButton submit_btn;
-
 
     private static final String EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"(),:;<>@\\[\\]\\\\]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$";
     private Pattern pattern = Pattern.compile(EMAIL_PATTERN);
@@ -104,6 +100,12 @@ public class Profile extends Fragment implements View.OnClickListener {
         return view;
     } //on create end
 
+
+    public void onStart(){
+        super.onStart();
+        loadProfileData();
+    }
+
     // on click method
     @Override
     public void onClick(View v) {
@@ -112,20 +114,31 @@ public class Profile extends Fragment implements View.OnClickListener {
         //circular image click
         if (id == R.id.profile_profileImage){
             // selecting image
-            if (checkPermissions()){
+            if (checkStoragePermission()){
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
             }
-
         }
-        //submit button click
+        //submit profile details button click
         else if (id == R.id.profile_submitButton){
-            name_tx = name_et.getText().toString();
-            email_tx = name_et.getText().toString();
-            phone_tx = name_et.getText().toString();
-            editTextValidations();
+            name_tx = name_et.getText().toString().trim();
+            email_tx = email_et.getText().toString().trim();
+            phone_tx = phone_et.getText().toString().trim();
+            //if all conditions are satisfied
+            if (editTextValidations()){
+                //setting values to firebase
+                rotateLoading.start();
+                databaseReference.child("users").child(mAuth.getUid()).child("profile_details").child("name").setValue(name_tx);
+                databaseReference.child("users").child(mAuth.getUid()).child("profile_details").child("email").setValue(email_tx);
+                databaseReference.child("users").child(mAuth.getUid()).child("profile_details").child("phone_number").setValue(phone_tx);
+                rotateLoading.stop();
+                new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Profile Updated")
+                        .setConfirmText("Okay")
+                        .show();
+            }
         }
 
     }
@@ -150,6 +163,7 @@ public class Profile extends Fragment implements View.OnClickListener {
     } // on activity
 
 
+//    upload image to firebase
     public void UploadImageFileToFirebaseStorage() {
         try{    // try block 1
             if (ImageFilePath != null) {
@@ -177,17 +191,23 @@ public class Profile extends Fragment implements View.OnClickListener {
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
                                 @SuppressWarnings("VisibleForTests")
-                            //    ImageUploadUrl imageUploadUrl = new ImageUploadUrl(taskSnapshot.getDownloadUrl().toString());
                                 String imageUploadUrl = taskSnapshot.getDownloadUrl().toString();
 
                                 databaseReference.child("users").child(uid).child("profile_image").child("profile_image_url")
                                         .setValue(imageUploadUrl);
                                 rotateLoadingImage.stop();
-                                new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
-                                        .setTitleText("Picture Updated!")
-                                        .show();
+                                try {
+                                    new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
+                                            .setTitleText("Picture Updated!")
+                                            .show();
+                                }
+                                catch (NullPointerException e){
+                                    e.printStackTrace();
+                                }
+
                                 imageDownloadTask demoTask = new imageDownloadTask();
                                 demoTask.doInBackground();
+                                setImageSharedPreferences();
 
                             }
                         })  // addOnSuccessListener ends
@@ -195,10 +215,16 @@ public class Profile extends Fragment implements View.OnClickListener {
                             @Override
                             public void onFailure(@NonNull Exception exception) {
                                 rotateLoadingImage.stop();
-                                new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
-                                        .setTitleText("Something Went Wrong!")
-                                        .setContentText(exception.getLocalizedMessage())
-                                        .show();
+                                try {
+                                    new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Something Went Wrong!")
+                                            .setContentText(exception.getLocalizedMessage())
+                                            .show();
+                                }
+                                catch (NullPointerException e){
+                                    e.printStackTrace();
+                                }
+
                             }
                         })  // addOnFailureListener ends
                         .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -217,7 +243,26 @@ public class Profile extends Fragment implements View.OnClickListener {
 
     }  // UploadImageFileToFirebaseStorage ends
 
+//    setting image
     public void setImage(){
+//        checking if there is profile image in firebase
+        SharedPreferences sharedDefaultImage = getActivity().getSharedPreferences("defaultImage", MODE_PRIVATE);
+        String isImageUrl = sharedDefaultImage.getString("NoImageUrl", "");
+        if (TextUtils.equals(isImageUrl, "true")){
+            Glide.with(getActivity())
+                    .load(R.drawable.default_profile_image)
+                    .into(profileImage);
+            return;
+        }
+        try {
+            SharedPreferences.Editor editorDefaultImage = sharedDefaultImage.edit();
+            editorDefaultImage.putString("NoImageUrl", "false");
+            editorDefaultImage.apply();
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+        }
+
 
         //loading saved image from storage
         String myFile = "/viewZapp/image.jpg";
@@ -234,6 +279,7 @@ public class Profile extends Fragment implements View.OnClickListener {
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                         try {
                             String newUrl = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
                             SharedPreferences sharedpreferences = getActivity().getSharedPreferences("imageUrlCheck1", MODE_PRIVATE);
                             String oldUrl = sharedpreferences.getString("imageUrl1", "");
@@ -249,10 +295,19 @@ public class Profile extends Fragment implements View.OnClickListener {
                             }
                             else if (!dataSnapshot.hasChild("profile_image")){
                                 Glide.with(getActivity())
-                                        .load(R.drawable.default_profile_image)
-                                        .into(profileImage);
-                            }
+                                    .load(R.drawable.default_profile_image)
+                                    .into(profileImage);
+
+                                    SharedPreferences sharedDefaultImage = getActivity().getSharedPreferences("defaultImage", MODE_PRIVATE);
+                                    SharedPreferences.Editor editorDefaultImage = sharedDefaultImage.edit();
+                                    editorDefaultImage.putString("NoImageUrl", "true");
+                                    editorDefaultImage.apply();
+                                }
+                         }
                             //rotateLoadingImage.stop();
+                         catch (NullPointerException e){
+                             e.printStackTrace();
+                         }
                         }
 
                         @Override
@@ -268,32 +323,32 @@ public class Profile extends Fragment implements View.OnClickListener {
     } // set image ends
 
 
-    public void editTextValidations(){
+    public boolean editTextValidations(){
         if (TextUtils.isEmpty(name_tx)){
             new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
-                    .setTitleText("Please Enter name")
+                    .setTitleText("Please enter name!")
                     .setConfirmText("Okay")
                     .show();
-           // return false;
+            return false;
         }
-        if (!validateEmail(email_tx)){
+        else if(!validateEmail(email_tx)){
             new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
-                    .setTitleText("Invalid Email Format")
+                    .setTitleText("Invalid email format!")
                     .setConfirmText("Okay")
                     .show();
-         //  return false;
+            return false;
         }
-
-
+        else if (phone_tx.length() < 10){
+            new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Invalid phone number!")
+                    .setConfirmText("Okay")
+                    .show();
+            return false;
+        }
+        return true;
     }// editTextValidations end
 
-//    email validator
-    public boolean validateEmail(String email) {
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
-    } // email validator ends
-
-    public boolean checkPermissions() {
+    public boolean checkStoragePermission() {
         if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
@@ -311,14 +366,15 @@ public class Profile extends Fragment implements View.OnClickListener {
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            String newUrl = dataSnapshot.child(mAuth.getUid()).child("profile_image").child("profile_image_url").getValue(String.class);
-                            SharedPreferences sharedpreferences = getActivity().getSharedPreferences("imageUrlCheck", MODE_PRIVATE);
-                            String oldUrl = sharedpreferences.getString("imageUrl", "");
-                            SharedPreferences.Editor editor = sharedpreferences.edit();
-                            editor.putString("imageUrl", newUrl);
-                            editor.apply();
+                            try {
+                                String newUrl = dataSnapshot.child(mAuth.getUid()).child("profile_image").child("profile_image_url").getValue(String.class);
+                                SharedPreferences sharedpreferences = getActivity().getSharedPreferences("imageUrlCheck", MODE_PRIVATE);
+                                String oldUrl = sharedpreferences.getString("imageUrl", "");
+                                SharedPreferences.Editor editor = sharedpreferences.edit();
+                                editor.putString("imageUrl", newUrl);
+                                editor.apply();
 
-                            if (!TextUtils.isEmpty(newUrl) && !TextUtils.equals(newUrl, oldUrl)) { // url check
+                                if (!TextUtils.isEmpty(newUrl) && !TextUtils.equals(newUrl, oldUrl)) { // url check
                                 DownloadManager mgr = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
                                 Uri downloadUri = Uri.parse(newUrl);
                                 //download manager
@@ -337,7 +393,7 @@ public class Profile extends Fragment implements View.OnClickListener {
                                         | DownloadManager.Request.NETWORK_MOBILE)
                                         .setVisibleInDownloadsUi(false)
                                         .setNotificationVisibility(0)
-                                       // .setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)
+                                        .setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)
                                         .setDestinationInExternalPublicDir("viewZapp", "image.jpg");
 
                                 if (mgr != null) {
@@ -345,6 +401,11 @@ public class Profile extends Fragment implements View.OnClickListener {
                                 }
 
                             } // if url ends
+
+                            }
+                            catch (NullPointerException e){
+                                e.printStackTrace();
+                            }
                         }
 
                         @Override
@@ -357,5 +418,119 @@ public class Profile extends Fragment implements View.OnClickListener {
 
         }
     }  //imageDownloadTask ends
+
+    public void setImageSharedPreferences(){
+        databaseReference.child("users").child(mAuth.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        try {
+                            String newUrl = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
+                            SharedPreferences sharedpreferences = getActivity().getSharedPreferences("imageUrlCheck1", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putString("imageUrl1", newUrl);
+                            editor.apply();
+
+                            SharedPreferences sharedDefaultImage = getActivity().getSharedPreferences("defaultImage", MODE_PRIVATE);
+                            SharedPreferences.Editor editorDefaultImage = sharedDefaultImage.edit();
+                            editorDefaultImage.putString("NoImageUrl", "false");
+                            editorDefaultImage.apply();
+                        }
+                        catch (NullPointerException e){
+                            e.printStackTrace();
+                        }
+
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }// setImageSharedPreferences ends
+
+    //on destroy
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        stopLoading();
+    }
+
+    //on pause
+    @Override
+    public void onPause(){
+        super.onPause();
+        stopLoading();
+    }
+
+
+    //stop loading
+    public void stopLoading(){
+        try{
+            if ( rotateLoading!=null && rotateLoading.isStart() ){
+                rotateLoading.stop();
+            }
+            if ( rotateLoadingImage!=null && rotateLoadingImage.isStart() ){
+                rotateLoadingImage.stop();
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }//stop loading ends
+
+//    loading user details from firebase
+    public void loadProfileData(){
+        SharedPreferences sharedpreferences = getActivity().getSharedPreferences("profileDetails", MODE_PRIVATE);
+        name_tx = sharedpreferences.getString("name","");
+        email_tx = sharedpreferences.getString("email","");
+        phone_tx = sharedpreferences.getString("phone","");
+//        setting values
+        name_et.setText(name_tx);
+        email_et.setText(email_tx);
+        phone_et.setText(phone_tx);
+
+        databaseReference.child("users").child(mAuth.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        getting values
+                        name_tx = dataSnapshot.child("profile_details").child("name").getValue(String.class);
+                        email_tx = dataSnapshot.child("profile_details").child("email").getValue(String.class);
+                        phone_tx = dataSnapshot.child("profile_details").child("phone_number").getValue(String.class);
+//                        setting values
+                        name_et.setText(name_tx);
+                        email_et.setText(email_tx);
+                        phone_et.setText(phone_tx);
+//                        storing values in shared preferences
+                        try {
+                            SharedPreferences sharedpreferences = getActivity().getSharedPreferences("profileDetails", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putString("name", name_tx);
+                            editor.putString("email", email_tx);
+                            editor.putString("phone", phone_tx);
+                            editor.apply();
+                        }
+                        catch (NullPointerException e){
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+//    validate email
+    public boolean validateEmail(String email) {
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+
+
+
 // end
 }

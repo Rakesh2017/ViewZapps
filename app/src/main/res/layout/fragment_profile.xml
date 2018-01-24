@@ -34,7 +34,7 @@
                 android:layout_centerInParent="true"
                 app:civ_shadow="true"
                 app:civ_shadow_radius="10"
-                app:civ_shadow_color="@color/appColor"
+                app:civ_shadow_color="@color/lightCoral"
                 android:id="@+id/profile_profileImage"
                 android:onClick="onClick"
                 />
@@ -72,7 +72,7 @@
             android:layout_below="@+id/profile_nameTextView"
             style="@style/MyCustomEditTextStyle"
             android:background="@drawable/custom_rounded_rectangle_edit_text"
-            android:drawableEnd="@drawable/name_mini_icon"
+            android:drawableEnd="@drawable/ic_name_mini_icon"
             android:inputType="textCapWords"
             android:elevation="@dimen/elevation"
             tools:targetApi="lollipop"
@@ -100,7 +100,7 @@
             android:layout_below="@+id/profile_emailTextView"
             style="@style/MyCustomEditTextStyle"
             android:background="@drawable/custom_rounded_rectangle_edit_text"
-            android:drawableEnd="@drawable/mail_mini_icon"
+            android:drawableEnd="@drawable/ic_email_mini_icon"
             android:inputType="textEmailAddress"
             android:elevation="@dimen/elevation"
             tools:targetApi="lollipop"
@@ -128,7 +128,7 @@
             android:layout_below="@+id/profile_phoneTextView"
             style="@style/MyCustomEditTextStyle"
             android:background="@drawable/custom_rounded_rectangle_edit_text"
-            android:drawableEnd="@drawable/phone_mini_icon"
+            android:drawableEnd="@drawable/ic_phone_mini_icon"
             android:inputType="phone"
             android:elevation="@dimen/elevation"
             tools:targetApi="lollipop"
@@ -163,7 +163,7 @@
             android:elevation="5dp"
             tools:targetApi="lollipop" />
 
-        <!--loading image-->
+        <!--loading-->
         <com.victor.loading.rotate.RotateLoading
             android:id="@+id/profile_rotateLoading"
             android:layout_width="@dimen/rotateLoadingWidth"

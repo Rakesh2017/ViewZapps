@@ -168,7 +168,7 @@
             android:layout_width="@dimen/rotateLoadingWidth"
             android:layout_height="@dimen/rotateLoadingHeight"
             app:loading_width="@dimen/rotateLoadingBreadth"
-            app:loading_color="@color/black"
+            app:loading_color="@color/carrot"
             android:elevation="@dimen/elevation"
             tools:targetApi="lollipop"
             android:layout_centerInParent="true"/>

@@ -1,10 +1,12 @@
 package enhabyto.com.viewzapps;
 
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,17 +21,27 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import util.android.textviews.FontTextView;
 
 public class DashBoard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
+    private FirebaseUser mAuth = FirebaseAuth.getInstance().getCurrentUser();
     ImageButton logout_ib;
+    FontTextView name_tv, email_tv, phone_tv, zapNumber_tv;
+    String name_tx, email_tx, phone_tx;
+
+//    database reference
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +59,15 @@ public class DashBoard extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //image button
+
+
+        //  FontTextView ids
+        name_tv = navigationView.getHeaderView(0).findViewById(R.id.header_nameTextView);
+        email_tv = navigationView.getHeaderView(0).findViewById(R.id.header_emailTextView);
+        phone_tv = navigationView.getHeaderView(0).findViewById(R.id.header_phoneTextView);
+        zapNumber_tv = navigationView.getHeaderView(0).findViewById(R.id.header_zapTextView);
+
+        //image button id
         logout_ib = findViewById(R.id.dash_logOut);
 
 
@@ -65,6 +85,59 @@ public class DashBoard extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+//    onStart
+    public void onStart(){
+        super.onStart();
+        setProfileData();
+    }
+
+//    setting profile data
+    private void setProfileData() {
+        SharedPreferences sharedpreferences = getSharedPreferences("profileDetails", MODE_PRIVATE);
+        name_tx = sharedpreferences.getString("name","");
+        email_tx = sharedpreferences.getString("email","");
+        phone_tx = sharedpreferences.getString("phone","");
+//        setting values
+        name_tv.setText(name_tx);
+        email_tv.setText(email_tx);
+        phone_tv.setText(phone_tx);
+       // zapNumber_tv.setText(phone_tx);
+
+        databaseReference.child("users").child(mAuth.getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        getting values
+                        name_tx = dataSnapshot.child("profile_details").child("name").getValue(String.class);
+                        email_tx = dataSnapshot.child("profile_details").child("email").getValue(String.class);
+                        phone_tx = dataSnapshot.child("profile_details").child("phone_number").getValue(String.class);
+//                        setting values
+                        name_tv.setText(name_tx);
+                        email_tv.setText(email_tx);
+                        phone_tv.setText(phone_tx);
+//                        storing values in shared preferences
+                        try {
+                            SharedPreferences sharedpreferences = getSharedPreferences("profileDetails", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putString("name", name_tx);
+                            editor.putString("email", email_tx);
+                            editor.putString("phone", phone_tx);
+                            editor.apply();
+                        }
+                        catch (NullPointerException e){
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
     }
 
     @Override
@@ -92,6 +165,7 @@ public class DashBoard extends AppCompatActivity
 
         switch (id){
             case R.id.nav_profile:
+                if (checkStoragePermission())
                 getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_dashboard, new Profile()).addToBackStack("profileFragment").commit();
                 break;
         }
@@ -118,7 +192,7 @@ public class DashBoard extends AppCompatActivity
                                     @Override
                                     public void onClick(final SweetAlertDialog sDialog) {
                                         sDialog.dismissWithAnimation();
-                                        mAuth.signOut();
+                                        FirebaseAuth.getInstance().signOut();
                                         DashBoard.this.finish();
                                         String myFile = "/viewZapp/image.jpg";
                                         String myPath = Environment.getExternalStorageDirectory() + myFile;
@@ -157,6 +231,15 @@ public class DashBoard extends AppCompatActivity
         }
     }
 
+    //storage permission
+    public boolean checkStoragePermission() {
+        if (ActivityCompat.checkSelfPermission(DashBoard.this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(DashBoard.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            return false;
+        }
+        else return true;
+    }
 
 // end
 }
