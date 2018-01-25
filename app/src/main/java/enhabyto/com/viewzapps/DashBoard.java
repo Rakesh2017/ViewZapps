@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -19,6 +20,8 @@ import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,6 +43,8 @@ public class DashBoard extends AppCompatActivity
     FontTextView name_tv, email_tv, phone_tv, zapNumber_tv;
     String name_tx, email_tx, phone_tx;
 
+    ImageButton youtube_btn, facebook_btn, insta_btn, android_btn, apple_btn, movie_btn;
+
 //    database reference
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -59,7 +64,13 @@ public class DashBoard extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
+//        Image button iss
+        youtube_btn = findViewById(R.id.dash_youtubeButton);
+        facebook_btn = findViewById(R.id.dash_facebookButton);
+        insta_btn = findViewById(R.id.dash_instagramButton);
+        android_btn = findViewById(R.id.dash_androidButton);
+        apple_btn = findViewById(R.id.dash_appleButton);
+        movie_btn = findViewById(R.id.dash_moviesButton);
 
         //  FontTextView ids
         name_tv = navigationView.getHeaderView(0).findViewById(R.id.header_nameTextView);
@@ -70,11 +81,30 @@ public class DashBoard extends AppCompatActivity
         //image button id
         logout_ib = findViewById(R.id.dash_logOut);
 
-
-
-
         // set on click
         logout_ib.setOnClickListener(this);
+    }
+
+//    load animations
+    private void LoadAnimations() {
+        YoYo.with(Techniques.ZoomIn)
+                .duration(1200)
+                .playOn(youtube_btn);
+        YoYo.with(Techniques.ZoomIn)
+                .duration(1600)
+                .playOn(facebook_btn);
+        YoYo.with(Techniques.ZoomIn)
+                .duration(2000)
+                .playOn(insta_btn);
+        YoYo.with(Techniques.ZoomIn)
+                .duration(1200)
+                .playOn(android_btn);
+        YoYo.with(Techniques.ZoomIn)
+                .duration(1600)
+                .playOn(apple_btn);
+        YoYo.with(Techniques.ZoomIn)
+                .duration(2000)
+                .playOn(movie_btn);
     }
 
     @Override
@@ -90,6 +120,8 @@ public class DashBoard extends AppCompatActivity
 //    onStart
     public void onStart(){
         super.onStart();
+        //function calls
+        LoadAnimations();
         setProfileData();
     }
 

@@ -20,5 +20,6 @@
     <dimen name="rotateLoadingBreadth">3dp</dimen>
     <dimen name="headerMarginTop">24dp</dimen>
     <dimen name="marginBetweenTags">4dp</dimen>
+    <dimen name="mainButtons">110dp</dimen>
 
 </resources>
