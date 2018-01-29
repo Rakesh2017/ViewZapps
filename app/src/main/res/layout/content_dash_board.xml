@@ -53,7 +53,7 @@
             android:layout_height="@dimen/mainButtons"
             android:background="@drawable/instagram"
             android:layout_weight="1"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
 
 
     </LinearLayout>

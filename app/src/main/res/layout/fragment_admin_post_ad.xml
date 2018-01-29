@@ -1,0 +1,57 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whiteSmoke"
+    tools:context="enhabyto.com.viewzapps.AdminPostAd">
+
+    <!--youtube and facebook and instagram-->
+    <LinearLayout
+        android:id="@+id/apa_linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:paddingStart="@dimen/book_padding"
+        android:paddingEnd="@dimen/book_padding"
+        android:paddingTop="@dimen/book_padding"
+        >
+
+        <!--youtube-->
+        <ImageButton
+            android:id="@+id/apa_youtubeButton"
+            android:layout_width="@dimen/mainButtons"
+            android:layout_height="@dimen/mainButtons"
+            android:background="@drawable/youtube"
+            android:layout_weight="1"
+            tools:ignore="ContentDescription"
+            android:layout_marginEnd="@dimen/book_border"
+            />
+
+        <!--facebook-->
+        <ImageButton
+            android:id="@+id/apa_facebookButton"
+            android:layout_width="@dimen/mainButtons"
+            android:layout_height="@dimen/mainButtons"
+            android:background="@drawable/facebook"
+            android:layout_weight="1"
+            tools:ignore="ContentDescription"
+            android:layout_marginEnd="@dimen/book_border"
+            />
+
+        <!--instagram-->
+        <ImageButton
+            android:id="@+id/apa_instagramButton"
+            android:layout_width="@dimen/mainButtons"
+            android:layout_height="@dimen/mainButtons"
+            android:background="@drawable/instagram"
+            android:layout_weight="1"
+            tools:ignore="ContentDescription"/>
+
+
+    </LinearLayout>
+
+
+
+
+</FrameLayout>

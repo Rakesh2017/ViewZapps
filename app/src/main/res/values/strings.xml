@@ -11,12 +11,14 @@
     <string name="postYoursAds">Post Yours Ads</string>
     <string name="aboutUs">About Us</string>
     <string name="rateUs">Rate US</string>
+    <string name="adminPostAd">Admin Post Ad</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
     <string name="phoneNumber">Phone Number</string>
     <string name="update">Update Profile</string>
     <string name="zapNumber">Zap No.</string>
     <string name="NA">N.A</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

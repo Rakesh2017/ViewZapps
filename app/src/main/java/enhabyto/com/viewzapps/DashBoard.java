@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -226,12 +227,19 @@ public class DashBoard extends AppCompatActivity
                                         sDialog.dismissWithAnimation();
                                         FirebaseAuth.getInstance().signOut();
                                         DashBoard.this.finish();
+
                                         String myFile = "/viewZapp/image.jpg";
                                         String myPath = Environment.getExternalStorageDirectory() + myFile;
                                         File f = new File(myPath);
                                         if (f.exists()) {
                                             f.delete();
                                         }
+
+                                        getSharedPreferences("defaultImage", MODE_PRIVATE).edit().clear().apply();
+                                        getSharedPreferences("imageUrlCheck1", MODE_PRIVATE).edit().clear().apply();
+                                        getSharedPreferences("imageUrlCheck", MODE_PRIVATE).edit().clear().apply();
+                                        getSharedPreferences("profileDetails", MODE_PRIVATE).edit().clear().apply();
+
                                         SharedPreferences sharedpreferences = getSharedPreferences("LogDetail", MODE_PRIVATE);
                                         SharedPreferences.Editor editor = sharedpreferences.edit();
                                         editor.putString("firstScreen", "Login");
@@ -266,8 +274,8 @@ public class DashBoard extends AppCompatActivity
     //storage permission
     public boolean checkStoragePermission() {
         if (ActivityCompat.checkSelfPermission(DashBoard.this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(DashBoard.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(DashBoard.this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(DashBoard.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             return false;
         }
         else return true;
