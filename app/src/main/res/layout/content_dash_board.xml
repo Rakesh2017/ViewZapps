@@ -11,101 +11,103 @@
     tools:showIn="@layout/app_bar_dash_board">
 
 
-    <!--youtube and facebook and instagram-->
+    <!--vertical divider-->
+    <android.support.v4.widget.Space
+        android:layout_height="match_parent"
+        android:layout_width="1dp"
+        android:layout_centerInParent="true"
+        android:id="@+id/dash_dividerVertical"
+        />
+
+
+    <!--linear layout 1-->
     <LinearLayout
         android:id="@+id/dash_linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_alignEnd="@+id/dash_dividerVertical"
+        android:orientation="vertical"
         android:weightSum="3"
-        android:layout_centerHorizontal="true"
-        android:paddingStart="@dimen/book_padding"
-        android:paddingEnd="@dimen/book_padding"
-        android:paddingTop="@dimen/book_padding"
         >
 
         <!--youtube-->
         <ImageButton
             android:id="@+id/dash_youtubeButton"
-            android:layout_width="@dimen/mainButtons"
-            android:layout_height="@dimen/mainButtons"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:background="@drawable/youtube"
             android:layout_weight="1"
             tools:ignore="ContentDescription"
-            android:layout_marginEnd="@dimen/book_border"
             />
 
-        <!--facebook-->
-        <ImageButton
-            android:id="@+id/dash_facebookButton"
-            android:layout_width="@dimen/mainButtons"
-            android:layout_height="@dimen/mainButtons"
-            android:background="@drawable/facebook"
-            android:layout_weight="1"
-            tools:ignore="ContentDescription"
-            android:layout_marginEnd="@dimen/book_border"
-            />
 
         <!--instagram-->
         <ImageButton
             android:id="@+id/dash_instagramButton"
-            android:layout_width="@dimen/mainButtons"
-            android:layout_height="@dimen/mainButtons"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:background="@drawable/instagram"
             android:layout_weight="1"
             tools:ignore="ContentDescription"/>
 
+        <!--apple-->
+        <ImageButton
+            android:id="@+id/dash_appleButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/apple"
+            android:layout_weight="1"
+            tools:ignore="ContentDescription"
+            />
+
 
     </LinearLayout>
 
-    <!--android and apple and movies-->
+
+
+    <!--linear layout 2-->
     <LinearLayout
         android:id="@+id/dash_linearLayout2"
-        android:layout_below="@+id/dash_linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_alignStart="@+id/dash_dividerVertical"
+        android:orientation="vertical"
         android:weightSum="3"
-        android:layout_centerHorizontal="true"
-        android:paddingStart="@dimen/book_padding"
-        android:paddingEnd="@dimen/book_padding"
-        android:paddingTop="@dimen/book_padding"
         >
+
+        <!--facebook-->
+        <ImageButton
+            android:id="@+id/dash_facebookButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/facebook"
+            android:layout_weight="1"
+            tools:ignore="ContentDescription"
+            />
 
         <!--android-->
         <ImageButton
             android:id="@+id/dash_androidButton"
-            android:layout_width="@dimen/mainButtons"
-            android:layout_height="@dimen/mainButtons"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:background="@drawable/android"
             android:layout_weight="1"
             tools:ignore="ContentDescription"
-            android:layout_marginEnd="@dimen/book_border"
-            android:elevation="@dimen/elevation"
-            tools:targetApi="lollipop" />
-
-        <!--apple-->
-        <ImageButton
-            android:id="@+id/dash_appleButton"
-            android:layout_width="@dimen/mainButtons"
-            android:layout_height="@dimen/mainButtons"
-            android:background="@drawable/apple"
-            android:layout_weight="1"
-            tools:ignore="ContentDescription"
-            android:layout_marginEnd="@dimen/book_border"
             />
 
         <!--movies-->
         <ImageButton
             android:id="@+id/dash_moviesButton"
-            android:layout_width="@dimen/mainButtons"
-            android:layout_height="@dimen/mainButtons"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:background="@drawable/movies"
             android:layout_weight="1"
             tools:ignore="ContentDescription" />
 
 
     </LinearLayout>
+
+
 
 
 </RelativeLayout>

@@ -5,53 +5,122 @@
     android:background="@color/whiteSmoke"
     tools:context="enhabyto.com.viewzapps.AdminPostAd">
 
-    <!--youtube and facebook and instagram-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <!--vertical divider-->
+        <android.support.v4.widget.Space
+            android:layout_height="match_parent"
+            android:layout_width="1dp"
+            android:layout_centerInParent="true"
+            android:id="@+id/apa_dividerVertical"
+            />
+
+
+    <util.android.textviews.FontTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="@dimen/page_border"
+        android:text="@string/adminPostAdPanel"
+        style="@style/MyCustomTextStyleLarge"
+        android:id="@+id/apa_headerTextView"
+        android:layout_alignParentEnd="true"
+        android:padding="@dimen/book_padding"
+        android:drawableStart="@drawable/ic_post_mini"
+        android:background="@color/whiteSmoke"
+        tools:ignore="RelativeOverlap" />
+
+        <!--linear layout 1-->
+
     <LinearLayout
         android:id="@+id/apa_linearLayout1"
+        android:layout_below="@+id/apa_headerTextView"
+        android:layout_alignEnd="@id/apa_dividerVertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:weightSum="3"
-        android:paddingStart="@dimen/book_padding"
-        android:paddingEnd="@dimen/book_padding"
-        android:paddingTop="@dimen/book_padding"
         >
 
         <!--youtube-->
         <ImageButton
             android:id="@+id/apa_youtubeButton"
-            android:layout_width="@dimen/mainButtons"
-            android:layout_height="@dimen/mainButtons"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:background="@drawable/youtube"
             android:layout_weight="1"
             tools:ignore="ContentDescription"
-            android:layout_marginEnd="@dimen/book_border"
             />
 
-        <!--facebook-->
-        <ImageButton
-            android:id="@+id/apa_facebookButton"
-            android:layout_width="@dimen/mainButtons"
-            android:layout_height="@dimen/mainButtons"
-            android:background="@drawable/facebook"
-            android:layout_weight="1"
-            tools:ignore="ContentDescription"
-            android:layout_marginEnd="@dimen/book_border"
-            />
 
         <!--instagram-->
         <ImageButton
             android:id="@+id/apa_instagramButton"
-            android:layout_width="@dimen/mainButtons"
-            android:layout_height="@dimen/mainButtons"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:background="@drawable/instagram"
             android:layout_weight="1"
             tools:ignore="ContentDescription"/>
+
+        <!--apple-->
+        <ImageButton
+            android:id="@+id/apa_appleButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/apple"
+            android:layout_weight="1"
+            tools:ignore="ContentDescription"
+            />
 
 
     </LinearLayout>
 
 
+        <!--linear layout 2-->
+        <LinearLayout
+            android:id="@+id/dash_linearLayout2"
+            android:layout_below="@+id/apa_headerTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/apa_dividerVertical"
+            android:orientation="vertical"
+            android:weightSum="3"
+            >
 
+            <!--facebook-->
+            <ImageButton
+                android:id="@+id/apa_facebookButton"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/facebook"
+                android:layout_weight="1"
+                tools:ignore="ContentDescription"
+                />
+
+            <!--android-->
+            <ImageButton
+                android:id="@+id/apa_androidButton"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/android"
+                android:layout_weight="1"
+                tools:ignore="ContentDescription"
+                />
+
+            <!--movies-->
+            <ImageButton
+                android:id="@+id/apa_moviesButton"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/movies"
+                android:layout_weight="1"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </FrameLayout>

@@ -36,7 +36,7 @@
             android:title="@string/rateUs" />
         <item
             android:id="@+id/nav_adminPostAd"
-            android:icon="@drawable/rate_us_icon"
+            android:icon="@drawable/post_ad_icon"
             android:title="@string/adminPostAd" />
     </group>
 

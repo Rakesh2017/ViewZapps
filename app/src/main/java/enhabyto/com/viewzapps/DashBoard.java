@@ -88,23 +88,23 @@ public class DashBoard extends AppCompatActivity
 
 //    load animations
     private void LoadAnimations() {
-        YoYo.with(Techniques.ZoomIn)
+        YoYo.with(Techniques.Bounce)
                 .duration(1200)
                 .playOn(youtube_btn);
-        YoYo.with(Techniques.ZoomIn)
-                .duration(1600)
+        YoYo.with(Techniques.Bounce)
+                .duration(1400)
                 .playOn(facebook_btn);
-        YoYo.with(Techniques.ZoomIn)
-                .duration(2000)
-                .playOn(insta_btn);
-        YoYo.with(Techniques.ZoomIn)
-                .duration(1200)
-                .playOn(android_btn);
-        YoYo.with(Techniques.ZoomIn)
+        YoYo.with(Techniques.Bounce)
                 .duration(1600)
-                .playOn(apple_btn);
-        YoYo.with(Techniques.ZoomIn)
+                .playOn(insta_btn);
+        YoYo.with(Techniques.Bounce)
+                .duration(1800)
+                .playOn(android_btn);
+        YoYo.with(Techniques.Bounce)
                 .duration(2000)
+                .playOn(apple_btn);
+        YoYo.with(Techniques.Bounce)
+                .duration(2200)
                 .playOn(movie_btn);
     }
 
@@ -197,9 +197,15 @@ public class DashBoard extends AppCompatActivity
         int id = item.getItemId();
 
         switch (id){
+//            profile
             case R.id.nav_profile:
                 if (checkStoragePermission())
                 getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_dashboard, new Profile()).addToBackStack("profileFragment").commit();
+                break;
+
+//                admin post ad
+            case R.id.nav_adminPostAd:
+                    getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_dashboard, new AdminPostAd()).addToBackStack("adminPostAd").commit();
                 break;
         }
 

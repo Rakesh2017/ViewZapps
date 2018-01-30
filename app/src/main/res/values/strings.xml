@@ -18,6 +18,8 @@
     <string name="update">Update Profile</string>
     <string name="zapNumber">Zap No.</string>
     <string name="NA">N.A</string>
+    <string name="adminPostAdPanel"><b><u>Admin Post Ad Panel</u></b></string>
+    <string name="adminYoutubeAd"><b><u>Youtube Ad</u></b></string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
