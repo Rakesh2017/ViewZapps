@@ -18,8 +18,14 @@
     <string name="update">Update Profile</string>
     <string name="zapNumber">Zap No.</string>
     <string name="NA">N.A</string>
-    <string name="adminPostAdPanel"><b><u>Admin Post Ad Panel</u></b></string>
-    <string name="adminYoutubeAd"><b><u>Youtube Ad</u></b></string>
+    <string name="adminPostAdPanel"><b>Admin Post Ad Panel</b></string>
+    <string name="adminYoutubeAd"><b>Youtube Ad</b></string>
+    <string name="videoTitle">Video Title</string>
+    <string name="videoUrlLink">Video Url</string>
+    <string name="likes">Number of Likes Needed</string>
+    <string name="views">Number of Views Needed</string>
+    <string name="subscribe">Number of Subscribers Needed</string>
+    <string name="submit">Submit</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

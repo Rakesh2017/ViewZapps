@@ -2,7 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/whiteSmoke"
+    android:clickable="true"
+    android:focusable="true"
     tools:context="enhabyto.com.viewzapps.AdminPostYoutubeAd">
 
     <!-- TODO: Update blank fragment layout -->
@@ -18,10 +22,178 @@
             style="@style/MyCustomTextStyleLarge"
             android:id="@+id/apa_headerTextView"
             android:layout_alignParentEnd="true"
-            android:padding="@dimen/book_padding"
+            android:padding="@dimen/page_border"
             android:drawableStart="@drawable/ic_youtube_mini"
             android:drawablePadding="@dimen/book_border"
             />
+
+        <!--Title-->
+        <util.android.textviews.FontTextView
+            android:id="@+id/apa_titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/videoTitle"
+            style="@style/MyCustomTextStyleMedium"
+            android:layout_below="@+id/apa_headerTextView"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_start_margin"
+            android:fontFamily="ubuntu"
+            />
+
+        <EditText
+            android:id="@+id/apa_titleEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/apa_titleTextView"
+            style="@style/MyCustomEditTextStyle"
+            android:background="@drawable/custom_rounded_rectangle_edit_text"
+            android:inputType="textCapWords"
+            android:elevation="@dimen/elevation"
+            tools:targetApi="lollipop"
+            tools:ignore="LabelFor" />
+
+
+        <!--Url Link-->
+        <util.android.textviews.FontTextView
+            android:id="@+id/apa_urlLinkTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/videoUrlLink"
+            style="@style/MyCustomTextStyleMedium"
+            android:layout_below="@+id/apa_titleEditText"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_start_margin"
+            android:fontFamily="ubuntu"
+            />
+
+        <EditText
+            android:id="@+id/apa_urlLinkEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/apa_urlLinkTextView"
+            style="@style/MyCustomEditTextStyle"
+            android:background="@drawable/custom_rounded_rectangle_edit_text"
+            android:inputType="textUri"
+            android:elevation="@dimen/elevation"
+            tools:targetApi="lollipop"
+            tools:ignore="LabelFor" />
+
+
+        <!--Views-->
+        <util.android.textviews.FontTextView
+            android:id="@+id/apa_viewsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/views"
+            style="@style/MyCustomTextStyleMedium"
+            android:layout_below="@+id/apa_urlLinkEditText"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_start_margin"
+            android:fontFamily="ubuntu"
+            />
+
+        <EditText
+            android:id="@+id/apa_viewsEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/apa_viewsTextView"
+            style="@style/MyCustomEditTextStyle"
+            android:background="@drawable/custom_rounded_rectangle_edit_text"
+            android:inputType="number"
+            android:elevation="@dimen/elevation"
+            tools:targetApi="lollipop"
+            tools:ignore="LabelFor" />
+
+        <!--likes-->
+        <util.android.textviews.FontTextView
+            android:id="@+id/apa_likesTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/likes"
+            style="@style/MyCustomTextStyleMedium"
+            android:layout_below="@+id/apa_viewsEditText"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_start_margin"
+            android:fontFamily="ubuntu"
+            />
+
+        <EditText
+            android:id="@+id/apa_likesEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/apa_likesTextView"
+            style="@style/MyCustomEditTextStyle"
+            android:background="@drawable/custom_rounded_rectangle_edit_text"
+            android:inputType="number"
+            android:elevation="@dimen/elevation"
+            tools:targetApi="lollipop"
+            tools:ignore="LabelFor" />
+
+        <!--likes-->
+        <util.android.textviews.FontTextView
+            android:id="@+id/apa_subscribersTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/subscribe"
+            style="@style/MyCustomTextStyleMedium"
+            android:layout_below="@+id/apa_likesEditText"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_start_margin"
+            android:fontFamily="ubuntu"
+            />
+
+        <EditText
+            android:id="@+id/apa_subscribersEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/apa_subscribersTextView"
+            style="@style/MyCustomEditTextStyle"
+            android:background="@drawable/custom_rounded_rectangle_edit_text"
+            android:inputType="number"
+            android:elevation="@dimen/elevation"
+            tools:targetApi="lollipop"
+            tools:ignore="LabelFor" />
+
+        <!--submit button-->
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/apa_submitButton"
+            android:layout_below="@+id/apa_subscribersEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            fancy:fb_borderWidth="2dp"
+            fancy:fb_iconPaddingRight="20dp"
+            fancy:fb_defaultColor="@color/faceBookBlue"
+            fancy:fb_focusColor="@color/appColor"
+            fancy:fb_fontIconResource="&#xf14b;"
+            fancy:fb_iconPosition="left"
+            fancy:fb_fontIconSize="20dp"
+            fancy:fb_radius="3dp"
+            fancy:fb_text="@string/submit"
+            style="@style/MyCustomTextStyleMedium"
+            fancy:fb_textColor="@color/loginButtonColors"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_start_margin"
+            android:layout_marginEnd="@dimen/activity_end_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:elevation="5dp"
+            tools:targetApi="lollipop" />
+
+        <!--loading-->
+        <com.victor.loading.rotate.RotateLoading
+            android:id="@+id/apa_rotateLoading"
+            android:layout_width="@dimen/rotateLoadingWidth"
+            android:layout_height="@dimen/rotateLoadingHeight"
+            app:loading_width="@dimen/rotateLoadingBreadth"
+            app:loading_color="@color/black"
+            android:elevation="@dimen/elevation"
+            tools:targetApi="lollipop"
+            android:layout_centerInParent="true"/>
+
 
     </RelativeLayout>
 

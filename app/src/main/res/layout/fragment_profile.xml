@@ -52,7 +52,6 @@
 
 
         <!--name-->
-
         <util.android.textviews.FontTextView
             android:id="@+id/profile_nameTextView"
             android:layout_width="wrap_content"

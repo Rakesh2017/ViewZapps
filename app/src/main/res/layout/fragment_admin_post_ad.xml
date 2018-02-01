@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/whiteSmoke"
+    android:clickable="true"
+    android:focusable="true"
     tools:context="enhabyto.com.viewzapps.AdminPostAd">
 
 
@@ -28,7 +30,7 @@
         style="@style/MyCustomTextStyleLarge"
         android:id="@+id/apa_headerTextView"
         android:layout_alignParentEnd="true"
-        android:padding="@dimen/book_padding"
+        android:padding="@dimen/page_border"
         android:drawableStart="@drawable/ic_post_mini"
         android:background="@color/whiteSmoke"
         tools:ignore="RelativeOverlap" />

@@ -225,7 +225,7 @@ public class DashBoard extends AppCompatActivity
 
                         new SweetAlertDialog(DashBoard.this, SweetAlertDialog.WARNING_TYPE)
                                 .setTitleText("Are you sure to Logout?")
-                                .setContentText("You can use left side icon to switch betwwn accounts!")
+                                .setContentText("You can use left side icon to switch between accounts!")
                                 .setConfirmText("Yes")
                                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                     @Override
