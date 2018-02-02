@@ -1,5 +1,6 @@
 package enhabyto.com.viewzapps;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -84,6 +85,7 @@ public class DashBoard extends AppCompatActivity
 
         // set on click
         logout_ib.setOnClickListener(this);
+        youtube_btn.setOnClickListener(this);
     }
 
 //    load animations
@@ -274,8 +276,13 @@ public class DashBoard extends AppCompatActivity
                                 })
                                 .show();
                 break;
+
+//                youtube
+            case R.id.dash_youtubeButton:
+                startActivity(new Intent(DashBoard.this, YoutubeAds.class));
+
         }
-    }
+    }//onclick
 
     //storage permission
     public boolean checkStoragePermission() {

@@ -88,12 +88,12 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
                                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Ads").child("youtubeAds").child("");
                                 String key = databaseReference.push().getKey();
 //                            posting ad
-                                databaseReference.child(key).child("expected").child("url").setValue(url_tx);
-                                databaseReference.child(key).child("expected").child("title").setValue(title_tx);
-                                databaseReference.child(key).child("expected").child("expectedViews").setValue(views_tx);
-                                databaseReference.child(key).child("expected").child("expectedLikes").setValue(likes_tx);
-                                databaseReference.child(key).child("expected").child("expectedSubscribers").setValue(subscribers_tx);
-                                databaseReference.child(key).child("expected").child("key").setValue(key);
+                                databaseReference.child(key).child("youtubeUrl").setValue(url_tx);
+                                databaseReference.child(key).child("youtubeTitle").setValue(title_tx);
+                                databaseReference.child(key).child("youtubeExpectedViews").setValue(views_tx);
+                                databaseReference.child(key).child("youtubeExpectedLikes").setValue(likes_tx);
+                                databaseReference.child(key).child("youtubeExpectedSubscribers").setValue(subscribers_tx);
+                                databaseReference.child(key).child("youtubeAdKey").setValue(key);
                                 loading.stop();
                                 new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
                                         .setTitleText("Ad Successfully Posted!")
@@ -129,7 +129,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
                     .show();
             return false;
         }
-        else if ( Patterns.WEB_URL.matcher(url_tx).matches()){
+        else if (!Patterns.WEB_URL.matcher(url_tx).matches()){
             new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Invalid Url!")
                     .show();
