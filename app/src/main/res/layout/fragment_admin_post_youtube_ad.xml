@@ -79,6 +79,68 @@
             tools:targetApi="lollipop"
             tools:ignore="LabelFor" />
 
+        <!--select image-->
+
+        <LinearLayout
+            android:id="@+id/apa_mainLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_below="@+id/apa_urlLinkEditText"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            >
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/apa_selectButton"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                fancy:fb_borderColor="@color/whiteSmoke"
+                fancy:fb_borderWidth="1dp"
+                style="@style/MyCustomTextStyleSmall"
+                fancy:fb_defaultColor="@color/whiteSmoke"
+                fancy:fb_focusColor="@color/whiteSmoke"
+                fancy:fb_fontIconResource="&#xf0c1;"
+                fancy:fb_iconPosition="right"
+                fancy:fb_radius="3dp"
+                fancy:fb_text="select image"
+                fancy:fb_textColor="@color/black" />
+
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/apa_cancelButton"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                fancy:fb_borderColor="@color/whiteSmoke"
+                style="@style/MyCustomTextStyleSmall"
+                fancy:fb_borderWidth="1dp"
+                fancy:fb_defaultColor="@color/whiteSmoke"
+                fancy:fb_focusColor="@color/whiteSmoke"
+                fancy:fb_fontIconResource="&#xf00d;"
+                fancy:fb_iconPosition="left"
+                fancy:fb_radius="3dp"
+                fancy:fb_text="cancel"
+                fancy:fb_textColor="@color/black" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/selectImageSize"
+            android:id="@+id/apa_selectedImageView"
+            android:layout_below="@+id/apa_mainLinearLayout"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            tools:ignore="ContentDescription"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+            />
 
         <!--Views-->
         <util.android.textviews.FontTextView
@@ -87,7 +149,7 @@
             android:layout_height="wrap_content"
             android:text="@string/views"
             style="@style/MyCustomTextStyleMedium"
-            android:layout_below="@+id/apa_urlLinkEditText"
+            android:layout_below="@+id/apa_selectedImageView"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginStart="@dimen/activity_start_margin"
             android:fontFamily="ubuntu"

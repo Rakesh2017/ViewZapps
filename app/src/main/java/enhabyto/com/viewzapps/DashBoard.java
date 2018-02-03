@@ -5,10 +5,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -20,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -81,7 +76,7 @@ public class DashBoard extends AppCompatActivity
         zapNumber_tv = navigationView.getHeaderView(0).findViewById(R.id.header_zapTextView);
 
         //image button id
-        logout_ib = findViewById(R.id.dash_logOut);
+        logout_ib = findViewById(R.id.bar_logOut);
 
         // set on click
         logout_ib.setOnClickListener(this);
@@ -223,7 +218,7 @@ public class DashBoard extends AppCompatActivity
 
         switch (id){
             // logout button
-            case R.id.dash_logOut:
+            case R.id.bar_logOut:
 
                         new SweetAlertDialog(DashBoard.this, SweetAlertDialog.WARNING_TYPE)
                                 .setTitleText("Are you sure to Logout?")

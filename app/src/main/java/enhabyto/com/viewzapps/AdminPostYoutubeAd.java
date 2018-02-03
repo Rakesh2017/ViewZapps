@@ -1,9 +1,13 @@
 package enhabyto.com.viewzapps;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -11,17 +15,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.googlecode.mp4parser.authoring.Edit;
+import com.squareup.picasso.Picasso;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.io.File;
+import java.io.IOException;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import mehdi.sakout.fancybuttons.FancyButton;
+
+import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -33,6 +43,13 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
 
     EditText title_et, url_et, views_et, likes_et, subscribers_et;
     String title_tx, url_tx, views_tx, likes_tx, subscribers_tx;
+
+    FancyButton selectImage_btn, cancelImage_btn;
+
+    ImageView selectedImage_iv;
+
+    int PICK_IMAGE_REQUEST = 111;
+    Uri ImageFilePath;
 
     RotateLoading loading;
 
@@ -53,11 +70,18 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         likes_et = view.findViewById(R.id.apa_likesEditText);
         subscribers_et = view.findViewById(R.id.apa_subscribersEditText);
 
+        selectImage_btn = view.findViewById(R.id.apa_selectButton);
+        cancelImage_btn = view.findViewById(R.id.apa_cancelButton);
+
+        selectedImage_iv = view.findViewById(R.id.apa_selectedImageView);
+
         loading = view.findViewById(R.id.apa_rotateLoading);
 
         FancyButton submit = view.findViewById(R.id.apa_submitButton);
 
         submit.setOnClickListener(this);
+        selectImage_btn.setOnClickListener(this);
+        cancelImage_btn.setOnClickListener(this);
 
         return view;
     }
@@ -109,9 +133,24 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
                             }
                         })
                         .show();
-            }//if ends
+            }
 
-        }
+        }//if ends
+
+     else if (id == R.id.apa_selectButton){
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
+        }//ele if
+
+    else if (id == R.id.apa_cancelButton){
+            ImageFilePath = null;
+            selectedImage_iv.setVisibility(View.GONE);
+            selectImage_btn.setText("Select Image");
+        }//ele if
+
+
 
 
     } //onclick
@@ -143,6 +182,32 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         }
         return true;
     }
+
+
+//    select image
+@Override
+public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        ImageFilePath = data.getData();
+
+            // Getting selected image into Bitmap.
+           // Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), ImageFilePath);
+            // Setting up bitmap selected image into ImageView.
+            selectedImage_iv.setVisibility(View.VISIBLE);
+            Picasso.with(getActivity())
+                    .load(ImageFilePath)
+                    .fit()
+                    .centerCrop()
+                    .into(selectedImage_iv);
+
+           // selectedImage_iv.setImageBitmap(bitmap);
+            // After selecting image change choose button above text.
+            selectImage_btn.setText("Selected");
+
+    }
+}//select image
 
 //    end
 }

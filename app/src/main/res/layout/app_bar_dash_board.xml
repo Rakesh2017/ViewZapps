@@ -23,29 +23,48 @@
                 android:background="@color/appColor"
                 app:popupTheme="@style/MyCustomAppTheme.PopupOverlay" />
 
+
+            <TextView
+                android:id="@+id/bar_zapsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/MyCustomTextStyleSmall"
+                android:drawableStart="@drawable/viewz_app_bar_logo"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:text="00000"
+                android:layout_marginEnd="12dp"
+                android:textStyle="bold"
+                android:drawablePadding="4dp"
+                android:background="@color/white"
+                android:padding="2dp"
+                android:elevation="@dimen/elevation"
+                tools:targetApi="lollipop" />
+
             <ImageButton
+                android:layout_toStartOf="@+id/bar_zapsTextView"
                 android:layout_width="@dimen/appBarIcon"
                 android:layout_height="@dimen/appBarIcon"
                 android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
                 android:background="@drawable/log_out"
                 tools:ignore="ContentDescription"
                 android:layout_marginEnd="12dp"
-                android:id="@+id/dash_logOut"
+                android:id="@+id/bar_logOut"
                 android:elevation="10dp"
-                />
+                tools:targetApi="lollipop" />
 
 
             <ImageButton
                 android:layout_width="@dimen/appBarIcon"
                 android:layout_height="@dimen/appBarIcon"
                 android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/dash_logOut"
+                android:layout_toStartOf="@+id/bar_logOut"
                 android:background="@drawable/switch_user"
                 tools:ignore="ContentDescription"
                 android:layout_marginEnd="12dp"
                 android:elevation="10dp"
-                />
+                tools:targetApi="lollipop" />
+
 
 
 
