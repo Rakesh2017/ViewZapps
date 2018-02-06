@@ -8,7 +8,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +18,21 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.googlecode.mp4parser.authoring.Edit;
+import com.iceteck.silicompressorr.FileUtils;
 import com.squareup.picasso.Picasso;
 import com.victor.loading.rotate.RotateLoading;
 
@@ -29,6 +40,7 @@ import java.io.File;
 import java.io.IOException;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import id.zelory.compressor.Compressor;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 import static android.app.Activity.RESULT_OK;
@@ -42,7 +54,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
     private View view;
 
     EditText title_et, url_et, views_et, likes_et, subscribers_et;
-    String title_tx, url_tx, views_tx, likes_tx, subscribers_tx;
+    String title_tx, url_tx, views_tx, likes_tx, subscribers_tx, key;
 
     FancyButton selectImage_btn, cancelImage_btn;
 
@@ -52,6 +64,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
     Uri ImageFilePath;
 
     RotateLoading loading;
+    private FirebaseUser mAuth = FirebaseAuth.getInstance().getCurrentUser();
 
     public AdminPostYoutubeAd() {
         // Required empty public constructor
@@ -109,15 +122,21 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
                             public void onClick(final SweetAlertDialog sDialog) {
                                 sDialog.dismissWithAnimation();
                                 loading.start();
-                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Ads").child("youtubeAds").child("");
-                                String key = databaseReference.push().getKey();
+
+                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                                key = databaseReference.push().getKey();
+                                databaseReference = databaseReference.child("ads").child("youtubeAds").child(key);
+
 //                            posting ad
-                                databaseReference.child(key).child("youtubeUrl").setValue(url_tx);
-                                databaseReference.child(key).child("youtubeTitle").setValue(title_tx);
-                                databaseReference.child(key).child("youtubeExpectedViews").setValue(views_tx);
-                                databaseReference.child(key).child("youtubeExpectedLikes").setValue(likes_tx);
-                                databaseReference.child(key).child("youtubeExpectedSubscribers").setValue(subscribers_tx);
-                                databaseReference.child(key).child("youtubeAdKey").setValue(key);
+                                databaseReference.child("youtubeUrl").setValue(url_tx);
+                                databaseReference.child("youtubeTitle").setValue(title_tx);
+                                databaseReference.child("youtubeExpectedViews").setValue(views_tx);
+                                databaseReference.child("youtubeExpectedLikes").setValue(likes_tx);
+                                databaseReference.child("youtubeExpectedSubscribers").setValue(subscribers_tx);
+                                databaseReference.child("youtubeAdKey").setValue(key);
+                                databaseReference.child("userUid").setValue(mAuth.getUid());
+
+                                UploadImageFileToFirebaseStorage();
                                 loading.stop();
                                 new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
                                         .setTitleText("Ad Successfully Posted!")
@@ -174,6 +193,12 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
                     .show();
             return false;
         }
+        else if (ImageFilePath == null){
+            new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Image for thumb nail is required!")
+                    .show();
+            return false;
+        }
         else if (views_tx.isEmpty() && likes_tx.isEmpty() && subscribers_tx.isEmpty()){
             new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Please specify at least one among VIEWS, LIKES, SUBSCRIBERS")
@@ -208,6 +233,67 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     }
 }//select image
+
+
+    //upload image
+    public void UploadImageFileToFirebaseStorage() {
+
+        try{
+            if (ImageFilePath != null) {
+
+                File actualImage = FileUtils.getFile(getActivity(), ImageFilePath);
+                try {
+                    File compressedImageFile = new Compressor(getActivity())
+                            .setQuality(25)
+                            .setCompressFormat(Bitmap.CompressFormat.WEBP)
+                            .compressToFile(actualImage);
+                    ImageFilePath = Uri.fromFile(compressedImageFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                StorageReference imageStorageReference = storageReference.child("ads/").child("youtubeAds/")
+                        .child(key+"/").child("adImage").child("youtubeImage.jpg");
+
+                imageStorageReference.putFile(ImageFilePath)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                                databaseReference.child("ads").child("youtubeAds/").child(key)
+                                        .child("youtubeAdImageUrl").setValue(taskSnapshot.getDownloadUrl().toString());
+                                //  dialog_uploadingPump.dismiss();
+
+                            }
+                        })
+                        // If something goes wrong .
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+
+                                // dialog_uploadingPump.dismiss();
+
+                                // Showing exception erro message.
+                                Toast.makeText(getActivity(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        })
+
+                        // On progress change upload time.
+                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            }
+                        });
+            }
+
+        }
+        catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
+
+    }//upload image
 
 //    end
 }

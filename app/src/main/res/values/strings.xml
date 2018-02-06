@@ -20,12 +20,15 @@
     <string name="NA">N.A</string>
     <string name="adminPostAdPanel"><b>Admin Post Ad Panel</b></string>
     <string name="adminYoutubeAd"><b>Youtube Ad</b></string>
+    <string name="youtubeAds"><b>Youtube Ads</b></string>
     <string name="videoTitle">Video Title</string>
     <string name="videoUrlLink">Video Url</string>
     <string name="likes">Number of Likes Needed</string>
     <string name="views">Number of Views Needed</string>
     <string name="subscribe">Number of Subscribers Needed</string>
     <string name="submit">Submit</string>
+    <string name="uploadedBy">uploaded by</string>
+    <string name="earnZaps"><b>Earn Zaps</b></string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

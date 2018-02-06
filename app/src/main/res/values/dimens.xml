@@ -21,7 +21,9 @@
     <dimen name="headerMarginTop">24dp</dimen>
     <dimen name="marginBetweenTags">4dp</dimen>
     <dimen name="mainButtons">110dp</dimen>
-    <dimen name="cardViewPadding">4dp</dimen>
+    <dimen name="cardViewPadding4">4dp</dimen>
+    <dimen name="cardViewPadding8">8dp</dimen>
+    <dimen name="cardViewPadding18">18dp</dimen>
     <dimen name="selectImageSize">200dp</dimen>
 
 </resources>

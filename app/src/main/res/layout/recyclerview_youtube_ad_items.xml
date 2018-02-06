@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cardview1"
+    android:id="@+id/rya_cardview"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     card_view:cardElevation="2dp"
@@ -11,32 +10,85 @@
     card_view:cardMaxElevation="2dp"
     android:layout_marginStart="2dp"
     android:layout_marginEnd="2dp"
-    android:background="@color/whiteSmoke"
-    >
+    android:layout_marginTop="@dimen/cardViewPadding4"
+    android:background="@color/whiteSmoke">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/dash_relativeLayout"
-        android:background="@color/appColor"
-        android:padding="@dimen/cardViewPadding">
+        android:id="@+id/rya_relativeLayout"
+        android:background="@color/whiteSmoke"
+        xmlns:app="http://schemas.android.com/tools"
+        android:padding="@dimen/cardViewPadding4"
+        >
 
+        <!--user image-->
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/rya_profileImage"
+            android:onClick="onClick"
+            />
+        <!--uploaded by-->
         <util.android.textviews.FontTextView
-            android:id="@+id/rya_titleTexxtView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/uploadedBy"
+            style="@style/MyCustomTextStyleSmall"
+            android:layout_toEndOf="@+id/rya_profileImage"
+            android:layout_marginStart="@dimen/cardViewPadding4"
+            android:layout_marginTop="@dimen/cardViewPadding4"
+            android:id="@+id/rya_uploadedByTextView"
+            />
+
+        <!--uploader name-->
+        <util.android.textviews.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/uploadedBy"
+            style="@style/MyCustomTextStyleMedium"
+            android:textStyle="bold"
+            android:layout_toEndOf="@+id/rya_uploadedByTextView"
+            android:layout_marginStart="@dimen/cardViewPadding4"
+            android:layout_marginTop="@dimen/cardViewPadding4"
+            android:textColor="@color/lightCoral"
+            android:id="@+id/rya_uploaderNameTextView"
+            />
+
+        <!--ad image-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:id="@+id/rya_adImageView"
+            app:ignore="ContentDescription"
+            android:layout_below="@+id/rya_uploaderNameTextView"
+            android:layout_marginStart="@dimen/cardViewPadding4"
+            android:layout_marginTop="@dimen/cardViewPadding18"
+            />
+
+        <!--ad title-->
+        <util.android.textviews.FontTextView
+            android:id="@+id/rya_titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/MyCustomTextStyleMedium"
-            android:padding="@dimen/cardViewPadding"
+            android:paddingStart="@dimen/cardViewPadding8"
+            android:paddingEnd="@dimen/cardViewPadding8"
+            android:textStyle="bold"
+            android:layout_below="@+id/rya_adImageView"
+            android:paddingTop="@dimen/cardViewPadding8"
             />
-        
+
+        <!--ad url-->
         <util.android.textviews.FontTextView
             android:id="@+id/rya_urlTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/MyCustomTextStyleSmall"
-            android:layout_below="@+id/rya_titleTexxtView"
-            android:textColor="@color/white"
-            android:padding="@dimen/cardViewPadding"
+            android:layout_below="@+id/rya_titleTextView"
+            android:textColor="@color/googleGreen"
+            android:paddingStart="@dimen/cardViewPadding8"
+            android:paddingEnd="@dimen/cardViewPadding8"
             />
 
         

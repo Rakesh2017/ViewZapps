@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -50,6 +50,7 @@
             android:background="@drawable/custom_rounded_rectangle_edit_text"
             android:inputType="textCapWords"
             android:elevation="@dimen/elevation"
+            android:maxLength="90"
             tools:targetApi="lollipop"
             tools:ignore="LabelFor" />
 
@@ -261,4 +262,4 @@
     </RelativeLayout>
 
 
-</FrameLayout>
+</android.support.v4.widget.NestedScrollView>
