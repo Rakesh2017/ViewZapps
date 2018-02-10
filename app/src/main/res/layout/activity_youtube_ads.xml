@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/whiteSmoke"
+    android:background="@color/gray90"
     tools:context="enhabyto.com.viewzapps.YoutubeAds">
 
     <android.support.design.widget.AppBarLayout
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:background="#ECEFF1"
+        android:background="@color/youtubeBackGround"
         android:fitsSystemWindows="true"
         >
 
@@ -25,7 +25,7 @@
             app:contentScrim="@color/white"
             app:expandedTitleMarginStart="48dp"
             app:expandedTitleMarginEnd="64dp"
-            android:background="@color/whiteSmoke"
+            android:background="@color/youtubeBackGround"
             android:elevation="@dimen/elevation"
             tools:targetApi="lollipop">
 
@@ -51,21 +51,38 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/swipeContainer"
+        >
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
+        android:background="@color/darkGray"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rya_recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/whiteSmoke"
+            android:layout_height="wrap_content"
+            android:background="@color/youtubeBackGround"
             />
+        <com.victor.loading.rotate.RotateLoading
+            android:id="@+id/ya_rotateLoading"
+            android:layout_width="@dimen/rotateLoadingWidth"
+            android:layout_height="@dimen/rotateLoadingHeight"
+            app:loading_width="@dimen/rotateLoadingBreadth"
+            app:loading_color="@color/appColor"
+            android:elevation="@dimen/elevation"
+            tools:targetApi="lollipop"
+            android:layout_centerInParent="true"/>
 
     </RelativeLayout>
 
-
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </android.support.design.widget.CoordinatorLayout>

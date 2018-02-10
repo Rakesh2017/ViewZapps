@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -71,7 +72,8 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
 
                 String url = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
                 Uri uri = Uri.parse(url);
-                Glide.with(context)
+
+                Picasso.with(context)
                         .load(uri)
                         .into(holder.userImage);
             }

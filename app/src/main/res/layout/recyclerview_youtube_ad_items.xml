@@ -1,23 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rya_cardview"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardElevation="2dp"
-    card_view:contentPadding="2dp"
-    card_view:cardCornerRadius="2dp"
-    card_view:cardMaxElevation="2dp"
-    android:layout_marginStart="2dp"
-    android:layout_marginEnd="2dp"
-    android:layout_marginTop="@dimen/cardViewPadding4"
-    android:background="@color/whiteSmoke">
+    android:background="@color/youtubeBackGround"
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/rya_relativeLayout"
-        android:background="@color/whiteSmoke"
+        android:background="@color/youtubeBackGround"
         xmlns:app="http://schemas.android.com/tools"
         android:padding="@dimen/cardViewPadding4"
         >
@@ -64,6 +58,7 @@
             android:layout_below="@+id/rya_uploaderNameTextView"
             android:layout_marginStart="@dimen/cardViewPadding4"
             android:layout_marginTop="@dimen/cardViewPadding18"
+            android:layout_centerHorizontal="true"
             />
 
         <!--ad title-->
