@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/youtubeBackGroundWhiteSmoke"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/gray90"
     tools:context="enhabyto.com.viewzapps.YoutubeAds">
 
     <android.support.design.widget.AppBarLayout
@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:background="@color/youtubeBackGround"
         android:fitsSystemWindows="true"
         >
 
@@ -20,30 +19,35 @@
             android:id="@+id/main.collapsing"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:layout_scrollFlags="scroll|enterAlways"
             android:fitsSystemWindows="true"
             app:contentScrim="@color/white"
             app:expandedTitleMarginStart="48dp"
             app:expandedTitleMarginEnd="64dp"
-            android:background="@color/youtubeBackGround"
+            android:background="@color/youtubeBackGroundWhiteSmoke"
             android:elevation="@dimen/elevation"
             tools:targetApi="lollipop">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/cardViewPadding8"
+                android:elevation="@dimen/cardViewPadding8"
                 >
+
             <util.android.textviews.FontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/youtubeAds"
-                style="@style/MyCustomTextStyleLarge"
-                android:layout_alignParentEnd="true"
-                android:paddingEnd="@dimen/page_border"
+                style="@style/MyCustomTextStyleMediumDroidBold"
+                android:paddingStart="@dimen/cardViewPadding18"
                 android:paddingTop="@dimen/page_border"
+                android:fontFamily="droid_sans_bold.tff"
                 android:drawableStart="@drawable/ic_youtube_mini"
-                android:drawablePadding="@dimen/book_border"
+                android:drawablePadding="@dimen/cardViewPadding4"
                 tools:ignore="RelativeOverlap,RtlSymmetry"
+                android:padding="@dimen/cardViewPadding4"
+                android:layout_centerVertical="true"
                 />
 
             </RelativeLayout>
@@ -51,25 +55,18 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/swipeContainer"
-        >
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/youtubeBackGroundWhiteSmoke"
         android:layout_marginTop="2dp"
-        android:background="@color/darkGray"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rya_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/youtubeBackGround"
+            android:background="@color/youtubeBackGroundWhiteSmoke"
             />
         <com.victor.loading.rotate.RotateLoading
             android:id="@+id/ya_rotateLoading"
@@ -82,7 +79,5 @@
             android:layout_centerInParent="true"/>
 
     </RelativeLayout>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
 
 </android.support.design.widget.CoordinatorLayout>

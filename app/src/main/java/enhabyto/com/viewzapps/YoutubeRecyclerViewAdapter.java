@@ -17,10 +17,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import util.android.textviews.FontTextView;
 
 /**
@@ -29,11 +31,11 @@ import util.android.textviews.FontTextView;
 
 public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecyclerViewAdapter.ViewHolder> {
 
-    Context context;
+    private Context context;
     private List<RecyclerViewInfo> MainImageUploadInfoList;
-    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
-    public YoutubeRecyclerViewAdapter(Context context, List<RecyclerViewInfo> TempList) {
+    YoutubeRecyclerViewAdapter(Context context, List<RecyclerViewInfo> TempList) {
 
         this.MainImageUploadInfoList = TempList;
 
@@ -45,9 +47,7 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_youtube_ad_items, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(view);
-
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
 
@@ -58,31 +58,41 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
         holder.title_tx.setText(UploadInfo.getYoutubeTitle());
         holder.url_tx.setText(UploadInfo.getYoutubeUrl());
 
+//        ad image
         Picasso.with(context)
                 .load(UploadInfo.getYoutubeAdImageUrl())
                 .fit()
                 .centerCrop()
+                .noFade()
                 .into(holder.adImage_iv);
 
-        databaseReference.child("users").child(UploadInfo.getUserUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                holder.uploaderName_tx.setText(dataSnapshot.child("profile_details")
-                        .child("name").getValue(String.class));
+        try {
+            databaseReference.child("users").child(UploadInfo.getUserUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    holder.uploaderName_tx.setText(dataSnapshot.child("profile_details")
+                            .child("name").getValue(String.class));
 
-                String url = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
-                Uri uri = Uri.parse(url);
+                    String url = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
+                    Uri uri = Uri.parse(url);
 
-                Picasso.with(context)
-                        .load(uri)
-                        .into(holder.userImage);
-            }
+//                    user image
+                    Picasso.with(context)
+                            .load(uri)
+                            .noFade()
+                            .into(holder.userImage);
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -106,7 +116,7 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
 
         FontTextView title_tx, url_tx, uploaderName_tx;
         ImageView adImage_iv;
-        CircularImageView userImage;
+        CircleImageView userImage;
 
 
         ViewHolder(View itemView) {

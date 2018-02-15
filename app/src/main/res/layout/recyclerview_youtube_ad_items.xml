@@ -1,38 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
     android:id="@+id/rya_cardview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/youtubeBackGround"
-    >
+    card_view:cardElevation="5dp"
+    card_view:cardMaxElevation="5dp"
+    app:cardCornerRadius="@dimen/cardViewPadding8"
+    android:alwaysDrawnWithCache="true"
+    app:cardBackgroundColor="@color/youtubeBackGroundWhiteSmoke"
+    android:background="@color/youtubeBackGroundWhiteSmoke"
+    android:layout_centerHorizontal="true"
+    android:shape="ring"
+    app:cardPreventCornerOverlap="true"
+    android:layout_marginTop="@dimen/cardViewPadding8"
+    android:layout_marginStart="@dimen/cardViewPadding4"
+    android:layout_marginEnd="@dimen/cardViewPadding4"
+    android:fitsSystemWindows="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="250dp"
         android:id="@+id/rya_relativeLayout"
-        android:background="@color/youtubeBackGround"
+        android:background="@color/youtubeBackGroundWhiteSmoke"
         xmlns:app="http://schemas.android.com/tools"
-        android:padding="@dimen/cardViewPadding4"
         >
 
+        <!--ad image-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rya_adImageView"
+            app:ignore="ContentDescription"
+            android:layout_centerHorizontal="true"
+            />
+
         <!--user image-->
-        <com.mikhaellopez.circularimageview.CircularImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/rya_profileImage"
-            android:onClick="onClick"
-            />
-        <!--uploaded by-->
-        <util.android.textviews.FontTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/uploadedBy"
-            style="@style/MyCustomTextStyleSmall"
-            android:layout_toEndOf="@+id/rya_profileImage"
-            android:layout_marginStart="@dimen/cardViewPadding4"
             android:layout_marginTop="@dimen/cardViewPadding4"
-            android:id="@+id/rya_uploadedByTextView"
+            android:layout_marginStart="@dimen/cardViewPadding4"
+            app:civ_border_width="10dp"
+            app:civ_border_color="#FF000000"
             />
 
         <!--uploader name-->
@@ -40,38 +52,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/uploadedBy"
-            style="@style/MyCustomTextStyleMedium"
+            style="@style/MyCustomTextStyleSmallDroidBold"
             android:textStyle="bold"
-            android:layout_toEndOf="@+id/rya_uploadedByTextView"
-            android:layout_marginStart="@dimen/cardViewPadding4"
-            android:layout_marginTop="@dimen/cardViewPadding4"
-            android:textColor="@color/lightCoral"
+            android:layout_toEndOf="@+id/rya_profileImage"
+            android:layout_marginStart="@dimen/cardViewPadding8"
+            android:layout_marginTop="@dimen/cardViewPadding8"
+            android:textColor="@color/black"
             android:id="@+id/rya_uploaderNameTextView"
+            android:layout_alignTop="@+id/rya_profileImage"
+            android:background="@drawable/rectangle_white_smoke_transparent"
             />
 
-        <!--ad image-->
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:id="@+id/rya_adImageView"
-            app:ignore="ContentDescription"
-            android:layout_below="@+id/rya_uploaderNameTextView"
-            android:layout_marginStart="@dimen/cardViewPadding4"
-            android:layout_marginTop="@dimen/cardViewPadding18"
-            android:layout_centerHorizontal="true"
-            />
+
 
         <!--ad title-->
         <util.android.textviews.FontTextView
             android:id="@+id/rya_titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/MyCustomTextStyleMedium"
+            style="@style/MyCustomTextStyleSmallDroidBold"
             android:paddingStart="@dimen/cardViewPadding8"
             android:paddingEnd="@dimen/cardViewPadding8"
             android:textStyle="bold"
-            android:layout_below="@+id/rya_adImageView"
             android:paddingTop="@dimen/cardViewPadding8"
+            android:layout_above="@+id/rya_urlTextView"
+            android:layout_marginBottom="@dimen/cardViewPadding8"
             />
 
         <!--ad url-->
@@ -79,11 +84,12 @@
             android:id="@+id/rya_urlTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/MyCustomTextStyleSmall"
-            android:layout_below="@+id/rya_titleTextView"
+            style="@style/MyCustomTextStyleSmallDroidBold"
             android:textColor="@color/googleGreen"
             android:paddingStart="@dimen/cardViewPadding8"
             android:paddingEnd="@dimen/cardViewPadding8"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/cardViewPadding8"
             />
 
         

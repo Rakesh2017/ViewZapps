@@ -8,16 +8,29 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="MyCustomTextStyleMedium" parent="@android:style/Theme.Light">
+    <style name="MyCustomTextStyleMediumUbuntu" parent="@android:style/Theme.Light">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/mediumSize</item>
         <item name="android:fontFamily">ubuntu.ttf</item>
     </style>
 
-    <style name="MyCustomTextStyleLarge" parent="@android:style/Theme.Light">
+    <style name="MyCustomTextStyleMediumDroidBold" parent="@android:style/Theme.Light">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/mediumSize</item>
+        <item name="android:fontFamily">droid_sans_bold.ttf</item>
+    </style>
+
+    <style name="MyCustomTextStyleLargeUbuntu" parent="@android:style/Theme.Light">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/largeSize</item>
         <item name="android:fontFamily">ubuntu.ttf</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MyCustomTextStyleLargeDroidSans" parent="@android:style/Theme.Light">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/largeSize</item>
+        <item name="android:fontFamily">droid_sans_bold.ttf</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -30,10 +43,16 @@
     </style>
 
 
-    <style name="MyCustomTextStyleSmall" parent="@android:style/Theme.Light">
+    <style name="MyCustomTextStyleSmallUbuntu" parent="@android:style/Theme.Light">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/smallSize</item>
         <item name="android:fontFamily">ubuntu.ttf</item>
+    </style>
+
+    <style name="MyCustomTextStyleSmallDroidBold" parent="@android:style/Theme.Light">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/smallSize</item>
+        <item name="android:fontFamily">droid_sans_bold.ttf</item>
     </style>
 
 

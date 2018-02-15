@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:drawablePadding="@dimen/page_border"
         android:text="@string/adminPostAdPanel"
-        style="@style/MyCustomTextStyleLarge"
+        style="@style/MyCustomTextStyleLargeUbuntu"
         android:id="@+id/apa_headerTextView"
         android:layout_alignParentEnd="true"
         android:padding="@dimen/page_border"

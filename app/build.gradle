@@ -48,6 +48,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2' //picasso
     compile 'id.zelory:compressor:2.1.0' //image compressor
     compile 'com.iceteck.silicompressorr:silicompressor:2.1' //image compressor
+    compile 'de.hdodenhof:circleimageview:2.2.0' //circular image
     testImplementation 'junit:junit:4.12'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
