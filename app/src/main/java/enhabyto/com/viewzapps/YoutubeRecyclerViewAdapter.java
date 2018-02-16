@@ -2,22 +2,24 @@ package enhabyto.com.viewzapps;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.ColorInt;
+import android.support.v4.graphics.ColorUtils;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.github.lzyzsd.randomcolor.RandomColor;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.mikhaellopez.circularimageview.CircularImageView;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -55,8 +57,16 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final RecyclerViewInfo UploadInfo = MainImageUploadInfoList.get(position);
 
+
+        RandomColor randomColor = new RandomColor();
+        int color = randomColor.randomColor();
+        int alpha = 200; //between 0-255
+        @ColorInt
+        int alphaColor = ColorUtils.setAlphaComponent(color, alpha);
+
+        holder.relativeLayout.setBackgroundColor(alphaColor);
         holder.title_tx.setText(UploadInfo.getYoutubeTitle());
-        holder.url_tx.setText(UploadInfo.getYoutubeUrl());
+        //holder.url_tx.setText(UploadInfo.getYoutubeUrl());
 
 //        ad image
         Picasso.with(context)
@@ -93,6 +103,14 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
             e.printStackTrace();
         }
 
+        if( position == 0 ){
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins((int) context.getResources().getDimension(R.dimen.cardViewPadding12),(int) context.getResources().getDimension(R.dimen.cardViewPadding16),(int) context.getResources().getDimension(R.dimen.cardViewPadding12),(int) context.getResources().getDimension(R.dimen.cardViewPadding16));
+            holder.cardView.setLayoutParams(params);
+        }
+
 
     }
 
@@ -108,7 +126,6 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
 
     @Override
     public int getItemCount() {
-
         return MainImageUploadInfoList.size();
     }
 
@@ -117,22 +134,24 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
         FontTextView title_tx, url_tx, uploaderName_tx;
         ImageView adImage_iv;
         CircleImageView userImage;
-
+        RelativeLayout relativeLayout;
+        CardView cardView;
 
         ViewHolder(View itemView) {
             super(itemView);
 
             title_tx = itemView.findViewById(R.id.rya_titleTextView);
-            url_tx = itemView.findViewById(R.id.rya_urlTextView);
+          //  url_tx = itemView.findViewById(R.id.rya_urlTextView);
 
             uploaderName_tx = itemView.findViewById(R.id.rya_uploaderNameTextView);
             adImage_iv = itemView.findViewById(R.id.rya_adImageView);
             userImage = itemView.findViewById(R.id.rya_profileImage);
+            relativeLayout = itemView.findViewById(R.id.rya_relativeLayout1);
+            cardView = itemView.findViewById(R.id.rya_cardview);
         }
 
 
     }
-
 
 //end
 }

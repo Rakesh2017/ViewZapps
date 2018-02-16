@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/youtubeAds"
                 style="@style/MyCustomTextStyleMediumDroidBold"
-                android:paddingStart="@dimen/cardViewPadding18"
+                android:paddingStart="@dimen/cardViewPadding12"
                 android:paddingTop="@dimen/page_border"
                 android:fontFamily="droid_sans_bold.tff"
                 android:drawableStart="@drawable/ic_youtube_mini"

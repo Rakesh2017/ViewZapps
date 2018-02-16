@@ -25,6 +25,9 @@
     <dimen name="cardViewPadding1">1dp</dimen>
     <dimen name="cardViewPadding8">8dp</dimen>
     <dimen name="cardViewPadding18">18dp</dimen>
+    <dimen name="cardViewPadding12">12dp</dimen>
+    <dimen name="cardViewPadding16">16dp</dimen>
     <dimen name="selectImageSize">200dp</dimen>
+    <dimen name="extraSmallTextSize12">200sp</dimen>
 
 </resources>
