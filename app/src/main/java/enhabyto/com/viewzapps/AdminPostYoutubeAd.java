@@ -128,13 +128,25 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
                                 databaseReference = databaseReference.child("ads").child("youtubeAds").child(key);
 
 //                            posting ad
-                                databaseReference.child("youtubeUrl").setValue(url_tx);
-                                databaseReference.child("youtubeTitle").setValue(title_tx);
-                                databaseReference.child("youtubeExpectedViews").setValue(views_tx);
-                                databaseReference.child("youtubeExpectedLikes").setValue(likes_tx);
-                                databaseReference.child("youtubeExpectedSubscribers").setValue(subscribers_tx);
+                                databaseReference.child("adUrl").setValue(url_tx);
+                                databaseReference.child("adTitle").setValue(title_tx);
+                                databaseReference.child("adViewsLeft").setValue(views_tx);
+                                databaseReference.child("adLikesLeft").setValue(likes_tx);
+                                databaseReference.child("adSubscribersLeft").setValue(subscribers_tx);
                                 databaseReference.child("youtubeAdKey").setValue(key);
                                 databaseReference.child("userUid").setValue(mAuth.getUid());
+
+                                databaseReference = FirebaseDatabase.getInstance().getReference();
+                                databaseReference = databaseReference.child("admin_posted_ads").child("youtubeAds").child(key);
+//                            posting ad
+                                databaseReference.child("adUrl").setValue(url_tx);
+                                databaseReference.child("adTitle").setValue(title_tx);
+                                databaseReference.child("adExpectedViews").setValue(views_tx);
+                                databaseReference.child("adExpectedLikes").setValue(likes_tx);
+                                databaseReference.child("adExpectedSubscribers").setValue(subscribers_tx);
+                                databaseReference.child("youtubeAdKey").setValue(key);
+                                databaseReference.child("userUid").setValue(mAuth.getUid());
+
 
                                 UploadImageFileToFirebaseStorage();
                                 loading.stop();
@@ -261,7 +273,10 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                                databaseReference.child("ads").child("youtubeAds/").child(key)
+                                databaseReference.child("ads").child("youtubeAds").child(key)
+                                        .child("youtubeAdImageUrl").setValue(taskSnapshot.getDownloadUrl().toString());
+                                databaseReference = FirebaseDatabase.getInstance().getReference();
+                                databaseReference.child("admin_posted_ads").child("youtubeAds").child(key)
                                         .child("youtubeAdImageUrl").setValue(taskSnapshot.getDownloadUrl().toString());
                                 //  dialog_uploadingPump.dismiss();
 
@@ -289,7 +304,7 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
             }
 
         }
-        catch (IllegalArgumentException e){
+        catch (IllegalArgumentException | NullPointerException e){
             e.printStackTrace();
         }
 

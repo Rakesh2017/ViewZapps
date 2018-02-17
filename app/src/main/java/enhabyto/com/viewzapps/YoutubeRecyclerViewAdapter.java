@@ -58,6 +58,7 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
         final RecyclerViewInfo UploadInfo = MainImageUploadInfoList.get(position);
 
 
+        //generating random color
         RandomColor randomColor = new RandomColor();
         int color = randomColor.randomColor();
         int alpha = 200; //between 0-255
@@ -65,7 +66,7 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
         int alphaColor = ColorUtils.setAlphaComponent(color, alpha);
 
         holder.relativeLayout.setBackgroundColor(alphaColor);
-        holder.title_tx.setText(UploadInfo.getYoutubeTitle());
+        holder.title_tx.setText(UploadInfo.getAdTitle());
         //holder.url_tx.setText(UploadInfo.getYoutubeUrl());
 
 //        ad image
@@ -89,6 +90,8 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
 //                    user image
                     Picasso.with(context)
                             .load(uri)
+                            .placeholder(R.drawable.ic_profile_image_placeholder)
+                            .error(R.drawable.ic_warning)
                             .noFade()
                             .into(holder.userImage);
                 }
@@ -103,6 +106,7 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
             e.printStackTrace();
         }
 
+        //first position
         if( position == 0 ){
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.WRAP_CONTENT,

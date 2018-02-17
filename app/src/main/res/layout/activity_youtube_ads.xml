@@ -78,6 +78,18 @@
             tools:targetApi="lollipop"
             android:layout_centerInParent="true"/>
 
+        <pl.droidsonroids.gif.GifTextView
+            android:id="@+id/ya_emptyListGif"
+            android:layout_width="350dp"
+            android:layout_height="300dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/empty_list"
+            android:text="Oops! There is no video at this moment. We will notify you."
+            style="@style/MyCustomTextStyleMediumDroidBold"
+            android:gravity="center|bottom"
+            android:visibility="gone"
+        />
+
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

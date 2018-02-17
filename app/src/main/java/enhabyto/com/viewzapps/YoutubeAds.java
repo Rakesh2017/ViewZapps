@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,6 +19,8 @@ import com.victor.loading.rotate.RotateLoading;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.droidsonroids.gif.GifTextView;
+
 public class YoutubeAds extends AppCompatActivity {
 
     RecyclerView recyclerView;
@@ -28,6 +31,7 @@ public class YoutubeAds extends AppCompatActivity {
 
     private DatabaseReference databaseReferenceParent = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference databaseReference = databaseReferenceParent.child("ads").child("youtubeAds");
+    GifTextView gifTextView;
 
     RotateLoading loading;
 
@@ -37,6 +41,7 @@ public class YoutubeAds extends AppCompatActivity {
         setContentView(R.layout.activity_youtube_ads);
 
         loading = findViewById(R.id.ya_rotateLoading);
+        gifTextView = findViewById(R.id.ya_emptyListGif);
 
         recyclerView = findViewById(R.id.rya_recyclerView);
 
@@ -70,6 +75,10 @@ public class YoutubeAds extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
                 recyclerView.setAdapter(adapter);
                 loading.stop();
+                if (adapter.getItemCount() == 0){
+                    gifTextView.setVisibility(View.VISIBLE);
+                }
+                else gifTextView.setVisibility(View.GONE);
 
                 // Hiding the progress dialog.
 

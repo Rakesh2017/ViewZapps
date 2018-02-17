@@ -48,36 +48,35 @@
                 app:civ_border_color="#000000"
                 />
 
-            <!--uploader name-->
-            <util.android.textviews.FontTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/MyCustomTextStyleSmallDroidBold"
-                android:textStyle="bold"
-                android:layout_toEndOf="@+id/rya_profileImage"
-                android:layout_marginStart="@dimen/cardViewPadding8"
-                android:layout_marginTop="@dimen/cardViewPadding12"
-                android:textColor="@color/black"
-                android:id="@+id/rya_uploaderNameTextView"
-                android:layout_alignTop="@+id/rya_profileImage"
-                />
-
-
 
             <!--ad title-->
             <util.android.textviews.FontTextView
                 android:id="@+id/rya_titleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/rya_profileImage"
+                android:layout_toEndOf="@+id/rya_profileImage"
                 style="@style/MyCustomTextStyleSmallDroidBold"
                 android:paddingStart="@dimen/cardViewPadding4"
                 android:paddingEnd="@dimen/cardViewPadding4"
                 android:textStyle="bold"
-                android:layout_below="@+id/rya_uploaderNameTextView"
-                android:layout_marginBottom="@dimen/cardViewPadding4"
+                android:maxLines="2"
                 android:layout_marginStart="@dimen/cardViewPadding8"
                 android:layout_marginEnd="@dimen/cardViewPadding8"
-                android:layout_marginTop="@dimen/cardViewPadding12"
+                />
+
+            <!--uploader name-->
+            <util.android.textviews.FontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/MyCustomTextStyleSmallDroidBold"
+                android:textStyle="bold"
+                android:layout_below="@+id/rya_profileImage"
+                android:layout_marginStart="@dimen/cardViewPadding8"
+                android:textColor="@color/whiteSmoke"
+                android:id="@+id/rya_uploaderNameTextView"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/cardViewPadding8"
                 />
 
 

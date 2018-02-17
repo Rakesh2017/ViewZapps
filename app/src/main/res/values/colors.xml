@@ -12,6 +12,7 @@
     <color name="whiteSmoke">#F5F5F5</color>
     <color name="whiteSmokeTransparent">#90F5F5F5</color>
     <color name="black">#000000</color>
+    <color name="black90">#90000000</color>
     <color name="carrot">#ED9121</color>
     <color name="wheat">#F5DEB3</color>
     <color name="thistle">#D8BFD8</color>
