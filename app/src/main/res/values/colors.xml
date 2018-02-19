@@ -6,7 +6,8 @@
 
     <!--My colors-->
 
-    <color name="appColor">#4885ed</color>
+    <color name="appColor">#00bbff</color>
+    <color name="transparentAppColor">#00bbff</color>
     <color name="logoColor">#fd7710</color>
     <color name="linen">#FAF0E6</color>
     <color name="whiteSmoke">#F5F5F5</color>
@@ -29,7 +30,7 @@
     <color name="white">#FFFFFF</color>
     <color name="peachPuff">#CDAF95</color>
     <color name="cardViewUrl">#5474b8</color>
-    <color name="youtubeBackGroundWhiteSmoke">#F5F5F5</color>
+    <color name="youtubeBackGroundDarkGray">#A9A9A9</color>
     <color name="darkGray">#A9A9A9</color>
 
 

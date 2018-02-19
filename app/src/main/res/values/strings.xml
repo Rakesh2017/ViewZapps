@@ -29,6 +29,8 @@
     <string name="submit">Submit</string>
     <string name="uploadedBy">uploaded by</string>
     <string name="earnZaps"><b>Earn Zaps</b></string>
+    <string name="hintPlaceholderL"><b>_____ __ _________ ______ </b></string>
+    <string name="hintPlaceholderS"><b>______ __________</b></string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -58,20 +58,21 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
         final RecyclerViewInfo UploadInfo = MainImageUploadInfoList.get(position);
 
 
-        //generating random color
+        /*generating random color
         RandomColor randomColor = new RandomColor();
         int color = randomColor.randomColor();
         int alpha = 200; //between 0-255
         @ColorInt
-        int alphaColor = ColorUtils.setAlphaComponent(color, alpha);
+        int alphaColor = ColorUtils.setAlphaComponent(color, alpha);*/
 
-        holder.relativeLayout.setBackgroundColor(alphaColor);
+        //holder.relativeLayout.setBackgroundColor(context.getResources().getColor(R.color.transparentAppColor));
         holder.title_tx.setText(UploadInfo.getAdTitle());
         //holder.url_tx.setText(UploadInfo.getYoutubeUrl());
 
 //        ad image
         Picasso.with(context)
                 .load(UploadInfo.getYoutubeAdImageUrl())
+                .placeholder(R.drawable.ic_youtube_placeholder)
                 .fit()
                 .centerCrop()
                 .noFade()
@@ -111,7 +112,7 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.WRAP_CONTENT,
                     FrameLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins((int) context.getResources().getDimension(R.dimen.cardViewPadding12),(int) context.getResources().getDimension(R.dimen.cardViewPadding16),(int) context.getResources().getDimension(R.dimen.cardViewPadding12),(int) context.getResources().getDimension(R.dimen.cardViewPadding16));
+            params.setMargins(0,(int) context.getResources().getDimension(R.dimen.cardViewPadding12),0,(int) context.getResources().getDimension(R.dimen.cardViewPadding12));
             holder.cardView.setLayoutParams(params);
         }
 
@@ -138,7 +139,6 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
         FontTextView title_tx, url_tx, uploaderName_tx;
         ImageView adImage_iv;
         CircleImageView userImage;
-        RelativeLayout relativeLayout;
         CardView cardView;
 
         ViewHolder(View itemView) {
@@ -150,7 +150,6 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
             uploaderName_tx = itemView.findViewById(R.id.rya_uploaderNameTextView);
             adImage_iv = itemView.findViewById(R.id.rya_adImageView);
             userImage = itemView.findViewById(R.id.rya_profileImage);
-            relativeLayout = itemView.findViewById(R.id.rya_relativeLayout1);
             cardView = itemView.findViewById(R.id.rya_cardview);
         }
 

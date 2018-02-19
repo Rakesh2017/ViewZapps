@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/youtubeBackGroundWhiteSmoke"
+    android:background="@color/youtubeBackGroundDarkGray"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="enhabyto.com.viewzapps.YoutubeAds">
 
@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:background="@color/whiteSmoke"
         android:fitsSystemWindows="true"
         >
 
@@ -24,13 +25,14 @@
             app:contentScrim="@color/white"
             app:expandedTitleMarginStart="48dp"
             app:expandedTitleMarginEnd="64dp"
-            android:background="@color/youtubeBackGroundWhiteSmoke"
+            android:background="@color/whiteSmoke"
             android:elevation="@dimen/elevation"
             tools:targetApi="lollipop">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/whiteSmoke"
                 android:padding="@dimen/cardViewPadding8"
                 android:elevation="@dimen/cardViewPadding8"
                 >
@@ -58,15 +60,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/youtubeBackGroundWhiteSmoke"
-        android:layout_marginTop="2dp"
+        android:background="@color/youtubeBackGroundDarkGray"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rya_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/youtubeBackGroundWhiteSmoke"
+            android:background="@color/youtubeBackGroundDarkGray"
             />
         <com.victor.loading.rotate.RotateLoading
             android:id="@+id/ya_rotateLoading"
