@@ -8,6 +8,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,7 +32,7 @@ public class YoutubeAds extends AppCompatActivity {
 
     private DatabaseReference databaseReferenceParent = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference databaseReference = databaseReferenceParent.child("ads").child("youtubeAds");
-    GifTextView gifTextView;
+    RelativeLayout gifTextView;
 
     RotateLoading loading;
 

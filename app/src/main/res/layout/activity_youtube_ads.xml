@@ -79,17 +79,25 @@
             tools:targetApi="lollipop"
             android:layout_centerInParent="true"/>
 
-        <pl.droidsonroids.gif.GifTextView
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
             android:id="@+id/ya_emptyListGif"
-            android:layout_width="350dp"
-            android:layout_height="300dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/empty_list"
-            android:text="Oops! There is no video at this moment. We will notify you."
-            style="@style/MyCustomTextStyleMediumDroidBold"
-            android:gravity="center|bottom"
             android:visibility="gone"
-        />
+            >
+            <pl.droidsonroids.gif.GifTextView
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/empty_list"
+                android:text="@string/noItem"
+                style="@style/MyCustomTextStyleMediumDroidBold"
+                android:gravity="center|bottom"
+                />
+        </RelativeLayout>
+
+
 
     </RelativeLayout>
 

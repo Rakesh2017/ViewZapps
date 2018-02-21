@@ -22,7 +22,7 @@
         android:id="@+id/rya_relativeLayout"
         android:background="@color/whiteSmoke"
         xmlns:app="http://schemas.android.com/tools"
-        android:padding="@dimen/cardViewPadding4"
+        android:padding="@dimen/cardViewPadding8"
         >
 
 
@@ -48,7 +48,6 @@
             android:hint="@string/hintPlaceholderS"
             android:padding="@dimen/cardViewPadding12"
             />
-
 
         <!--ad image-->
         <ImageView

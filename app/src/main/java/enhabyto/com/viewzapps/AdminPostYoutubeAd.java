@@ -1,26 +1,28 @@
 package enhabyto.com.viewzapps;
 
 
+import android.*;
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,18 +33,16 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.googlecode.mp4parser.authoring.Edit;
 import com.iceteck.silicompressorr.FileUtils;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 import com.victor.loading.rotate.RotateLoading;
-
 import java.io.File;
 import java.io.IOException;
-
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import id.zelory.compressor.Compressor;
 import mehdi.sakout.fancybuttons.FancyButton;
-
 import static android.app.Activity.RESULT_OK;
 
 
@@ -60,7 +60,6 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
 
     ImageView selectedImage_iv;
 
-    int PICK_IMAGE_REQUEST = 111;
     Uri ImageFilePath;
 
     RotateLoading loading;
@@ -169,10 +168,9 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         }//if ends
 
      else if (id == R.id.apa_selectButton){
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
+            CropImage.activity()
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .start(getContext(), this);
         }//ele if
 
     else if (id == R.id.apa_cancelButton){
@@ -182,9 +180,9 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         }//ele if
 
 
-
-
     } //onclick
+
+//    validations
 
     public boolean Validations(){
         if (title_tx.length() < 3){
@@ -219,32 +217,32 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         }
         return true;
     }
+//    validations
 
-
-//    select image
-@Override
-public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-
-    if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-        ImageFilePath = data.getData();
-
-            // Getting selected image into Bitmap.
-           // Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), ImageFilePath);
-            // Setting up bitmap selected image into ImageView.
-            selectedImage_iv.setVisibility(View.VISIBLE);
-            Picasso.with(getActivity())
-                    .load(ImageFilePath)
-                    .fit()
-                    .centerCrop()
-                    .into(selectedImage_iv);
-
-           // selectedImage_iv.setImageBitmap(bitmap);
-            // After selecting image change choose button above text.
-            selectImage_btn.setText("Selected");
-
+//selecting image
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Toast.makeText(getActivity(), "hello", Toast.LENGTH_SHORT).show();
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                selectedImage_iv.setVisibility(View.VISIBLE);
+                ImageFilePath = result.getUri();
+                Picasso.with(getActivity())
+                        .load(ImageFilePath)
+                        .fit()
+                        .centerCrop()
+                        .into(selectedImage_iv);
+                selectImage_btn.setText("Selected");
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText(error.toString())
+                        .show();
+            }
+        }
     }
-}//select image
+    //selecting image
 
 
     //upload image

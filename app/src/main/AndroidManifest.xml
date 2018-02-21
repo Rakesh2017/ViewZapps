@@ -33,7 +33,9 @@
             android:label="@string/title_activity_dash_board"
             android:theme="@style/MyCustomAppTheme"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".YoutubeAds"></activity>
+        <activity android:name=".YoutubeAds"/>
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/>
     </application>
 
 </manifest>

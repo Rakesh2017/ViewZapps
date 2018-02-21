@@ -50,6 +50,7 @@ dependencies {
     compile 'com.iceteck.silicompressorr:silicompressor:2.1' //image compressor
     compile 'de.hdodenhof:circleimageview:2.2.0' //circular image
     compile 'com.github.lzyzsd.randomcolor:library:1.0.0' //random color generator
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.6.0' //image cropper
     testImplementation 'junit:junit:4.12'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
