@@ -30,5 +30,6 @@
     <dimen name="cardViewPadding16">16dp</dimen>
     <dimen name="selectImageSize">200dp</dimen>
     <dimen name="extraSmallTextSize12">200sp</dimen>
+    <dimen name="padding2">2dp</dimen>
 
 </resources>

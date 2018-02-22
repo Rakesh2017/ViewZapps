@@ -14,14 +14,45 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp">
+            android:layout_height="90dp">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="40dp"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="match_parent"
                 android:background="@color/appColor"
                 app:popupTheme="@style/MyCustomAppTheme.PopupOverlay" />
+
+            <!--profile image-->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/bar_profileImage"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerVertical="true"
+                tools:ignore="ContentDescription,UnusedAttribute"
+                android:elevation="@dimen/elevation"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                app:civ_border_width="1dp"
+                app:civ_border_color="@color/appColor"
+                android:layout_toEndOf="@+id/toolbar"
+                />
+
+            <!--user name-->
+            <util.android.textviews.FontTextView
+                android:id="@+id/bar_nameTextView"
+                android:layout_toEndOf="@+id/bar_profileImage"
+                android:paddingStart="@dimen/cardViewPadding4"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rakesh Kumar"
+                style="@style/MyCustomTextStyleMediumDroidBold"
+                android:layout_marginStart="@dimen/marginBetweenTags"
+                android:layout_marginEnd="@dimen/marginBetweenTags"
+                android:fontFamily="ubuntu"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                tools:ignore="RelativeOverlap,RtlSymmetry" />
+
 
 
             <TextView
@@ -29,43 +60,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/MyCustomTextStyleSmallUbuntu"
-                android:drawableStart="@drawable/viewz_app_bar_logo"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
-                android:text="00000"
+                android:text="0 zaps"
                 android:layout_marginEnd="12dp"
                 android:textStyle="bold"
                 android:drawablePadding="4dp"
-                android:background="@drawable/rectangle_white_smoke"
                 android:padding="2dp"
                 android:elevation="@dimen/elevation"
                 tools:targetApi="lollipop" />
-
-            <ImageButton
-                android:layout_toStartOf="@+id/bar_zapsTextView"
-                android:layout_width="@dimen/appBarIcon"
-                android:layout_height="@dimen/appBarIcon"
-                android:layout_centerVertical="true"
-                android:background="@drawable/log_out"
-                tools:ignore="ContentDescription"
-                android:layout_marginEnd="12dp"
-                android:id="@+id/bar_logOut"
-                android:elevation="10dp"
-                tools:targetApi="lollipop" />
-
-
-            <ImageButton
-                android:layout_width="@dimen/appBarIcon"
-                android:layout_height="@dimen/appBarIcon"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/bar_logOut"
-                android:background="@drawable/switch_user"
-                tools:ignore="ContentDescription"
-                android:layout_marginEnd="12dp"
-                android:elevation="10dp"
-                tools:targetApi="lollipop" />
-
-
 
 
 

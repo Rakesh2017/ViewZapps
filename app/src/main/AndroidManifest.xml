@@ -31,6 +31,7 @@
         <activity
             android:name=".DashBoard"
             android:label="@string/title_activity_dash_board"
+            android:launchMode="singleTask"
             android:theme="@style/MyCustomAppTheme"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".YoutubeAds"/>

@@ -71,6 +71,7 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
         Picasso.with(context)
                 .load(UploadInfo.getYoutubeAdImageUrl())
                 .placeholder(R.drawable.ic_youtube_placeholder)
+                .error(R.drawable.ic_warning)
                 .fit()
                 .centerCrop()
                 .noFade()

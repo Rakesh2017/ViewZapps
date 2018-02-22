@@ -37,12 +37,21 @@
                 android:elevation="@dimen/cardViewPadding8"
                 >
 
+           <ImageButton
+               android:id="@+id/rya_backButton"
+               android:layout_width="22dp"
+               android:layout_height="22dp"
+               android:background="@drawable/ic_back_app_color"
+               android:layout_centerVertical="true"
+               android:layout_marginStart="@dimen/cardViewPadding12"
+               tools:ignore="ContentDescription" />
+
             <util.android.textviews.FontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/youtubeAds"
                 style="@style/MyCustomTextStyleMediumDroidBold"
-                android:paddingStart="@dimen/cardViewPadding12"
+                android:paddingEnd="@dimen/cardViewPadding12"
                 android:paddingTop="@dimen/page_border"
                 android:fontFamily="droid_sans_bold.tff"
                 android:drawableStart="@drawable/ic_youtube_mini"
@@ -50,6 +59,7 @@
                 tools:ignore="RelativeOverlap,RtlSymmetry"
                 android:padding="@dimen/cardViewPadding4"
                 android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
                 />
 
             </RelativeLayout>
@@ -82,7 +92,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
+            android:background="@color/noItemGifColor"
             android:id="@+id/ya_emptyListGif"
             android:visibility="gone"
             >

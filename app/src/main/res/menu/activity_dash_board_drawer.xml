@@ -7,36 +7,36 @@
         >
         <item
             android:id="@+id/nav_profile"
-            android:icon="@drawable/profile_icon"
+            android:icon="@drawable/ic_profile"
             android:title="@string/profile"
             />
         <item
             android:id="@+id/nav_history"
-            android:icon="@drawable/history_icon"
+            android:icon="@drawable/ic_history"
             android:title="@string/history" />
         <item
             android:id="@+id/nav_refer"
-            android:icon="@drawable/refer_icon"
+            android:icon="@drawable/ic_refer"
             android:title="@string/refer" />
         <item
             android:id="@+id/nav_friends"
-            android:icon="@drawable/friends_icon"
+            android:icon="@drawable/ic_friends"
             android:title="@string/friends" />
         <item
             android:id="@+id/nav_postYoursAds"
-            android:icon="@drawable/post_ad_icon"
+            android:icon="@drawable/ic_broadcast"
             android:title="@string/postYoursAds" />
         <item
             android:id="@+id/nav_aboutUs"
-            android:icon="@drawable/about_us_icon"
+            android:icon="@drawable/ic_about_us"
             android:title="@string/aboutUs" />
         <item
             android:id="@+id/nav_rateUs"
-            android:icon="@drawable/rate_us_icon"
+            android:icon="@drawable/ic_rate_us"
             android:title="@string/rateUs" />
         <item
             android:id="@+id/nav_adminPostAd"
-            android:icon="@drawable/post_ad_icon"
+            android:icon="@drawable/ic_broadcast"
             android:title="@string/adminPostAd" />
     </group>
 

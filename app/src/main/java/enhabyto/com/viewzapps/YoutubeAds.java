@@ -1,5 +1,6 @@
 package enhabyto.com.viewzapps;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.google.firebase.database.DataSnapshot;
@@ -22,7 +24,7 @@ import java.util.List;
 
 import pl.droidsonroids.gif.GifTextView;
 
-public class YoutubeAds extends AppCompatActivity {
+public class YoutubeAds extends AppCompatActivity implements View.OnClickListener {
 
     RecyclerView recyclerView;
 
@@ -33,6 +35,7 @@ public class YoutubeAds extends AppCompatActivity {
     private DatabaseReference databaseReferenceParent = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference databaseReference = databaseReferenceParent.child("ads").child("youtubeAds");
     RelativeLayout gifTextView;
+    ImageButton backButton_ib;
 
     RotateLoading loading;
 
@@ -45,6 +48,8 @@ public class YoutubeAds extends AppCompatActivity {
         gifTextView = findViewById(R.id.ya_emptyListGif);
 
         recyclerView = findViewById(R.id.rya_recyclerView);
+
+        backButton_ib = findViewById(R.id.rya_backButton);
 
         recyclerView.setCameraDistance(2);
 
@@ -95,7 +100,19 @@ public class YoutubeAds extends AppCompatActivity {
             }
         });
 
+        //onclick
+        backButton_ib.setOnClickListener(this);
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+
+//        back button
+        if (id == R.id.rya_backButton){
+            super.onBackPressed();
+        }
     }
 
     //end

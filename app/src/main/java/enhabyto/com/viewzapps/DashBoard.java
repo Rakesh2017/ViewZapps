@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
@@ -28,18 +30,22 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.Random;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import de.hdodenhof.circleimageview.CircleImageView;
 import util.android.textviews.FontTextView;
 
 public class DashBoard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private FirebaseUser mAuth = FirebaseAuth.getInstance().getCurrentUser();
-    ImageButton logout_ib;
+    CircleImageView profileImage_iv, profileImageMainPage_iv;
     FontTextView name_tv, email_tv, phone_tv, zapNumber_tv;
     String name_tx, email_tx, phone_tx;
 
@@ -64,6 +70,10 @@ public class DashBoard extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+//        image view
+        profileImage_iv = navigationView.getHeaderView(0).findViewById(R.id.header_appLogoImageView);
+        profileImageMainPage_iv = findViewById(R.id.bar_profileImage);
+
 //        Image button iss
         youtube_btn = findViewById(R.id.dash_youtubeButton);
         facebook_btn = findViewById(R.id.dash_facebookButton);
@@ -78,12 +88,9 @@ public class DashBoard extends AppCompatActivity
         phone_tv = navigationView.getHeaderView(0).findViewById(R.id.header_phoneTextView);
         zapNumber_tv = navigationView.getHeaderView(0).findViewById(R.id.header_zapTextView);
 
-        //image button id
-        logout_ib = findViewById(R.id.bar_logOut);
 
-        // set on click
-        logout_ib.setOnClickListener(this);
-        youtube_btn.setOnClickListener(this);
+//        load animations
+        LoadAnimations();
     }
 
 //    load animations
@@ -122,7 +129,6 @@ public class DashBoard extends AppCompatActivity
     public void onStart(){
         super.onStart();
         //function calls
-        LoadAnimations();
         setProfileData();
     }
 
@@ -169,7 +175,37 @@ public class DashBoard extends AppCompatActivity
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
+                });//setting profile data
+
+
+//        setting profile pic
+        databaseReference.child("users").child(mAuth.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String imagePath = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
+
+                        Picasso.with(DashBoard.this)
+                                .load(imagePath)
+                                .placeholder(R.drawable.ic_profile_image_placeholder)
+                                .error(R.drawable.ic_warning)
+                                .into(profileImageMainPage_iv);
+
+
+                        Picasso.with(DashBoard.this)
+                                .load(imagePath)
+                                .placeholder(R.drawable.ic_profile_image_placeholder)
+                                .error(R.drawable.ic_warning)
+                                .into(profileImage_iv);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
                 });
+        //setting pofile pic
+
 
     }
 
@@ -220,6 +256,7 @@ public class DashBoard extends AppCompatActivity
         int id = v.getId();
 
         switch (id){
+            /*
             // logout button
             case R.id.bar_logOut:
 
@@ -261,7 +298,7 @@ public class DashBoard extends AppCompatActivity
                                                new SweetNoInternetConnection().noInternet(DashBoard.this);
 
                                             }
-                                        }).execute();*/
+                                        }).execute();
 
                                     }
                                 })
@@ -274,10 +311,13 @@ public class DashBoard extends AppCompatActivity
                                 })
                                 .show();
                 break;
-
+*/
 //                youtube
             case R.id.dash_youtubeButton:
-                startActivity(new Intent(DashBoard.this, YoutubeAds.class));
+                Intent intent = new Intent(DashBoard.this, YoutubeAds.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+               // startActivity(new Intent(DashBoard.this, YoutubeAds.class));
 
         }
     }//onclick
