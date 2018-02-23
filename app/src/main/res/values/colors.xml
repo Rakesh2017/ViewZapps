@@ -34,4 +34,24 @@
     <color name="lightGray">#D3D3D3</color>
     <color name="noItemGifColor">#F5F5F5</color>
 
+    <!--dashboard liner layout colors-->
+    <!--youtube-->
+    <color name="youtubeUp">#1BE9B8</color>
+    <color name="youtubeBelow">#B9F6CA</color>
+    <!--facebook-->
+    <color name="facebookUp">#ffa500</color>
+    <color name="facebookBelow">#ffc966</color>
+    <!--instagram-->
+    <color name="instaUp">#83FFFD</color>
+    <color name="instaBelow">#05A7F7</color>
+    <!--android-->
+    <color name="androidUp">#F95850</color>
+    <color name="androidBelow">#F88D7A</color>
+    <!--iphone-->
+    <color name="iphoneUp">#db9356</color>
+    <color name="iphoneBelow">#f6b67f</color>
+    <!--movies-->
+    <color name="moviesUp">#fba1f9</color>
+    <color name="moviesBelow">#fcc6fb</color>
+
 </resources>

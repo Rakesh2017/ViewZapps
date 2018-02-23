@@ -3,9 +3,13 @@ package enhabyto.com.viewzapps;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -20,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.github.lzyzsd.randomcolor.RandomColor;
@@ -130,6 +135,7 @@ public class DashBoard extends AppCompatActivity
         super.onStart();
         //function calls
         setProfileData();
+        setImage();
     }
 
 //    setting profile data
@@ -177,7 +183,7 @@ public class DashBoard extends AppCompatActivity
                     }
                 });//setting profile data
 
-
+/*
 //        setting profile pic
         databaseReference.child("users").child(mAuth.getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -204,8 +210,8 @@ public class DashBoard extends AppCompatActivity
 
                     }
                 });
-        //setting pofile pic
-
+        //setting profile pic
+*/
 
     }
 
@@ -236,12 +242,12 @@ public class DashBoard extends AppCompatActivity
 //            profile
             case R.id.nav_profile:
                 if (checkStoragePermission())
-                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_dashboard, new Profile()).addToBackStack("profileFragment").commit();
+                startActivity(new Intent(DashBoard.this, EditProfile.class));
                 break;
 
 //                admin post ad
             case R.id.nav_adminPostAd:
-                    getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_dashboard, new AdminPostAd()).addToBackStack("adminPostAd").commit();
+                      startActivity(new Intent(DashBoard.this, AdPostAdmin.class));
                 break;
         }
 
@@ -331,6 +337,101 @@ public class DashBoard extends AppCompatActivity
         }
         else return true;
     }
+
+    //handling profile image
+    //    setting image
+    public void setImage(){
+//        checking if there is profile image in firebase
+        SharedPreferences sharedDefaultImage = getSharedPreferences("defaultImage", MODE_PRIVATE);
+        String isImageUrl = sharedDefaultImage.getString("NoImageUrl", "");
+        if (TextUtils.equals(isImageUrl, "true")){
+            Glide.with(DashBoard.this)
+                    .load(R.drawable.ic_profile_image_placeholder)
+                    .into(profileImageMainPage_iv);
+            Glide.with(DashBoard.this)
+                    .load(R.drawable.ic_profile_image_placeholder)
+                    .into(profileImage_iv);
+            return;
+        }
+        try {
+            SharedPreferences.Editor editorDefaultImage = sharedDefaultImage.edit();
+            editorDefaultImage.putString("NoImageUrl", "false");
+            editorDefaultImage.apply();
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+        }
+
+
+        //loading saved image from storage
+        String myFile = "/viewZapp/image.jpg";
+        String myPath = Environment.getExternalStorageDirectory()+myFile;
+        File imgFile = new  File(myPath);
+
+        if(imgFile.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            profileImageMainPage_iv.setImageBitmap(myBitmap);
+            profileImage_iv.setImageBitmap(myBitmap);
+        }
+        //rotateLoadingImage.start();
+        if (DashBoard.this != null){
+            databaseReference.child("users").child(mAuth.getUid())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            try {
+                                String newUrl = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
+                                SharedPreferences sharedpreferences = getSharedPreferences("imageUrlCheck1", MODE_PRIVATE);
+                                String oldUrl = sharedpreferences.getString("imageUrl1", "");
+                                SharedPreferences.Editor editor = sharedpreferences.edit();
+                                editor.putString("imageUrl1", newUrl);
+                                editor.apply();
+
+                                if (dataSnapshot.hasChild("profile_image") && !TextUtils.equals(oldUrl, newUrl)){
+                                    String url = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
+                                    Glide.with(DashBoard.this)
+                                            .load(url)
+                                            .into(profileImageMainPage_iv);
+                                    Glide.with(DashBoard.this)
+                                            .load(url)
+                                            .into(profileImage_iv);
+                                }
+                                else if (!dataSnapshot.hasChild("profile_image")){
+                                    Glide.with(DashBoard.this)
+                                            .load(R.drawable.ic_profile_image_placeholder)
+                                            .into(profileImageMainPage_iv);
+                                    Glide.with(DashBoard.this)
+                                            .load(R.drawable.ic_profile_image_placeholder)
+                                            .into(profileImage_iv);
+
+
+                                    SharedPreferences sharedDefaultImage = getSharedPreferences("defaultImage", MODE_PRIVATE);
+                                    SharedPreferences.Editor editorDefaultImage = sharedDefaultImage.edit();
+                                    editorDefaultImage.putString("NoImageUrl", "true");
+                                    editorDefaultImage.apply();
+                                }
+                            }
+                            //rotateLoadingImage.stop();
+                            catch (NullPointerException e){
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Glide.with(DashBoard.this)
+                                    .load(R.drawable.ic_profile_image_placeholder)
+                                    .into(profileImageMainPage_iv);
+                            Glide.with(DashBoard.this)
+                                    .load(R.drawable.ic_profile_image_placeholder)
+                                    .into(profileImage_iv);
+                            //rotateLoadingImage.stop();
+                        }
+                    }); // database ends
+        } // if ends
+
+    } // set image ends
+
 
 // end
 }

@@ -84,7 +84,7 @@
             android:layout_below="@+id/rya_titleTextView"
             android:layout_alignStart="@+id/rya_titleTextView"
             android:layout_marginTop="@dimen/cardViewPadding4"
-            android:divider="@drawable/liner_horizontal_divider"
+            android:divider="@drawable/liner_vertical_divider_1"
             android:showDividers="middle"
             >
 

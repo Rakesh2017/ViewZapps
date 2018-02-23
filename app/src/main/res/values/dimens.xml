@@ -31,5 +31,6 @@
     <dimen name="selectImageSize">200dp</dimen>
     <dimen name="extraSmallTextSize12">200sp</dimen>
     <dimen name="padding2">2dp</dimen>
+    <dimen name="padding4">4dp</dimen>
 
 </resources>

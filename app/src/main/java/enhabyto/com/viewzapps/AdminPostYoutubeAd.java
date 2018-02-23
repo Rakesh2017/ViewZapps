@@ -287,7 +287,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
 
                                 // dialog_uploadingPump.dismiss();
 
-                                // Showing exception erro message.
+                                // Showing exception error message.
                                 Toast.makeText(getActivity(), exception.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         })

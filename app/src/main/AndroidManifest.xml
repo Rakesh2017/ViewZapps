@@ -34,9 +34,12 @@
             android:launchMode="singleTask"
             android:theme="@style/MyCustomAppTheme"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".YoutubeAds"/>
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
+        <activity android:name=".YoutubeAds" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <activity android:name=".EditProfile" />
+        <activity android:name=".AdPostAdmin"></activity>
     </application>
 
 </manifest>

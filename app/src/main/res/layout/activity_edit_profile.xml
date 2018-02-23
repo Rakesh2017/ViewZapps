@@ -1,17 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:clickable="true"
-    android:focusable="true"
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="enhabyto.com.viewzapps.Profile">
+    tools:context="enhabyto.com.viewzapps.EditProfile">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <ImageView
             android:id="@+id/profile_headerImageView"
@@ -49,6 +49,16 @@
                 android:layout_centerInParent="true"/>
 
         </RelativeLayout>
+
+        <!--back button-->
+        <ImageButton
+            android:id="@+id/profile_backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:background="@drawable/ic_back_black"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            tools:ignore="ContentDescription" />
 
 
         <!--name-->
@@ -175,6 +185,5 @@
 
 
     </RelativeLayout>
-
 
 </android.support.v4.widget.NestedScrollView>
