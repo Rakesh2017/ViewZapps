@@ -93,6 +93,8 @@ public class DashBoard extends AppCompatActivity
         phone_tv = navigationView.getHeaderView(0).findViewById(R.id.header_phoneTextView);
         zapNumber_tv = navigationView.getHeaderView(0).findViewById(R.id.header_zapTextView);
 
+        //on click
+        youtube_btn.setOnClickListener(this);
 
 //        load animations
         LoadAnimations();

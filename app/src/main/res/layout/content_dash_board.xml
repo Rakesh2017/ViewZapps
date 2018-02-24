@@ -29,9 +29,9 @@
         android:layout_alignEnd="@+id/dash_dividerVertical"
         android:orientation="vertical"
         android:weightSum="3"
-        android:divider="@drawable/liner_horizontal_divider_4"
+        android:divider="@drawable/liner_horizontal_divider_3"
         android:showDividers="middle"
-        android:layout_marginEnd="3dp"
+        android:layout_marginEnd="@dimen/padding2"
         >
         <!--youtube-->
         <RelativeLayout
@@ -42,8 +42,8 @@
             >
             <ImageButton
                 android:id="@+id/dash_youtubeButton"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="@dimen/dashBoardIconHeight"
+                android:layout_height="@dimen/dashBoardIconHeight"
                 android:background="@drawable/ic_youtube"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -76,8 +76,8 @@
             >
             <ImageButton
                 android:id="@+id/dash_instagramButton"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="@dimen/dashBoardIconHeight"
+                android:layout_height="@dimen/dashBoardIconHeight"
                 android:background="@drawable/ic_instagram"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -108,8 +108,8 @@
             >
             <ImageButton
                 android:id="@+id/dash_appleButton"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="@dimen/dashBoardIconHeight"
+                android:layout_height="@dimen/dashBoardIconHeight"
                 android:background="@drawable/ic_apple"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -132,14 +132,7 @@
                 />
         </RelativeLayout>
 
-
-
-
-
-
-
     </LinearLayout>
-
 
 
     <!--linear layout 2-->
@@ -150,9 +143,9 @@
         android:layout_alignStart="@+id/dash_dividerVertical"
         android:orientation="vertical"
         android:weightSum="3"
-        android:divider="@drawable/liner_horizontal_divider_4"
+        android:divider="@drawable/liner_horizontal_divider_3"
         android:showDividers="middle"
-        android:layout_marginStart="3dp"
+        android:layout_marginStart="@dimen/padding2"
         >
         <!--facebook-->
         <RelativeLayout
@@ -163,8 +156,8 @@
             >
             <ImageButton
                 android:id="@+id/dash_facebookButton"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="@dimen/dashBoardIconHeight"
+                android:layout_height="@dimen/dashBoardIconHeight"
                 android:background="@drawable/ic_facebook"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -182,7 +175,7 @@
                 android:textStyle="bold"
                 android:paddingStart="@dimen/cardViewPadding8"
                 android:paddingEnd="@dimen/cardViewPadding8"
-                android:drawableEnd="@drawable/ic_facebook_social_retro_circular_badge"
+                android:drawableEnd="@drawable/ic_facebook_mini"
                 />
         </RelativeLayout>
 
@@ -195,8 +188,8 @@
             >
             <ImageButton
                 android:id="@+id/dash_androidButton"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="@dimen/dashBoardIconHeight"
+                android:layout_height="@dimen/dashBoardIconHeight"
                 android:background="@drawable/ic_android"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -228,8 +221,8 @@
             >
             <ImageButton
                 android:id="@+id/dash_moviesButton"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="@dimen/dashBoardIconHeight"
+                android:layout_height="@dimen/dashBoardIconHeight"
                 android:background="@drawable/ic_movie"
                 tools:ignore="ContentDescription"
                 android:layout_centerHorizontal="true"
@@ -251,16 +244,6 @@
                 android:drawableEnd="@drawable/ic_movies_mini"
                 />
         </RelativeLayout>
-
-
-
-
-
-
-
     </LinearLayout>
-
-
-
 
 </RelativeLayout>

@@ -41,9 +41,11 @@
                android:id="@+id/rya_backButton"
                android:layout_width="22dp"
                android:layout_height="22dp"
-               android:background="@drawable/ic_back_app_color"
+               android:background="@drawable/ic_back_brown"
                android:layout_centerVertical="true"
                android:layout_marginStart="@dimen/cardViewPadding12"
+               android:elevation="@dimen/elevation"
+               tools:targetApi="lollipop"
                tools:ignore="ContentDescription" />
 
             <util.android.textviews.FontTextView

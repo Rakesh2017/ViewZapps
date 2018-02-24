@@ -129,7 +129,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                 rotateLoading.stop();
                 new SweetAlertDialog(EditProfile.this, SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText("Profile Updated")
-                        .setConfirmText("Okay")
+                        .setConfirmText("Got it!")
                         .show();
             }
         }//else if
@@ -269,7 +269,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
             profileImage.setImageBitmap(myBitmap);
         }
         //rotateLoadingImage.start();
-        if (EditProfile.this != null){
+      //  if (EditProfile.this != null){
             databaseReference.child("users").child(mAuth.getUid())
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -313,7 +313,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                             //rotateLoadingImage.stop();
                         }
                     }); // database ends
-        } // if ends
+      //  } // if ends
 
     } // set image ends
 

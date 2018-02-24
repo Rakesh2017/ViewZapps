@@ -12,119 +12,278 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <!--vertical divider-->
-        <android.support.v4.widget.Space
-            android:layout_height="match_parent"
-            android:layout_width="1dp"
-            android:layout_centerInParent="true"
-            android:id="@+id/apa_dividerVertical"
-            />
-
+        android:layout_height="150dp"
+        android:background="@color/appColor"
+        android:padding="@dimen/activity_horizontal_margin"
+        >
 
         <util.android.textviews.FontTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawablePadding="@dimen/page_border"
-            android:text="@string/adminPostAdPanel"
-            style="@style/MyCustomTextStyleLargeUbuntu"
-            android:id="@+id/apa_headerTextView"
+            android:text="Post Your Ad"
+            style="@style/MyCustomTextStyleMediumDroidBold"
             android:layout_alignParentEnd="true"
-            android:padding="@dimen/page_border"
-            android:drawableStart="@drawable/ic_post_mini"
-            android:background="@color/whiteSmoke"
-            tools:ignore="RelativeOverlap" />
+            android:drawableStart="@drawable/ic_advertising"
+            android:drawablePadding="@dimen/cardViewPadding8"
+            />
 
-        <!--linear layout 1-->
-
-        <LinearLayout
-            android:id="@+id/apa_linearLayout1"
-            android:layout_below="@+id/apa_headerTextView"
-            android:layout_alignEnd="@id/apa_dividerVertical"
-            android:layout_width="match_parent"
+        <!--back button-->
+        <ImageButton
+            android:id="@+id/aap_backButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:weightSum="3"
-            >
-
-            <!--youtube-->
-            <ImageButton
-                android:id="@+id/apa_youtubeButton"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:background="@drawable/youtube"
-                android:layout_weight="1"
-                tools:ignore="ContentDescription"
-                />
-
-
-            <!--instagram-->
-            <ImageButton
-                android:id="@+id/apa_instagramButton"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:background="@drawable/instagram"
-                android:layout_weight="1"
-                tools:ignore="ContentDescription"/>
-
-            <!--apple-->
-            <ImageButton
-                android:id="@+id/apa_appleButton"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:background="@drawable/apple"
-                android:layout_weight="1"
-                tools:ignore="ContentDescription"
-                />
-
-
-        </LinearLayout>
-
-
-        <!--linear layout 2-->
-        <LinearLayout
-            android:id="@+id/dash_linearLayout2"
-            android:layout_below="@+id/apa_headerTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/apa_dividerVertical"
-            android:orientation="vertical"
-            android:weightSum="3"
-            >
-
-            <!--facebook-->
-            <ImageButton
-                android:id="@+id/apa_facebookButton"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:background="@drawable/facebook"
-                android:layout_weight="1"
-                tools:ignore="ContentDescription"
-                />
-
-            <!--android-->
-            <ImageButton
-                android:id="@+id/apa_androidButton"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:background="@drawable/android"
-                android:layout_weight="1"
-                tools:ignore="ContentDescription"
-                />
-
-            <!--movies-->
-            <ImageButton
-                android:id="@+id/apa_moviesButton"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:background="@drawable/movies"
-                android:layout_weight="1"
-                tools:ignore="ContentDescription" />
-
-        </LinearLayout>
+            android:background="@drawable/ic_back_brown"
+            tools:ignore="ContentDescription"
+            android:elevation="@dimen/elevation"
+            tools:targetApi="lollipop" />
 
     </RelativeLayout>
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <!--empty space-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/aap_emptyRelativeLayout"
+                tools:ignore="UselessLeaf">
+
+            </RelativeLayout>
+
+            <!--youtube-->
+        <RelativeLayout
+            android:id="@+id/aap_youtubeRelativeLayout"
+            android:layout_below="@+id/aap_emptyRelativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_rectangle_youtube_layout"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:elevation="@dimen/elevation"
+            tools:targetApi="lollipop"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            >
+
+            <ImageButton
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:background="@drawable/ic_youtube"
+                tools:ignore="ContentDescription"
+                android:id="@+id/aap_youtubeImageButton"
+                />
+
+            <LinearLayout
+                android:id="@+id/aap_youtubeLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_toEndOf="@+id/aap_youtubeImageButton"
+                android:layout_marginStart="@dimen/cardViewPadding8"
+                android:weightSum="3"
+                android:divider="@drawable/liner_vertical_divider_1"
+                android:showDividers="middle"
+                >
+                <!--admin-->
+                <TextView
+                    android:id="@+id/aap_youtubeAdsByAdmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableTop="@drawable/ic_admin"
+                    android:drawablePadding="@dimen/cardViewPadding4"
+                    android:text="admin ads: "
+                    android:gravity="center"
+                    style="@style/MyCustomTextStyleSmallDroidBold"
+                    android:textStyle="normal"
+                    android:layout_marginTop="@dimen/cardViewPadding4"
+                    android:padding="@dimen/cardViewPadding2"
+                    android:layout_weight="1"
+                    />
+                <!--user-->
+                <TextView
+                    android:id="@+id/aap_youtubeAdsByUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableTop="@drawable/ic_user"
+                    android:drawablePadding="@dimen/cardViewPadding4"
+                    android:text="user ads:"
+                    android:gravity="center"
+                    style="@style/MyCustomTextStyleSmallDroidBold"
+                    android:textStyle="normal"
+                    android:layout_marginTop="@dimen/cardViewPadding4"
+                    android:padding="@dimen/cardViewPadding2"
+                    android:layout_weight="1"
+                    />
+                <!--total-->
+                <TextView
+                    android:id="@+id/total_youtubeAds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableTop="@drawable/ic_user"
+                    android:drawablePadding="@dimen/cardViewPadding4"
+                    android:text="total ads:"
+                    android:gravity="center"
+                    style="@style/MyCustomTextStyleSmallDroidBold"
+                    android:textStyle="normal"
+                    android:layout_marginTop="@dimen/cardViewPadding4"
+                    android:padding="@dimen/cardViewPadding2"
+                    android:layout_weight="1"
+                    />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_pricing"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/aap_youtubeLinearLayout"
+                android:layout_marginTop="@dimen/padding4"
+                tools:ignore="ContentDescription" />
+
+        </RelativeLayout>
+
+            <!--facebook-->
+        <RelativeLayout
+            android:id="@+id/aap_facebookRelativeLayout"
+            android:layout_below="@+id/aap_youtubeRelativeLayout"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_rectangle_facebook_layout"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:elevation="@dimen/elevation"
+            tools:targetApi="lollipop"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            >
+
+            <ImageButton
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:background="@drawable/ic_facebook"
+                tools:ignore="ContentDescription"
+                android:id="@+id/aap_facebookImageButton"
+                />
+
+        </RelativeLayout>
+
+            <!--instagram-->
+            <RelativeLayout
+                android:id="@+id/aap_instaRelativeLayout"
+                android:layout_below="@+id/aap_facebookRelativeLayout"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_rectangle_instagram_layout"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:elevation="@dimen/elevation"
+                tools:targetApi="lollipop"
+                android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:layout_marginEnd="@dimen/activity_vertical_margin"
+                >
+
+                <ImageButton
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/ic_instagram"
+                    tools:ignore="ContentDescription"
+                    android:id="@+id/aap_instaImageButton"
+                    />
+
+            </RelativeLayout>
+
+
+
+            <!--android-->
+            <RelativeLayout
+                android:id="@+id/aap_androidRelativeLayout"
+                android:layout_below="@+id/aap_instaRelativeLayout"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_rectangle_android_layout"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:elevation="@dimen/elevation"
+                tools:targetApi="lollipop"
+                android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:layout_marginEnd="@dimen/activity_vertical_margin"
+                >
+
+                <ImageButton
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/ic_android"
+                    tools:ignore="ContentDescription"
+                    android:id="@+id/aap_androidImageButton"
+                    />
+
+            </RelativeLayout>
+
+
+            <!--apple-->
+            <RelativeLayout
+                android:id="@+id/aap_appleRelativeLayout"
+                android:layout_below="@+id/aap_androidRelativeLayout"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_rectangle_apple_layout"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:elevation="@dimen/elevation"
+                tools:targetApi="lollipop"
+                android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:layout_marginEnd="@dimen/activity_vertical_margin"
+                >
+
+                <ImageButton
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/ic_apple"
+                    tools:ignore="ContentDescription"
+                    android:id="@+id/aap_appleImageButton"
+                    />
+
+            </RelativeLayout>
+
+
+            <!--apple-->
+            <RelativeLayout
+                android:id="@+id/aap_moviesRelativeLayout"
+                android:layout_below="@+id/aap_appleRelativeLayout"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_rectangle_movies_layout"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:elevation="@dimen/elevation"
+                tools:targetApi="lollipop"
+                android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:layout_marginEnd="@dimen/activity_vertical_margin"
+                >
+
+                <ImageButton
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/ic_movie"
+                    tools:ignore="ContentDescription"
+                    android:id="@+id/aap_moviesImageButton"
+                    />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
 
 </FrameLayout>
