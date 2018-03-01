@@ -8,7 +8,7 @@
     <string name="history">History</string>
     <string name="refer">refer</string>
     <string name="friends">Friends</string>
-    <string name="postYoursAds">Post Yours Ads</string>
+    <string name="postYoursAds"><b>Post Yours Ad</b></string>
     <string name="aboutUs">About Us</string>
     <string name="rateUs">Rate US</string>
     <string name="adminPostAd">Admin Post Ad</string>

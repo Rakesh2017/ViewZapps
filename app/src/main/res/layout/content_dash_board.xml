@@ -48,7 +48,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 tools:ignore="ContentDescription"
-                android:elevation="@dimen/elevation"
+                android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop"
                 />
             <Button
@@ -58,7 +58,7 @@
                 android:background="@color/youtubeUp"
                 android:text="@string/youtubeDescription"
                 android:gravity="start|center"
-                style="@style/MyCustomTextStyleSmallDroidBold"
+                style="@style/TextStyleSmall"
                 android:textStyle="bold"
                 android:paddingStart="@dimen/cardViewPadding8"
                 android:paddingEnd="@dimen/cardViewPadding8"
@@ -82,7 +82,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 tools:ignore="ContentDescription"
-                android:elevation="@dimen/elevation"
+                android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop" />
             <Button
                 android:layout_width="match_parent"
@@ -91,7 +91,7 @@
                 android:background="@color/instaUp"
                 android:text="@string/name"
                 android:gravity="start|center"
-                style="@style/MyCustomTextStyleSmallDroidBold"
+                style="@style/TextStyleSmall"
                 android:textStyle="bold"
                 android:paddingStart="@dimen/cardViewPadding8"
                 android:paddingEnd="@dimen/cardViewPadding8"
@@ -114,7 +114,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 tools:ignore="ContentDescription"
-                android:elevation="@dimen/elevation"
+                android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop"
                 />
             <Button
@@ -124,7 +124,7 @@
                 android:background="@color/iphoneUp"
                 android:text="@string/name"
                 android:gravity="start|center"
-                style="@style/MyCustomTextStyleSmallDroidBold"
+                style="@style/TextStyleSmall"
                 android:textStyle="bold"
                 android:paddingStart="@dimen/cardViewPadding8"
                 android:paddingEnd="@dimen/cardViewPadding8"
@@ -162,7 +162,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 tools:ignore="ContentDescription"
-                android:elevation="@dimen/elevation"
+                android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop" />
             <Button
                 android:layout_width="match_parent"
@@ -171,7 +171,7 @@
                 android:background="@color/facebookUp"
                 android:text="@string/name"
                 android:gravity="start|center"
-                style="@style/MyCustomTextStyleSmallDroidBold"
+                style="@style/TextStyleSmall"
                 android:textStyle="bold"
                 android:paddingStart="@dimen/cardViewPadding8"
                 android:paddingEnd="@dimen/cardViewPadding8"
@@ -194,7 +194,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 tools:ignore="ContentDescription"
-                android:elevation="@dimen/elevation"
+                android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop"
                 />
             <Button
@@ -204,7 +204,7 @@
                 android:background="@color/androidUp"
                 android:text="@string/name"
                 android:gravity="start|center"
-                style="@style/MyCustomTextStyleSmallDroidBold"
+                style="@style/TextStyleSmall"
                 android:textStyle="bold"
                 android:paddingStart="@dimen/cardViewPadding8"
                 android:paddingEnd="@dimen/cardViewPadding8"
@@ -227,7 +227,7 @@
                 tools:ignore="ContentDescription"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:elevation="@dimen/elevation"
+                android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop"
                 />
             <Button
@@ -237,7 +237,7 @@
                 android:background="@color/moviesUp"
                 android:text="@string/name"
                 android:gravity="start|center"
-                style="@style/MyCustomTextStyleSmallDroidBold"
+                style="@style/TextStyleSmall"
                 android:textStyle="bold"
                 android:paddingStart="@dimen/cardViewPadding8"
                 android:paddingEnd="@dimen/cardViewPadding8"

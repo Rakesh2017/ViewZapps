@@ -59,7 +59,7 @@
             android:background="@drawable/ic_back_brown"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             tools:ignore="ContentDescription"
-            android:elevation="@dimen/elevation"
+            android:elevation="@dimen/elevation_5dp"
             tools:targetApi="lollipop" />
 
 
@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/name"
-            style="@style/MyCustomTextStyleMediumUbuntu"
+            style="@style/TextStyleMedium"
             android:layout_below="@+id/profile_relativeLayout2"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginStart="@dimen/activity_start_margin"
@@ -81,11 +81,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/profile_nameTextView"
-            style="@style/MyCustomEditTextStyle"
+            style="@style/EditTextStyle"
             android:background="@drawable/custom_rounded_rectangle_edit_text"
             android:drawableEnd="@drawable/ic_name_mini_icon"
             android:inputType="textCapWords"
-            android:elevation="@dimen/elevation"
+            android:elevation="@dimen/elevation_5dp"
             tools:targetApi="lollipop"
             tools:ignore="LabelFor" />
 
@@ -98,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/email"
-            style="@style/MyCustomTextStyleMediumUbuntu"
+            style="@style/TextStyleMedium"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginStart="@dimen/activity_start_margin"
             android:fontFamily="ubuntu"
@@ -109,11 +109,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/profile_emailTextView"
-            style="@style/MyCustomEditTextStyle"
+            style="@style/EditTextStyle"
             android:background="@drawable/custom_rounded_rectangle_edit_text"
             android:drawableEnd="@drawable/ic_email_mini_icon"
             android:inputType="textEmailAddress"
-            android:elevation="@dimen/elevation"
+            android:elevation="@dimen/elevation_5dp"
             tools:targetApi="lollipop"
             tools:ignore="LabelFor" />
 
@@ -126,7 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/phoneNumber"
-            style="@style/MyCustomTextStyleMediumUbuntu"
+            style="@style/TextStyleMedium"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginStart="@dimen/activity_start_margin"
             android:fontFamily="ubuntu"
@@ -137,11 +137,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/profile_phoneTextView"
-            style="@style/MyCustomEditTextStyle"
+            style="@style/EditTextStyle"
             android:background="@drawable/custom_rounded_rectangle_edit_text"
             android:drawableEnd="@drawable/ic_phone_mini_icon"
             android:inputType="phone"
-            android:elevation="@dimen/elevation"
+            android:elevation="@dimen/elevation_5dp"
             tools:targetApi="lollipop"
             tools:ignore="LabelFor" />
 
@@ -165,7 +165,7 @@
             fancy:fb_fontIconSize="20dp"
             fancy:fb_radius="3dp"
             fancy:fb_text="@string/update"
-            style="@style/MyCustomTextStyleMediumUbuntu"
+            style="@style/TextStyleMedium"
             fancy:fb_textColor="@color/loginButtonColors"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginStart="@dimen/activity_start_margin"
@@ -181,7 +181,7 @@
             android:layout_height="@dimen/rotateLoadingHeight"
             app:loading_width="@dimen/rotateLoadingBreadth"
             app:loading_color="@color/black"
-            android:elevation="@dimen/elevation"
+            android:elevation="@dimen/elevation_5dp"
             tools:targetApi="lollipop"
             android:layout_centerInParent="true"/>
 

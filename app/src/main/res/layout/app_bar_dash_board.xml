@@ -31,7 +31,7 @@
                 android:layout_height="60dp"
                 android:layout_centerVertical="true"
                 tools:ignore="ContentDescription,UnusedAttribute"
-                android:elevation="@dimen/elevation"
+                android:elevation="@dimen/elevation_5dp"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 app:civ_border_width="1dp"
                 app:civ_border_color="@color/black"
@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rakesh Kumar"
-                style="@style/MyCustomTextStyleMediumDroidBold"
+                style="@style/TextStyleMedium"
                 android:textStyle="bold"
                 android:layout_marginStart="@dimen/marginBetweenTags"
                 android:layout_marginEnd="@dimen/marginBetweenTags"
@@ -60,7 +60,7 @@
                 android:id="@+id/bar_zapsTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/MyCustomTextStyleMediumDroidBold"
+                style="@style/TextStyleMedium"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
                 android:text="0 zaps"
@@ -68,7 +68,7 @@
                 android:layout_marginEnd="12dp"
                 android:drawablePadding="4dp"
                 android:padding="2dp"
-                android:elevation="@dimen/elevation"
+                android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop" />
 
 

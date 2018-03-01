@@ -34,7 +34,7 @@
         android:layout_marginEnd="24dp"
         android:clickable="true"
         android:focusable="true"
-        android:elevation="@dimen/elevation"
+        android:elevation="@dimen/elevation_5dp"
         tools:targetApi="lollipop"
         android:id="@+id/login_relativeLayout2"
         android:visibility="invisible"
@@ -78,13 +78,13 @@
                 fancy:fb_fontIconSize="20dp"
                 fancy:fb_radius="3dp"
                 fancy:fb_text="@string/loginWithGoogle"
-                style="@style/MyCustomTextStyleMediumUbuntu"
+                style="@style/TextStyleMedium"
                 fancy:fb_textColor="@color/loginButtonColors"
                 android:layout_weight="1"
                 android:layout_marginTop="24dp"
                 android:layout_marginStart="@dimen/activity_start_margin"
                 android:layout_marginEnd="@dimen/activity_end_margin"
-                android:elevation="@dimen/elevation"
+                android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop"
                 />
 
@@ -106,13 +106,13 @@
                 fancy:fb_fontIconSize="20dp"
                 fancy:fb_radius="3dp"
                 fancy:fb_text="@string/loginWithInsta"
-                style="@style/MyCustomTextStyleMediumUbuntu"
+                style="@style/TextStyleMedium"
                 fancy:fb_textColor="@color/loginButtonColors"
                 android:layout_weight="1"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_marginStart="@dimen/activity_start_margin"
                 android:layout_marginEnd="@dimen/activity_end_margin"
-                android:elevation="@dimen/elevation"
+                android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop" />
 
 
@@ -133,14 +133,14 @@
                 fancy:fb_fontIconSize="20dp"
                 fancy:fb_radius="3dp"
                 fancy:fb_text="@string/loginWithFb"
-                style="@style/MyCustomTextStyleMediumUbuntu"
+                style="@style/TextStyleMedium"
                 fancy:fb_textColor="@color/loginButtonColors"
                 android:layout_weight="1"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_marginStart="@dimen/activity_start_margin"
                 android:layout_marginEnd="@dimen/activity_end_margin"
                 android:layout_marginBottom="16dp"
-                android:elevation="@dimen/elevation"
+                android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop" />
 
 
@@ -169,7 +169,7 @@
             android:layout_height="@dimen/rotateLoadingHeight"
             app:loading_width="@dimen/rotateLoadingBreadth"
             app:loading_color="@color/carrot"
-            android:elevation="@dimen/elevation"
+            android:elevation="@dimen/elevation_5dp"
             tools:targetApi="lollipop"
             android:layout_centerInParent="true"/>
 

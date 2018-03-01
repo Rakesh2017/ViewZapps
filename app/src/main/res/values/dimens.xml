@@ -14,7 +14,7 @@
     <dimen name="largeSize">18dp</dimen>
     <dimen name="smallSize">14dp</dimen>
     <dimen name="drawablePadding">10dp</dimen>
-    <dimen name="elevation">5dp</dimen>
+    <dimen name="elevation_5dp">5dp</dimen>
     <dimen name="rotateLoadingWidth">60dp</dimen>
     <dimen name="rotateLoadingHeight">60dp</dimen>
     <dimen name="rotateLoadingBreadth">3dp</dimen>

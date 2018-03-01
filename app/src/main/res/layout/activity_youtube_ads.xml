@@ -26,7 +26,7 @@
             app:expandedTitleMarginStart="48dp"
             app:expandedTitleMarginEnd="64dp"
             android:background="@color/whiteSmoke"
-            android:elevation="@dimen/elevation"
+            android:elevation="@dimen/elevation_5dp"
             tools:targetApi="lollipop">
 
             <RelativeLayout
@@ -44,7 +44,7 @@
                android:background="@drawable/ic_back_brown"
                android:layout_centerVertical="true"
                android:layout_marginStart="@dimen/cardViewPadding12"
-               android:elevation="@dimen/elevation"
+               android:elevation="@dimen/elevation_5dp"
                tools:targetApi="lollipop"
                tools:ignore="ContentDescription" />
 
@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/youtubeAds"
-                style="@style/MyCustomTextStyleMediumDroidBold"
+                style="@style/TextStyleMedium"
                 android:paddingEnd="@dimen/cardViewPadding12"
                 android:paddingTop="@dimen/page_border"
                 android:fontFamily="droid_sans_bold.tff"
@@ -87,7 +87,7 @@
             android:layout_height="@dimen/rotateLoadingHeight"
             app:loading_width="@dimen/rotateLoadingBreadth"
             app:loading_color="@color/appColor"
-            android:elevation="@dimen/elevation"
+            android:elevation="@dimen/elevation_5dp"
             tools:targetApi="lollipop"
             android:layout_centerInParent="true"/>
 
@@ -104,7 +104,7 @@
                 android:layout_centerInParent="true"
                 android:background="@drawable/empty_list"
                 android:text="@string/noItem"
-                style="@style/MyCustomTextStyleMediumDroidBold"
+                style="@style/TextStyleMedium"
                 android:gravity="center|bottom"
                 />
         </RelativeLayout>

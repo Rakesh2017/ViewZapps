@@ -20,6 +20,7 @@ public class AdPostAdmin extends AppCompatActivity implements View.OnClickListen
 
 //        on click
         youtube_btn.setOnClickListener(this);
+        back_btn.setOnClickListener(this);
     }
 
     //    onClick
@@ -27,14 +28,16 @@ public class AdPostAdmin extends AppCompatActivity implements View.OnClickListen
     public void onClick(View v) {
         int id = v.getId();
 
-//        youtube
-        if (id == R.id.aap_youtubeImageButton){
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_ad_post_admin, new AdminPostYoutubeAd()).addToBackStack("adminPostYoutubeAd").commit();
-        }
-//        back pressed
-        else if (id == R.id.aap_backButton){
-            super.onBackPressed();
-        }
+        switch (id) {
+            //        youtube button
+            case R.id.aap_youtubeImageButton:
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_ad_post_admin, new AdminPostYoutubeAd()).addToBackStack("adminPostYoutubeAd").commit();
+                break;
+//                back pressed
+            case R.id.aap_backButton:
+                super.onBackPressed();
+        }//switch
+
     }//onclick
 
     //end
