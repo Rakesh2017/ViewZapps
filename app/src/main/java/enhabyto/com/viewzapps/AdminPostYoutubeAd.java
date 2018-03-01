@@ -14,10 +14,12 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -59,6 +61,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
     FancyButton selectImage_btn, cancelImage_btn;
 
     ImageView selectedImage_iv;
+    ImageButton backButton;
 
     Uri ImageFilePath;
 
@@ -85,6 +88,8 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         selectImage_btn = view.findViewById(R.id.apa_selectButton);
         cancelImage_btn = view.findViewById(R.id.apa_cancelButton);
 
+        backButton = view.findViewById(R.id.apa_backButton);
+
         selectedImage_iv = view.findViewById(R.id.apa_selectedImageView);
 
         loading = view.findViewById(R.id.apa_rotateLoading);
@@ -94,6 +99,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         submit.setOnClickListener(this);
         selectImage_btn.setOnClickListener(this);
         cancelImage_btn.setOnClickListener(this);
+        backButton.setOnClickListener(this);
 
         return view;
     }
@@ -113,56 +119,27 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
 
             if (Validations()) {
 
-                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText("Are you sure to Post this Ad?")
-                        .setConfirmText("Yes")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(final SweetAlertDialog sDialog) {
-                                sDialog.dismissWithAnimation();
-                                loading.start();
-
-                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                                key = databaseReference.push().getKey();
-                                databaseReference = databaseReference.child("ads").child("youtubeAds").child(key);
-
-//                            posting ad
-                                databaseReference.child("adUrl").setValue(url_tx);
-                                databaseReference.child("adTitle").setValue(title_tx);
-                                databaseReference.child("adViewsLeft").setValue(views_tx);
-                                databaseReference.child("adLikesLeft").setValue(likes_tx);
-                                databaseReference.child("adSubscribersLeft").setValue(subscribers_tx);
-                                databaseReference.child("youtubeAdKey").setValue(key);
-                                databaseReference.child("userUid").setValue(mAuth.getUid());
-
-                                databaseReference = FirebaseDatabase.getInstance().getReference();
-                                databaseReference = databaseReference.child("admin_posted_ads").child("youtubeAds").child(key);
-//                            posting ad
-                                databaseReference.child("adUrl").setValue(url_tx);
-                                databaseReference.child("adTitle").setValue(title_tx);
-                                databaseReference.child("adExpectedViews").setValue(views_tx);
-                                databaseReference.child("adExpectedLikes").setValue(likes_tx);
-                                databaseReference.child("adExpectedSubscribers").setValue(subscribers_tx);
-                                databaseReference.child("youtubeAdKey").setValue(key);
-                                databaseReference.child("userUid").setValue(mAuth.getUid());
-
-
-                                UploadImageFileToFirebaseStorage();
-                                loading.stop();
-                                new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
-                                        .setTitleText("Ad Successfully Posted!")
-                                        .show();
-
-                            }
-                        })
-                        .setCancelText("No")
+                new SweetAlertDialog(getActivity(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                        .setTitleText("Have a Preview of Ad!")
+                        .setCancelText("Preview Ad")
+                        .setConfirmText("Post Ad")
+                        .showCancelButton(true)
                         .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                sweetAlertDialog.dismissWithAnimation();
+                            public void onClick(SweetAlertDialog sDialog) {
+
+                                sDialog.cancel();
+                            }
+                        })
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                PostFinalAd();
+                                sDialog.cancel();
                             }
                         })
                         .show();
+
             }
 
         }//if ends
@@ -177,6 +154,17 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
             ImageFilePath = null;
             selectedImage_iv.setVisibility(View.GONE);
             selectImage_btn.setText("Select Image");
+        }//ele if
+
+//        back button
+        else if (id == R.id.apa_backButton){
+        try {
+            getFragmentManager().popBackStack();
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+        }
+
         }//ele if
 
 
@@ -222,7 +210,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
 //selecting image
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Toast.makeText(getActivity(), "hello", Toast.LENGTH_SHORT).show();
+
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
@@ -233,7 +221,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
                         .fit()
                         .centerCrop()
                         .into(selectedImage_iv);
-                selectImage_btn.setText("Selected");
+                selectImage_btn.setText("re-select");
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
                 new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
@@ -307,6 +295,60 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         }
 
     }//upload image
+
+//    finally post ad
+    public void PostFinalAd(){
+        new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Are you sure to Post this Ad?")
+                .setConfirmText("Yes")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(final SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
+                        loading.start();
+
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                        key = databaseReference.push().getKey();
+                        databaseReference = databaseReference.child("ads").child("youtubeAds").child(key);
+
+//                            posting ad
+                        databaseReference.child("adUrl").setValue(url_tx);
+                        databaseReference.child("adTitle").setValue(title_tx);
+                        databaseReference.child("adViewsLeft").setValue(views_tx);
+                        databaseReference.child("adLikesLeft").setValue(likes_tx);
+                        databaseReference.child("adSubscribersLeft").setValue(subscribers_tx);
+                        databaseReference.child("youtubeAdKey").setValue(key);
+                        databaseReference.child("userUid").setValue(mAuth.getUid());
+
+                        databaseReference = FirebaseDatabase.getInstance().getReference();
+                        databaseReference = databaseReference.child("admin_posted_ads").child("youtubeAds").child(key);
+//                            posting ad
+                        databaseReference.child("adUrl").setValue(url_tx);
+                        databaseReference.child("adTitle").setValue(title_tx);
+                        databaseReference.child("adExpectedViews").setValue(views_tx);
+                        databaseReference.child("adExpectedLikes").setValue(likes_tx);
+                        databaseReference.child("adExpectedSubscribers").setValue(subscribers_tx);
+                        databaseReference.child("youtubeAdKey").setValue(key);
+                        databaseReference.child("userUid").setValue(mAuth.getUid());
+
+
+                        UploadImageFileToFirebaseStorage();
+                        loading.stop();
+                        new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
+                                .setTitleText("Ad Successfully Posted!")
+                                .show();
+
+                    }
+                })
+                .setCancelText("No")
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismissWithAnimation();
+                    }
+                })
+                .show();
+    }//finally post ad
 
 //    end
 }
