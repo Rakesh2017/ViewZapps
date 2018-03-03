@@ -38,12 +38,12 @@
             />
 
         <!--uploader name-->
-        <util.android.textviews.FontTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/TextStyleSmall"
-            android:layout_toEndOf="@+id/rya_profileImage"
             android:textStyle="bold"
+            android:layout_toEndOf="@+id/rya_profileImage"
             android:id="@+id/rya_uploaderNameTextView"
             android:hint="@string/hintPlaceholderS"
             android:padding="@dimen/cardViewPadding12"
@@ -61,7 +61,7 @@
 
 
         <!--ad title-->
-        <util.android.textviews.FontTextView
+        <TextView
             android:id="@+id/rya_titleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -100,6 +100,7 @@
                 style="@style/TextStyleSmall"
                 android:textStyle="bold"
                 android:layout_weight="1"
+                android:hint="---"
                 />
 
 
@@ -136,22 +137,6 @@
 
 
         </LinearLayout>
-
-
-
-
-        <!--ad url
-        <util.android.textviews.FontTextView
-            android:id="@+id/rya_urlTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/MyCustomTextStyleSmallDroidBold"
-            android:textColor="@color/googleGreen"
-            android:paddingStart="@dimen/cardViewPadding8"
-            android:paddingEnd="@dimen/cardViewPadding8"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/cardViewPadding8"
-            />-->
 
     </RelativeLayout>
 

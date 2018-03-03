@@ -32,6 +32,9 @@
     <dimen name="extraSmallTextSize12">200sp</dimen>
     <dimen name="padding2">2dp</dimen>
     <dimen name="padding3">3dp</dimen>
+    <dimen name="padding8">8dp</dimen>
+    <dimen name="padding10">10dp</dimen>
+    <dimen name="padding12">12dp</dimen>
     <dimen name="padding4">4dp</dimen>
     <dimen name="dashBoardIconHeight">90dp</dimen>
 

@@ -1,36 +1,32 @@
 package enhabyto.com.viewzapps;
 
 
-import android.*;
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -43,8 +39,11 @@ import com.victor.loading.rotate.RotateLoading;
 import java.io.File;
 import java.io.IOException;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
 import mehdi.sakout.fancybuttons.FancyButton;
+import util.android.textviews.FontTextView;
+
 import static android.app.Activity.RESULT_OK;
 
 
@@ -65,8 +64,17 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
 
     Uri ImageFilePath;
 
+    //preview material
+    CircleImageView profileImage;
+    TextView uploaderName, adTitle;
+    ImageView adImage;
+    CardView cardView;
+    ImageButton cancelPreviewButton;
+    RelativeLayout mainRelativeLayout, previewRelativeLayout;
+
     RotateLoading loading;
     private FirebaseUser mAuth = FirebaseAuth.getInstance().getCurrentUser();
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
     public AdminPostYoutubeAd() {
         // Required empty public constructor
@@ -96,10 +104,27 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
 
         FancyButton submit = view.findViewById(R.id.apa_submitButton);
 
+        //preview
+        profileImage = view.findViewById(R.id.apa_profileImage);
+
+        uploaderName = view.findViewById(R.id.apa_uploaderNameTextView);
+        adTitle = view.findViewById(R.id.apa_previewTitleTextView);
+
+        adImage = view.findViewById(R.id.apa_adImageView);
+
+        cardView = view.findViewById(R.id.apa_cardview);
+
+        cancelPreviewButton = view.findViewById(R.id.apa_cancelImageButton);
+
+        mainRelativeLayout = view.findViewById(R.id.apa_mainRelativeLayout);
+        previewRelativeLayout = view.findViewById(R.id.apa_previewRelativeLayout);
+        //preview
+
         submit.setOnClickListener(this);
         selectImage_btn.setOnClickListener(this);
         cancelImage_btn.setOnClickListener(this);
         backButton.setOnClickListener(this);
+        cancelPreviewButton.setOnClickListener(this);
 
         return view;
     }
@@ -118,38 +143,19 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
             subscribers_tx = subscribers_et.getText().toString().trim();
 
             if (Validations()) {
-
-                new SweetAlertDialog(getActivity(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
-                        .setTitleText("Have a Preview of Ad!")
-                        .setCancelText("Preview Ad")
-                        .setConfirmText("Post Ad")
-                        .showCancelButton(true)
-                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-
-                                sDialog.cancel();
-                            }
-                        })
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-                                PostFinalAd();
-                                sDialog.cancel();
-                            }
-                        })
-                        .show();
-
+                sweetAlertForPostAd();
             }
 
         }//if ends
 
+//        select image
      else if (id == R.id.apa_selectButton){
             CropImage.activity()
                     .setGuidelines(CropImageView.Guidelines.ON)
                     .start(getContext(), this);
         }//ele if
 
+//        cancel image
     else if (id == R.id.apa_cancelButton){
             ImageFilePath = null;
             selectedImage_iv.setVisibility(View.GONE);
@@ -167,6 +173,12 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
 
         }//ele if
 
+//        cancel Preview
+        else if(id == R.id.apa_cancelImageButton){
+            previewRelativeLayout.setVisibility(View.GONE);
+            mainRelativeLayout.setVisibility(View.VISIBLE);
+            sweetAlertForPostAd();
+        }
 
     } //onclick
 
@@ -336,6 +348,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
                         loading.stop();
                         new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
                                 .setTitleText("Ad Successfully Posted!")
+                                .setConfirmText("Got it!")
                                 .show();
 
                     }
@@ -349,6 +362,82 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
                 })
                 .show();
     }//finally post ad
+
+
+//    AdPreview
+
+    public void AdPreview(){
+        //profile image
+        Picasso.with(getActivity())
+                .load(ImageFilePath)
+                .placeholder(R.drawable.ic_youtube_placeholder)
+                .error(R.drawable.ic_warning)
+                .fit()
+                .centerCrop()
+                .noFade()
+                .into(adImage);
+
+        adTitle.setText(title_tx);
+
+        databaseReference.child("users").child(FirebaseAuth.getInstance().getUid())
+                .addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String name = dataSnapshot.child("profile_details").child("name").getValue(String.class);
+                        uploaderName.setText(name);
+                        String image = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
+                        Picasso.with(getContext())
+                                .load(image)
+                                .placeholder(R.drawable.ic_profile_image_placeholder)
+                                .error(R.drawable.ic_warning)
+                                .noFade()
+                                .into(profileImage);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
+    }//    AdPreview
+
+
+//    posting ad sweet alert
+    public void sweetAlertForPostAd(){
+        new SweetAlertDialog(getActivity(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                .setTitleText("Have a Preview of Ad!")
+                .setCancelText("Preview Ad")
+                .setConfirmText("Post Ad")
+                .showCancelButton(true)
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        AdPreview();
+                        previewRelativeLayout.setVisibility(View.VISIBLE);
+                        mainRelativeLayout.setVisibility(View.GONE);
+                        sDialog.cancel();
+                    }
+                })
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        PostFinalAd();
+                        sDialog.cancel();
+                    }
+                })
+                .setNeutralText("Cancel")
+                .setNeutralClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.cancel();
+                    }
+                })
+                .show();
+    }
+    //    posting ad sweet alert
+
 
 //    end
 }

@@ -25,7 +25,7 @@
 
 
     <!--name-->
-    <util.android.textviews.FontTextView
+    <TextView
         android:id="@+id/header_name1TextView"
         android:layout_toEndOf="@+id/header_appLogoImageView"
         android:layout_width="wrap_content"
@@ -37,7 +37,7 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         />
 
-    <util.android.textviews.FontTextView
+    <TextView
         android:id="@+id/header_nameTextView"
         android:layout_toEndOf="@+id/header_name1TextView"
         android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
 
 
     <!--email-->
-    <util.android.textviews.FontTextView
+    <TextView
         android:id="@+id/header_email1TextView"
         android:layout_toEndOf="@+id/header_appLogoImageView"
         android:layout_below="@+id/header_nameTextView"
@@ -65,7 +65,7 @@
         android:layout_marginTop="@dimen/nav_header_vertical_spacing"
         />
 
-    <util.android.textviews.FontTextView
+    <TextView
         android:id="@+id/header_emailTextView"
         android:layout_toEndOf="@+id/header_email1TextView"
         android:layout_below="@+id/header_nameTextView"
@@ -80,7 +80,7 @@
         />
 
     <!--phone-->
-    <util.android.textviews.FontTextView
+    <TextView
         android:id="@+id/header_phone1TextView"
         android:layout_toEndOf="@+id/header_appLogoImageView"
         android:layout_below="@+id/header_emailTextView"
@@ -93,7 +93,7 @@
         android:layout_marginTop="@dimen/nav_header_vertical_spacing"
         />
 
-    <util.android.textviews.FontTextView
+    <TextView
         android:id="@+id/header_phoneTextView"
         android:layout_toEndOf="@+id/header_phone1TextView"
         android:layout_below="@+id/header_emailTextView"
@@ -108,7 +108,7 @@
         />
 
     <!--phone-->
-    <util.android.textviews.FontTextView
+    <TextView
         android:id="@+id/header_zap1TextView"
         android:layout_toEndOf="@+id/header_appLogoImageView"
         android:layout_below="@+id/header_phoneTextView"
@@ -121,7 +121,7 @@
         android:layout_marginTop="@dimen/nav_header_vertical_spacing"
         />
 
-    <util.android.textviews.FontTextView
+    <TextView
         android:id="@+id/header_zapTextView"
         android:layout_toEndOf="@+id/header_zap1TextView"
         android:layout_below="@+id/header_phoneTextView"

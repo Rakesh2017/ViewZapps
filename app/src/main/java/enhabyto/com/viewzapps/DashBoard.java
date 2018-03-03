@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -51,7 +52,7 @@ public class DashBoard extends AppCompatActivity
 
     private FirebaseUser mAuth = FirebaseAuth.getInstance().getCurrentUser();
     CircleImageView profileImage_iv, profileImageMainPage_iv;
-    FontTextView name_tv, email_tv, phone_tv, zapNumber_tv;
+    TextView name_tv, email_tv, phone_tv, zapNumber_tv;
     String name_tx, email_tx, phone_tx;
 
     ImageButton youtube_btn, facebook_btn, insta_btn, android_btn, apple_btn, movie_btn;

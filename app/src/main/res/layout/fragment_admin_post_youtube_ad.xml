@@ -14,19 +14,26 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:ignore="UselessParent">
+        tools:ignore="UselessParent"
+        >
 
-        <util.android.textviews.FontTextView
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/adminYoutubeAd"
-            style="@style/TextStyleLarge"
-            android:id="@+id/apa_headerTextView"
-            android:layout_alignParentEnd="true"
-            android:padding="@dimen/activity_vertical_margin"
-            android:drawableStart="@drawable/ic_youtube_mini"
-            android:drawablePadding="@dimen/book_border"
-            tools:ignore="RelativeOverlap" />
+            android:id="@+id/apa_mainRelativeLayout"
+            >
+
+            <ImageView
+                android:layout_width="90dp"
+                android:layout_height="20dp"
+                android:background="@drawable/ic_youtube_logo"
+                android:id="@+id/apa_headerTextView"
+                android:layout_alignParentEnd="true"
+                android:padding="@dimen/activity_vertical_margin"
+                tools:ignore="RelativeOverlap"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                />
 
         <!--back button-->
         <ImageButton
@@ -65,11 +72,12 @@
             android:elevation="@dimen/elevation_5dp"
             android:maxLength="90"
             tools:targetApi="lollipop"
-            tools:ignore="LabelFor" />
+            tools:ignore="LabelFor"
+            />
 
 
         <!--Url Link-->
-        <util.android.textviews.FontTextView
+        <TextView
             android:id="@+id/apa_urlLinkTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -158,7 +166,7 @@
             />
 
         <!--Views-->
-        <util.android.textviews.FontTextView
+        <TextView
             android:id="@+id/apa_viewsTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -183,7 +191,7 @@
             tools:ignore="LabelFor" />
 
         <!--likes-->
-        <util.android.textviews.FontTextView
+        <TextView
             android:id="@+id/apa_likesTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -208,7 +216,7 @@
             tools:ignore="LabelFor" />
 
         <!--likes-->
-        <util.android.textviews.FontTextView
+        <TextView
             android:id="@+id/apa_subscribersTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -272,11 +280,45 @@
             tools:targetApi="lollipop"
             android:layout_centerInParent="true"/>
 
+        </RelativeLayout>
 
 
-
+        <!--                                            -->
+        <!--                                            -->
         <!--preview of ad-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/apa_previewRelativeLayout"
+            android:visibility="gone"
+            >
+
+        <!--preview cancel button-->
+        <ImageButton
+            android:id="@+id/apa_cancelImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_cancel_button"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_alignParentEnd="true"
+            tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_preview"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:text="Your Ad Preview"
+                android:textStyle="bold"
+                style="@style/TextStyleMedium"
+                android:drawablePadding="@dimen/padding8"
+                />
+
+
         <android.support.v7.widget.CardView
+            android:layout_below="@+id/apa_cancelImageButton"
             xmlns:card_view="http://schemas.android.com/tools"
             android:id="@+id/apa_cardview"
             android:layout_width="match_parent"
@@ -286,12 +328,12 @@
             android:alwaysDrawnWithCache="true"
             app:cardBackgroundColor="@color/whiteSmoke"
             android:background="@color/whiteSmoke"
-            android:layout_centerHorizontal="true"
             android:shape="ring"
             app:cardPreventCornerOverlap="true"
             android:layout_marginTop="@dimen/cardViewPadding12"
             android:fitsSystemWindows="true"
-            android:layout_centerInParent="true"
+            android:elevation="@dimen/elevation_5dp"
+            card_view:targetApi="lollipop"
             >
 
             <RelativeLayout
@@ -316,7 +358,7 @@
                     />
 
                 <!--uploader name-->
-                <util.android.textviews.FontTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/TextStyleSmall"
@@ -339,7 +381,7 @@
 
 
                 <!--ad title-->
-                <util.android.textviews.FontTextView
+                <TextView
                     android:id="@+id/apa_previewTitleTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -418,11 +460,10 @@
             </RelativeLayout>
 
         </android.support.v7.widget.CardView>
-<!--preview ends-->
+
+        </RelativeLayout>
+        <!--preview ends-->
 
     </RelativeLayout>
-
-
-
 
 </android.support.v4.widget.NestedScrollView>

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.lzyzsd.randomcolor.RandomColor;
@@ -135,7 +136,7 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        FontTextView title_tx, url_tx, uploaderName_tx;
+        TextView title_tx, url_tx, uploaderName_tx;
         ImageView adImage_iv;
         CircleImageView userImage;
         CardView cardView;
