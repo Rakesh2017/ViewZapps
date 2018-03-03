@@ -63,10 +63,11 @@ public class YoutubeAds extends AppCompatActivity implements View.OnClickListene
         // Setting RecyclerView layout as LinearLayout.
         recyclerView.setLayoutManager(mLayoutManager);
 
+        loading.start();
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                loading.start();
+
                 if(list!=null) {
                     list.clear();  // v v v v important (eliminate duplication of data)
                 }
@@ -80,14 +81,14 @@ public class YoutubeAds extends AppCompatActivity implements View.OnClickListene
                 //   Collections.reverse(list);
                 adapter.notifyDataSetChanged();
                 recyclerView.setAdapter(adapter);
-                loading.stop();
+
                 if (adapter.getItemCount() == 0){
                     gifTextView.setVisibility(View.VISIBLE);
                 }
                 else gifTextView.setVisibility(View.GONE);
 
                 // Hiding the progress dialog.
-
+                loading.stop();
             }
 
             @Override

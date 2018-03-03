@@ -39,7 +39,7 @@
                 />
 
             <!--user name-->
-            <util.android.textviews.FontTextView
+            <TextView
                 android:id="@+id/bar_nameTextView"
                 android:layout_toEndOf="@+id/bar_profileImage"
                 android:paddingStart="@dimen/cardViewPadding4"

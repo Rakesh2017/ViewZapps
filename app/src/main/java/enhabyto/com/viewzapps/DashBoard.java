@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.AppBarLayout;
@@ -41,6 +42,7 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.net.URI;
 import java.util.Random;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -51,7 +53,7 @@ public class DashBoard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private FirebaseUser mAuth = FirebaseAuth.getInstance().getCurrentUser();
-    CircleImageView profileImage_iv, profileImageMainPage_iv;
+    CircleImageView  profileImageMainPage_iv;
     TextView name_tv, email_tv, phone_tv, zapNumber_tv;
     String name_tx, email_tx, phone_tx;
 
@@ -77,7 +79,6 @@ public class DashBoard extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 //        image view
-        profileImage_iv = navigationView.getHeaderView(0).findViewById(R.id.header_appLogoImageView);
         profileImageMainPage_iv = findViewById(R.id.bar_profileImage);
 
 //        Image button iss
@@ -351,9 +352,6 @@ public class DashBoard extends AppCompatActivity
             Glide.with(DashBoard.this)
                     .load(R.drawable.ic_profile_image_placeholder)
                     .into(profileImageMainPage_iv);
-            Glide.with(DashBoard.this)
-                    .load(R.drawable.ic_profile_image_placeholder)
-                    .into(profileImage_iv);
             return;
         }
         try {
@@ -372,12 +370,19 @@ public class DashBoard extends AppCompatActivity
         File imgFile = new  File(myPath);
 
         if(imgFile.exists()){
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            profileImageMainPage_iv.setImageBitmap(myBitmap);
-            profileImage_iv.setImageBitmap(myBitmap);
+            //Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            File f = new File(imgFile.getAbsolutePath());
+            Uri imageUri = Uri.fromFile(f);
+            Picasso.with(DashBoard.this)
+                    .load(imageUri)
+                    .placeholder(R.drawable.ic_profile_image_placeholder)
+                    .error(R.drawable.ic_warning)
+                    .into(profileImageMainPage_iv);
+
+            //profileImageMainPage_iv.setImageBitmap(myBitmap);
         }
         //rotateLoadingImage.start();
-        if (DashBoard.this != null){
+
             databaseReference.child("users").child(mAuth.getUid())
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -392,21 +397,17 @@ public class DashBoard extends AppCompatActivity
 
                                 if (dataSnapshot.hasChild("profile_image") && !TextUtils.equals(oldUrl, newUrl)){
                                     String url = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
-                                    Glide.with(DashBoard.this)
+                                    Picasso.with(DashBoard.this)
                                             .load(url)
+                                            .placeholder(R.drawable.ic_profile_image_placeholder)
+                                            .error(R.drawable.ic_warning)
                                             .into(profileImageMainPage_iv);
-                                    Glide.with(DashBoard.this)
-                                            .load(url)
-                                            .into(profileImage_iv);
+
                                 }
                                 else if (!dataSnapshot.hasChild("profile_image")){
                                     Glide.with(DashBoard.this)
                                             .load(R.drawable.ic_profile_image_placeholder)
                                             .into(profileImageMainPage_iv);
-                                    Glide.with(DashBoard.this)
-                                            .load(R.drawable.ic_profile_image_placeholder)
-                                            .into(profileImage_iv);
-
 
                                     SharedPreferences sharedDefaultImage = getSharedPreferences("defaultImage", MODE_PRIVATE);
                                     SharedPreferences.Editor editorDefaultImage = sharedDefaultImage.edit();
@@ -425,13 +426,10 @@ public class DashBoard extends AppCompatActivity
                             Glide.with(DashBoard.this)
                                     .load(R.drawable.ic_profile_image_placeholder)
                                     .into(profileImageMainPage_iv);
-                            Glide.with(DashBoard.this)
-                                    .load(R.drawable.ic_profile_image_placeholder)
-                                    .into(profileImage_iv);
                             //rotateLoadingImage.stop();
                         }
                     }); // database ends
-        } // if ends
+
 
     } // set image ends
 

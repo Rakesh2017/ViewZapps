@@ -116,7 +116,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             case R.id.login_googleButton:
                 rotateLoading.start();
                 signIn();
-              /*  new CheckNetworkConnection(Login.this, new CheckNetworkConnection.OnConnectionCallback() {
+                /*new CheckNetworkConnection(Login.this, new CheckNetworkConnection.OnConnectionCallback() {
                     @Override
                     public void onConnectionSuccess() {
                         signIn();
@@ -125,9 +125,9 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                     @Override
                     public void onConnectionFail(String msg) {
                         new SweetNoInternetConnection().noInternet(Login.this);
-                        avi.hide();
+                        rotateLoading.stop();
                     }
-                }).execute(); */
+                }).execute();*/
                 break;
 
 

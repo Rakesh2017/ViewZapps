@@ -403,7 +403,7 @@
                     android:weightSum="3"
                     android:layout_below="@+id/apa_previewTitleTextView"
                     android:layout_alignStart="@+id/apa_previewTitleTextView"
-                    android:layout_marginTop="@dimen/cardViewPadding4"
+                    android:layout_marginTop="@dimen/padding8"
                     android:divider="@drawable/liner_vertical_divider_1"
                     android:showDividers="middle"
                     >

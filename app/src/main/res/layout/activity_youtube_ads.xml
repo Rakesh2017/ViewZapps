@@ -81,15 +81,6 @@
             android:layout_height="wrap_content"
             android:background="@color/youtubeBackGroundDarkGray"
             />
-        <com.victor.loading.rotate.RotateLoading
-            android:id="@+id/ya_rotateLoading"
-            android:layout_width="@dimen/rotateLoadingWidth"
-            android:layout_height="@dimen/rotateLoadingHeight"
-            app:loading_width="@dimen/rotateLoadingBreadth"
-            app:loading_color="@color/appColor"
-            android:elevation="@dimen/elevation_5dp"
-            tools:targetApi="lollipop"
-            android:layout_centerInParent="true"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -109,6 +100,17 @@
                 />
         </RelativeLayout>
 
+
+        <com.victor.loading.rotate.RotateLoading
+            android:id="@+id/ya_rotateLoading"
+            android:layout_width="@dimen/rotateLoadingWidth"
+            android:layout_height="@dimen/rotateLoadingHeight"
+            app:loading_width="@dimen/rotateLoadingBreadth"
+            app:loading_color="@color/appColor"
+            android:elevation="12dp"
+            tools:targetApi="lollipop"
+            android:visibility="visible"
+            android:layout_centerInParent="true"/>
 
 
     </RelativeLayout>
