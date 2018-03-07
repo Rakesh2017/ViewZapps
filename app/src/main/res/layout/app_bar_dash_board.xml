@@ -27,15 +27,16 @@
             <!--profile image-->
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/bar_profileImage"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_centerVertical="true"
                 tools:ignore="ContentDescription,UnusedAttribute"
                 android:elevation="@dimen/elevation_5dp"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 app:civ_border_width="1dp"
-                app:civ_border_color="@color/black"
+                app:civ_border_color="@color/black90"
                 android:layout_toEndOf="@+id/toolbar"
+                android:background="@drawable/ic_profile_image_placeholder"
                 />
 
             <!--user name-->

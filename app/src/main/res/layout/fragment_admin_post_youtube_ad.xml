@@ -30,7 +30,7 @@
                 android:id="@+id/apa_headerTextView"
                 android:layout_alignParentEnd="true"
                 android:padding="@dimen/activity_vertical_margin"
-                tools:ignore="RelativeOverlap"
+                tools:ignore="ContentDescription,RelativeOverlap"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 />
@@ -48,6 +48,37 @@
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             />
 
+
+            <!--channel name-->
+            <util.android.textviews.FontTextView
+                android:id="@+id/apa_userUidTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/userUId"
+                style="@style/TextStyleMedium"
+                android:layout_below="@+id/apa_headerTextView"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginStart="@dimen/activity_start_margin"
+                android:fontFamily="ubuntu"
+                />
+
+            <EditText
+                android:id="@+id/apa_userUidEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/apa_userUidTextView"
+                style="@style/EditTextStyle"
+                android:background="@drawable/custom_rounded_rectangle_edit_text"
+                android:inputType="textCapWords"
+                android:drawableEnd="@drawable/ic_uid"
+                android:elevation="@dimen/elevation_5dp"
+                android:maxLength="90"
+                tools:targetApi="lollipop"
+                tools:ignore="LabelFor"
+                />
+
+
+
         <!--Title-->
         <util.android.textviews.FontTextView
             android:id="@+id/apa_titleTextView"
@@ -55,7 +86,7 @@
             android:layout_height="wrap_content"
             android:text="@string/videoTitle"
             style="@style/TextStyleMedium"
-            android:layout_below="@+id/apa_headerTextView"
+            android:layout_below="@+id/apa_userUidEditText"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginStart="@dimen/activity_start_margin"
             android:fontFamily="ubuntu"
@@ -69,6 +100,7 @@
             style="@style/EditTextStyle"
             android:background="@drawable/custom_rounded_rectangle_edit_text"
             android:inputType="textCapWords"
+            android:drawableEnd="@drawable/ic_youtube_edit_text"
             android:elevation="@dimen/elevation_5dp"
             android:maxLength="90"
             tools:targetApi="lollipop"
@@ -96,6 +128,7 @@
             android:layout_below="@+id/apa_urlLinkTextView"
             style="@style/EditTextStyle"
             android:background="@drawable/custom_rounded_rectangle_edit_text"
+            android:drawableEnd="@drawable/ic_link"
             android:inputType="textUri"
             android:elevation="@dimen/elevation_5dp"
             tools:targetApi="lollipop"
@@ -185,6 +218,7 @@
             android:layout_below="@+id/apa_viewsTextView"
             style="@style/EditTextStyle"
             android:background="@drawable/custom_rounded_rectangle_edit_text"
+            android:drawableEnd="@drawable/ic_view"
             android:inputType="number"
             android:elevation="@dimen/elevation_5dp"
             tools:targetApi="lollipop"
@@ -210,6 +244,7 @@
             android:layout_below="@+id/apa_likesTextView"
             style="@style/EditTextStyle"
             android:background="@drawable/custom_rounded_rectangle_edit_text"
+            android:drawableEnd="@drawable/ic_thumbs_up"
             android:inputType="number"
             android:elevation="@dimen/elevation_5dp"
             tools:targetApi="lollipop"
@@ -235,6 +270,7 @@
             android:layout_below="@+id/apa_subscribersTextView"
             style="@style/EditTextStyle"
             android:background="@drawable/custom_rounded_rectangle_edit_text"
+            android:drawableEnd="@drawable/ic_subscribe"
             android:inputType="number"
             android:elevation="@dimen/elevation_5dp"
             tools:targetApi="lollipop"
@@ -389,7 +425,8 @@
                     style="@style/TextStyleSmall"
                     android:textStyle="bold"
                     android:maxLines="3"
-                    android:layout_marginStart="@dimen/cardViewPadding4"
+                    android:layout_marginStart="@dimen/cardViewPadding8"
+                    android:layout_marginEnd="@dimen/padding4"
                     android:hint="@string/hintPlaceholderL"
                     android:layout_alignTop="@+id/apa_adImageView"
                     />

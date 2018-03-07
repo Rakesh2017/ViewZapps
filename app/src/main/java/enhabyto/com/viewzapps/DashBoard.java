@@ -3,15 +3,8 @@ package enhabyto.com.viewzapps;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityCompat;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,14 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.github.lzyzsd.randomcolor.RandomColor;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,17 +25,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
-
-import java.io.File;
-import java.net.URI;
-import java.util.Random;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import de.hdodenhof.circleimageview.CircleImageView;
-import util.android.textviews.FontTextView;
+
 
 public class DashBoard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -138,8 +120,8 @@ public class DashBoard extends AppCompatActivity
     public void onStart(){
         super.onStart();
         //function calls
-        setProfileData();
         setImage();
+        setProfileData();
     }
 
 //    setting profile data
@@ -187,35 +169,9 @@ public class DashBoard extends AppCompatActivity
                     }
                 });//setting profile data
 
-/*
 //        setting profile pic
-        databaseReference.child("users").child(mAuth.getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String imagePath = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
 
-                        Picasso.with(DashBoard.this)
-                                .load(imagePath)
-                                .placeholder(R.drawable.ic_profile_image_placeholder)
-                                .error(R.drawable.ic_warning)
-                                .into(profileImageMainPage_iv);
-
-
-                        Picasso.with(DashBoard.this)
-                                .load(imagePath)
-                                .placeholder(R.drawable.ic_profile_image_placeholder)
-                                .error(R.drawable.ic_warning)
-                                .into(profileImage_iv);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
         //setting profile pic
-*/
 
     }
 
@@ -252,6 +208,11 @@ public class DashBoard extends AppCompatActivity
 //                admin post ad
             case R.id.nav_adminPostAd:
                       startActivity(new Intent(DashBoard.this, AdPostAdmin.class));
+                break;
+
+//                log out
+            case R.id.nav_logOut:
+                Logout();
                 break;
         }
 
@@ -345,94 +306,76 @@ public class DashBoard extends AppCompatActivity
     //handling profile image
     //    setting image
     public void setImage(){
-//        checking if there is profile image in firebase
-        SharedPreferences sharedDefaultImage = getSharedPreferences("defaultImage", MODE_PRIVATE);
-        String isImageUrl = sharedDefaultImage.getString("NoImageUrl", "");
-        if (TextUtils.equals(isImageUrl, "true")){
-            Glide.with(DashBoard.this)
-                    .load(R.drawable.ic_profile_image_placeholder)
-                    .into(profileImageMainPage_iv);
-            return;
-        }
-        try {
-            SharedPreferences.Editor editorDefaultImage = sharedDefaultImage.edit();
-            editorDefaultImage.putString("NoImageUrl", "false");
-            editorDefaultImage.apply();
-        }
-        catch (NullPointerException e){
-            e.printStackTrace();
-        }
+        databaseReference.child("users").child(mAuth.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String imagePath = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
 
+                        Picasso.with(DashBoard.this)
+                                .load(imagePath)
+                                .placeholder(R.drawable.ic_profile_image_placeholder)
+                                .error(R.drawable.ic_warning)
+                                .into(profileImageMainPage_iv);
+                    }
 
-        //loading saved image from storage
-        String myFile = "/viewZapp/image.jpg";
-        String myPath = Environment.getExternalStorageDirectory()+myFile;
-        File imgFile = new  File(myPath);
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-        if(imgFile.exists()){
-            //Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            File f = new File(imgFile.getAbsolutePath());
-            Uri imageUri = Uri.fromFile(f);
-            Picasso.with(DashBoard.this)
-                    .load(imageUri)
-                    .placeholder(R.drawable.ic_profile_image_placeholder)
-                    .error(R.drawable.ic_warning)
-                    .into(profileImageMainPage_iv);
-
-            //profileImageMainPage_iv.setImageBitmap(myBitmap);
-        }
-        //rotateLoadingImage.start();
-
-            databaseReference.child("users").child(mAuth.getUid())
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            try {
-                                String newUrl = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
-                                SharedPreferences sharedpreferences = getSharedPreferences("imageUrlCheck1", MODE_PRIVATE);
-                                String oldUrl = sharedpreferences.getString("imageUrl1", "");
-                                SharedPreferences.Editor editor = sharedpreferences.edit();
-                                editor.putString("imageUrl1", newUrl);
-                                editor.apply();
-
-                                if (dataSnapshot.hasChild("profile_image") && !TextUtils.equals(oldUrl, newUrl)){
-                                    String url = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
-                                    Picasso.with(DashBoard.this)
-                                            .load(url)
-                                            .placeholder(R.drawable.ic_profile_image_placeholder)
-                                            .error(R.drawable.ic_warning)
-                                            .into(profileImageMainPage_iv);
-
-                                }
-                                else if (!dataSnapshot.hasChild("profile_image")){
-                                    Glide.with(DashBoard.this)
-                                            .load(R.drawable.ic_profile_image_placeholder)
-                                            .into(profileImageMainPage_iv);
-
-                                    SharedPreferences sharedDefaultImage = getSharedPreferences("defaultImage", MODE_PRIVATE);
-                                    SharedPreferences.Editor editorDefaultImage = sharedDefaultImage.edit();
-                                    editorDefaultImage.putString("NoImageUrl", "true");
-                                    editorDefaultImage.apply();
-                                }
-                            }
-                            //rotateLoadingImage.stop();
-                            catch (NullPointerException e){
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Glide.with(DashBoard.this)
-                                    .load(R.drawable.ic_profile_image_placeholder)
-                                    .into(profileImageMainPage_iv);
-                            //rotateLoadingImage.stop();
-                        }
-                    }); // database ends
-
+                    }
+                });
 
     } // set image ends
 
+//    log out
+    public void Logout(){
+        new SweetAlertDialog(DashBoard.this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Are you sure to Logout?")
+                .setContentText("You can use left side icon to switch between accounts!")
+                .setConfirmText("Yes")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(final SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
+                        FirebaseAuth.getInstance().signOut();
+                        DashBoard.this.finish();
+
+                        String myFile = "/viewZapp/image.jpg";
+
+                        getSharedPreferences("defaultImage", MODE_PRIVATE).edit().clear().apply();
+                        getSharedPreferences("imageUrlCheck1", MODE_PRIVATE).edit().clear().apply();
+                        getSharedPreferences("imageUrlCheck", MODE_PRIVATE).edit().clear().apply();
+                        getSharedPreferences("profileDetails", MODE_PRIVATE).edit().clear().apply();
+
+                        SharedPreferences sharedpreferences = getSharedPreferences("LogDetail", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedpreferences.edit();
+                        editor.putString("firstScreen", "Login");
+                        editor.apply();
+                                      new CheckNetworkConnection(DashBoard.this, new CheckNetworkConnection.OnConnectionCallback() {
+                                            @Override
+                                            public void onConnectionSuccess() {
+
+                                            }
+
+                                            @Override
+                                            public void onConnectionFail(String msg) {
+                                               new SweetNoInternetConnection().noInternet(DashBoard.this);
+
+                                            }
+                                        }).execute();
+
+                                    }
+                                })
+                                .setCancelText("No")
+                                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                        sweetAlertDialog.dismissWithAnimation();
+                                    }
+                                })
+                                .show();
+    }
+//    logout
 
 // end
 }

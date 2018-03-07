@@ -36,6 +36,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.iceteck.silicompressorr.FileUtils;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.squareup.picasso.Picasso;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.io.File;
@@ -85,10 +86,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         submit_btn = findViewById(R.id.profile_submitButton);
         //function calls
         setImage();
-        //class calls
-        imageDownloadTask demoTask = new imageDownloadTask();
-        demoTask.doInBackground();
-        //onclick listener
+
         profileImage.setOnClickListener(this);
         submit_btn.setOnClickListener(this);
         backButton_ib.setOnClickListener(this);
@@ -200,9 +198,6 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                                     e.printStackTrace();
                                 }
 
-                                imageDownloadTask demoTask = new imageDownloadTask();
-                                demoTask.doInBackground();
-                                setImageSharedPreferences();
 
                             }
                         })  // addOnSuccessListener ends
@@ -238,82 +233,28 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
     }  // UploadImageFileToFirebaseStorage ends
 
+
+    //handling profile image
     //    setting image
     public void setImage(){
-//        checking if there is profile image in firebase
-        SharedPreferences sharedDefaultImage = getSharedPreferences("defaultImage", MODE_PRIVATE);
-        String isImageUrl = sharedDefaultImage.getString("NoImageUrl", "");
-        if (TextUtils.equals(isImageUrl, "true")){
-            Glide.with(EditProfile.this)
-                    .load(R.drawable.default_profile_image)
-                    .into(profileImage);
-            return;
-        }
-        try {
-            SharedPreferences.Editor editorDefaultImage = sharedDefaultImage.edit();
-            editorDefaultImage.putString("NoImageUrl", "false");
-            editorDefaultImage.apply();
-        }
-        catch (NullPointerException e){
-            e.printStackTrace();
-        }
+        databaseReference.child("users").child(mAuth.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String imagePath = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
 
+                        Picasso.with(getApplicationContext())
+                                .load(imagePath)
+                                .placeholder(R.drawable.ic_profile_image_placeholder)
+                                .error(R.drawable.ic_warning)
+                                .into(profileImage);
+                    }
 
-        //loading saved image from storage
-        String myFile = "/viewZapp/image.jpg";
-        String myPath = Environment.getExternalStorageDirectory()+myFile;
-        File imgFile = new  File(myPath);
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-        if(imgFile.exists()){
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            profileImage.setImageBitmap(myBitmap);
-        }
-        //rotateLoadingImage.start();
-      //  if (EditProfile.this != null){
-            databaseReference.child("users").child(mAuth.getUid())
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            try {
-                                String newUrl = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
-                                SharedPreferences sharedpreferences = getSharedPreferences("imageUrlCheck1", MODE_PRIVATE);
-                                String oldUrl = sharedpreferences.getString("imageUrl1", "");
-                                SharedPreferences.Editor editor = sharedpreferences.edit();
-                                editor.putString("imageUrl1", newUrl);
-                                editor.apply();
-
-                                if (dataSnapshot.hasChild("profile_image") && !TextUtils.equals(oldUrl, newUrl)){
-                                    String url = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
-                                    Glide.with(EditProfile.this)
-                                            .load(url)
-                                            .into(profileImage);
-                                }
-                                else if (!dataSnapshot.hasChild("profile_image")){
-                                    Glide.with(EditProfile.this)
-                                            .load(R.drawable.default_profile_image)
-                                            .into(profileImage);
-
-                                    SharedPreferences sharedDefaultImage = getSharedPreferences("defaultImage", MODE_PRIVATE);
-                                    SharedPreferences.Editor editorDefaultImage = sharedDefaultImage.edit();
-                                    editorDefaultImage.putString("NoImageUrl", "true");
-                                    editorDefaultImage.apply();
-                                }
-                            }
-                            //rotateLoadingImage.stop();
-                            catch (NullPointerException e){
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Glide.with(EditProfile.this)
-                                    .load(R.drawable.default_profile_image)
-                                    .into(profileImage);
-                            //rotateLoadingImage.stop();
-                        }
-                    }); // database ends
-      //  } // if ends
+                    }
+                });
 
     } // set image ends
 
@@ -353,96 +294,6 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         else return true;
     }
 
-    //    background task
-    @SuppressLint("StaticFieldLeak")
-    class imageDownloadTask extends AsyncTask<Void, Void, Void> {
-
-        protected Void doInBackground(Void... arg0) {
-            databaseReference.child("users")
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            try {
-                                String newUrl = dataSnapshot.child(mAuth.getUid()).child("profile_image").child("profile_image_url").getValue(String.class);
-                                SharedPreferences sharedpreferences = getSharedPreferences("imageUrlCheck", MODE_PRIVATE);
-                                String oldUrl = sharedpreferences.getString("imageUrl", "");
-                                SharedPreferences.Editor editor = sharedpreferences.edit();
-                                editor.putString("imageUrl", newUrl);
-                                editor.apply();
-
-                                if (!TextUtils.isEmpty(newUrl) && !TextUtils.equals(newUrl, oldUrl)) { // url check
-                                    DownloadManager mgr = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-                                    Uri downloadUri = Uri.parse(newUrl);
-                                    //download manager
-                                    DownloadManager.Request request = new DownloadManager.Request(downloadUri);
-                                    //path to store it
-                                    String myFile = "/viewZapp/image.jpg";
-                                    String myPath = Environment.getExternalStorageDirectory() + myFile;
-
-                                    File f = new File(myPath);
-                                    if (f.exists()) {
-                                        f.delete();
-                                    }
-
-                                    //downloading image from url
-                                    request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI
-                                            | DownloadManager.Request.NETWORK_MOBILE)
-                                            .setVisibleInDownloadsUi(false)
-                                            .setNotificationVisibility(0)
-                                            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)
-                                            .setDestinationInExternalPublicDir("viewZapp", "image.jpg");
-
-                                    if (mgr != null) {
-                                        mgr.enqueue(request);
-                                    }
-
-                                } // if url ends
-
-                            }
-                            catch (NullPointerException e){
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-            return null;
-
-        }
-    }  //imageDownloadTask ends
-
-    public void setImageSharedPreferences(){
-        databaseReference.child("users").child(mAuth.getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        try {
-                            String newUrl = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
-                            SharedPreferences sharedpreferences = getSharedPreferences("imageUrlCheck1", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedpreferences.edit();
-                            editor.putString("imageUrl1", newUrl);
-                            editor.apply();
-
-                            SharedPreferences sharedDefaultImage = getSharedPreferences("defaultImage", MODE_PRIVATE);
-                            SharedPreferences.Editor editorDefaultImage = sharedDefaultImage.edit();
-                            editorDefaultImage.putString("NoImageUrl", "false");
-                            editorDefaultImage.apply();
-                        }
-                        catch (NullPointerException e){
-                            e.printStackTrace();
-                        }
-
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-    }// setImageSharedPreferences ends
 
     //on destroy
     @Override

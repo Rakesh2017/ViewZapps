@@ -69,7 +69,8 @@
             style="@style/TextStyleSmall"
             android:textStyle="bold"
             android:maxLines="3"
-            android:layout_marginStart="@dimen/cardViewPadding4"
+            android:layout_marginStart="@dimen/cardViewPadding8"
+            android:layout_marginEnd="@dimen/padding4"
             android:hint="@string/hintPlaceholderL"
             android:layout_alignTop="@+id/rya_adImageView"
             />

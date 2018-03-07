@@ -14,8 +14,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/header_appLogoImageView"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         tools:ignore="ContentDescription,UnusedAttribute"
         android:elevation="@dimen/elevation_5dp"
         android:layout_marginTop="@dimen/activity_vertical_margin"

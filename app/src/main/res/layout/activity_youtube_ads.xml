@@ -69,11 +69,22 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:id="@+id/rya_swipeRefresh"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <!-- TODO: Update blank fragment layout -->
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/youtubeBackGroundDarkGray"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
         >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rya_recyclerView"
@@ -112,7 +123,8 @@
             android:visibility="visible"
             android:layout_centerInParent="true"/>
 
-
     </RelativeLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </android.support.design.widget.CoordinatorLayout>

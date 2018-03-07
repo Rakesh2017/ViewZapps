@@ -35,6 +35,10 @@
             android:icon="@drawable/ic_rate_us"
             android:title="@string/rateUs" />
         <item
+            android:id="@+id/nav_logOut"
+            android:icon="@drawable/ic_logout"
+            android:title="@string/logOut" />
+        <item
             android:id="@+id/nav_adminPostAd"
             android:icon="@drawable/ic_broadcast"
             android:title="@string/adminPostAd" />

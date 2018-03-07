@@ -3,6 +3,8 @@ package enhabyto.com.viewzapps;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -36,8 +38,10 @@ public class YoutubeAds extends AppCompatActivity implements View.OnClickListene
     private DatabaseReference databaseReference = databaseReferenceParent.child("ads").child("youtubeAds");
     RelativeLayout gifTextView;
     ImageButton backButton_ib;
-
+    SwipeRefreshLayout swipeRefreshLayout;
     RotateLoading loading;
+
+    Boolean check = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,7 @@ public class YoutubeAds extends AppCompatActivity implements View.OnClickListene
 
         loading = findViewById(R.id.ya_rotateLoading);
         gifTextView = findViewById(R.id.ya_emptyListGif);
+        swipeRefreshLayout = findViewById(R.id.rya_swipeRefresh);
 
         recyclerView = findViewById(R.id.rya_recyclerView);
 
@@ -63,8 +68,44 @@ public class YoutubeAds extends AppCompatActivity implements View.OnClickListene
         // Setting RecyclerView layout as LinearLayout.
         recyclerView.setLayoutManager(mLayoutManager);
 
-        loading.start();
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        //calling functions
+        Refresh();
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                check = false;
+                Refresh();
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 2000);
+            }
+        });
+
+        //onclick
+        backButton_ib.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+
+//        back button
+        if (id == R.id.rya_backButton){
+            super.onBackPressed();
+        }
+    }
+
+
+    public void Refresh(){
+        if (check) loading.start();
+
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
 
@@ -88,32 +129,18 @@ public class YoutubeAds extends AppCompatActivity implements View.OnClickListene
                 else gifTextView.setVisibility(View.GONE);
 
                 // Hiding the progress dialog.
-                loading.stop();
+                if (check) loading.stop();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
                 // Hiding the progress dialog.
-                loading.stop();
+                if (check) loading.stop();
 
 
             }
         });
-
-        //onclick
-        backButton_ib.setOnClickListener(this);
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-
-//        back button
-        if (id == R.id.rya_backButton){
-            super.onBackPressed();
-        }
     }
 
     //end

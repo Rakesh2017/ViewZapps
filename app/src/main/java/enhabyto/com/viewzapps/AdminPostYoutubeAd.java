@@ -54,8 +54,8 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
 
     private View view;
 
-    EditText title_et, url_et, views_et, likes_et, subscribers_et;
-    String title_tx, url_tx, views_tx, likes_tx, subscribers_tx, key;
+    EditText title_et, url_et, views_et, likes_et, subscribers_et, userUid_et;
+    String title_tx, url_tx, views_tx, likes_tx, subscribers_tx, key, userUid_tx;
 
     FancyButton selectImage_btn, cancelImage_btn;
 
@@ -92,6 +92,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         views_et = view.findViewById(R.id.apa_viewsEditText);
         likes_et = view.findViewById(R.id.apa_likesEditText);
         subscribers_et = view.findViewById(R.id.apa_subscribersEditText);
+        userUid_et = view.findViewById(R.id.apa_userUidEditText);
 
         selectImage_btn = view.findViewById(R.id.apa_selectButton);
         cancelImage_btn = view.findViewById(R.id.apa_cancelButton);
@@ -136,6 +137,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         int id = v.getId();
 
         if (id == R.id.apa_submitButton){ //if
+            userUid_tx = userUid_et.getText().toString().trim();
             title_tx = title_et.getText().toString().trim();
             url_tx = url_et.getText().toString().trim();
             views_tx = views_et.getText().toString().trim();
@@ -185,7 +187,13 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
 //    validations
 
     public boolean Validations(){
-        if (title_tx.length() < 3){
+        if (userUid_tx.isEmpty()){
+            new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Enter User Uid!")
+                    .show();
+            return false;
+        }
+        else if (title_tx.length() < 3){
             new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Title is too small!")
                     .show();
@@ -330,7 +338,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
                         databaseReference.child("adLikesLeft").setValue(likes_tx);
                         databaseReference.child("adSubscribersLeft").setValue(subscribers_tx);
                         databaseReference.child("youtubeAdKey").setValue(key);
-                        databaseReference.child("userUid").setValue(mAuth.getUid());
+                        databaseReference.child("userUid").setValue(userUid_tx);
 
                         databaseReference = FirebaseDatabase.getInstance().getReference();
                         databaseReference = databaseReference.child("admin_posted_ads").child("youtubeAds").child(key);
@@ -341,7 +349,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
                         databaseReference.child("adExpectedLikes").setValue(likes_tx);
                         databaseReference.child("adExpectedSubscribers").setValue(subscribers_tx);
                         databaseReference.child("youtubeAdKey").setValue(key);
-                        databaseReference.child("userUid").setValue(mAuth.getUid());
+                        databaseReference.child("userUid").setValue(userUid_tx);
 
 
                         UploadImageFileToFirebaseStorage();
@@ -370,7 +378,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         //profile image
         Picasso.with(getActivity())
                 .load(ImageFilePath)
-                .placeholder(R.drawable.ic_youtube_placeholder)
+                .placeholder(R.drawable.youtube_placeholder)
                 .error(R.drawable.ic_warning)
                 .fit()
                 .centerCrop()
@@ -406,6 +414,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
 
 //    posting ad sweet alert
     public void sweetAlertForPostAd(){
+
         new SweetAlertDialog(getActivity(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
                 .setTitleText("Have a Preview of Ad!")
                 .setCancelText("Preview Ad")
