@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,8 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
-
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -35,7 +37,7 @@ public class DashBoard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private FirebaseUser mAuth = FirebaseAuth.getInstance().getCurrentUser();
-    CircleImageView  profileImageMainPage_iv;
+    CircularImageView profileImageMainPage_iv;
     TextView name_tv, email_tv, phone_tv, zapNumber_tv;
     String name_tx, email_tx, phone_tx;
 
@@ -62,6 +64,9 @@ public class DashBoard extends AppCompatActivity
 
 //        image view
         profileImageMainPage_iv = findViewById(R.id.bar_profileImage);
+        Glide.with(DashBoard.this)
+                .load(R.drawable.ic_profile_image_placeholder)
+                .into(profileImageMainPage_iv);
 
 //        Image button iss
         youtube_btn = findViewById(R.id.dash_youtubeButton);
@@ -227,62 +232,6 @@ public class DashBoard extends AppCompatActivity
         int id = v.getId();
 
         switch (id){
-            /*
-            // logout button
-            case R.id.bar_logOut:
-
-                        new SweetAlertDialog(DashBoard.this, SweetAlertDialog.WARNING_TYPE)
-                                .setTitleText("Are you sure to Logout?")
-                                .setContentText("You can use left side icon to switch between accounts!")
-                                .setConfirmText("Yes")
-                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                    @Override
-                                    public void onClick(final SweetAlertDialog sDialog) {
-                                        sDialog.dismissWithAnimation();
-                                        FirebaseAuth.getInstance().signOut();
-                                        DashBoard.this.finish();
-
-                                        String myFile = "/viewZapp/image.jpg";
-                                        String myPath = Environment.getExternalStorageDirectory() + myFile;
-                                        File f = new File(myPath);
-                                        if (f.exists()) {
-                                            f.delete();
-                                        }
-
-                                        getSharedPreferences("defaultImage", MODE_PRIVATE).edit().clear().apply();
-                                        getSharedPreferences("imageUrlCheck1", MODE_PRIVATE).edit().clear().apply();
-                                        getSharedPreferences("imageUrlCheck", MODE_PRIVATE).edit().clear().apply();
-                                        getSharedPreferences("profileDetails", MODE_PRIVATE).edit().clear().apply();
-
-                                        SharedPreferences sharedpreferences = getSharedPreferences("LogDetail", MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = sharedpreferences.edit();
-                                        editor.putString("firstScreen", "Login");
-                                        editor.apply();
-                                       /* new CheckNetworkConnection(DashBoard.this, new CheckNetworkConnection.OnConnectionCallback() {
-                                            @Override
-                                            public void onConnectionSuccess() {
-
-                                            }
-
-                                            @Override
-                                            public void onConnectionFail(String msg) {
-                                               new SweetNoInternetConnection().noInternet(DashBoard.this);
-
-                                            }
-                                        }).execute();
-
-                                    }
-                                })
-                                .setCancelText("No")
-                                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                    @Override
-                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                        sweetAlertDialog.dismissWithAnimation();
-                                    }
-                                })
-                                .show();
-                break;
-*/
 //                youtube
             case R.id.dash_youtubeButton:
                 Intent intent = new Intent(DashBoard.this, YoutubeAds.class);
@@ -339,13 +288,6 @@ public class DashBoard extends AppCompatActivity
                         sDialog.dismissWithAnimation();
                         FirebaseAuth.getInstance().signOut();
                         DashBoard.this.finish();
-
-                        String myFile = "/viewZapp/image.jpg";
-
-                        getSharedPreferences("defaultImage", MODE_PRIVATE).edit().clear().apply();
-                        getSharedPreferences("imageUrlCheck1", MODE_PRIVATE).edit().clear().apply();
-                        getSharedPreferences("imageUrlCheck", MODE_PRIVATE).edit().clear().apply();
-                        getSharedPreferences("profileDetails", MODE_PRIVATE).edit().clear().apply();
 
                         SharedPreferences sharedpreferences = getSharedPreferences("LogDetail", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedpreferences.edit();

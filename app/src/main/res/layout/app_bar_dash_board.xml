@@ -25,18 +25,16 @@
                 app:popupTheme="@style/MyCustomAppTheme.PopupOverlay" />
 
             <!--profile image-->
-            <de.hdodenhof.circleimageview.CircleImageView
+            <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/bar_profileImage"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_centerVertical="true"
-                tools:ignore="ContentDescription,UnusedAttribute"
-                android:elevation="@dimen/elevation_5dp"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                app:civ_border_width="1dp"
-                app:civ_border_color="@color/black90"
+                app:civ_shadow="true"
+                app:civ_shadow_radius="10"
+                app:civ_border="false"
+                app:civ_shadow_color="@color/black"
                 android:layout_toEndOf="@+id/toolbar"
-                android:background="@drawable/ic_profile_image_placeholder"
                 />
 
             <!--user name-->

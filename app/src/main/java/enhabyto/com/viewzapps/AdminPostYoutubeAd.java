@@ -57,7 +57,8 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
     EditText title_et, url_et, views_et, likes_et, subscribers_et, userUid_et;
     String title_tx, url_tx, views_tx, likes_tx, subscribers_tx, key, userUid_tx;
 
-    FancyButton selectImage_btn, cancelImage_btn;
+    FancyButton selectImage_btn, cancelImage_btn, submitAd_btn, cancelAd_btn;
+    TextView likes_tv, views_tv, subscribers_tv;
 
     ImageView selectedImage_iv;
     ImageButton backButton;
@@ -73,7 +74,6 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
     RelativeLayout mainRelativeLayout, previewRelativeLayout;
 
     RotateLoading loading;
-    private FirebaseUser mAuth = FirebaseAuth.getInstance().getCurrentUser();
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
     public AdminPostYoutubeAd() {
@@ -87,6 +87,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_admin_post_youtube_ad, container, false);
 
+//        edit texts
         title_et = view.findViewById(R.id.apa_titleEditText);
         url_et = view.findViewById(R.id.apa_urlLinkEditText);
         views_et = view.findViewById(R.id.apa_viewsEditText);
@@ -94,6 +95,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         subscribers_et = view.findViewById(R.id.apa_subscribersEditText);
         userUid_et = view.findViewById(R.id.apa_userUidEditText);
 
+//        button
         selectImage_btn = view.findViewById(R.id.apa_selectButton);
         cancelImage_btn = view.findViewById(R.id.apa_cancelButton);
 
@@ -102,7 +104,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         selectedImage_iv = view.findViewById(R.id.apa_selectedImageView);
 
         loading = view.findViewById(R.id.apa_rotateLoading);
-
+//         fancy buttons
         FancyButton submit = view.findViewById(R.id.apa_submitButton);
 
         //preview
@@ -119,6 +121,15 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
 
         mainRelativeLayout = view.findViewById(R.id.apa_mainRelativeLayout);
         previewRelativeLayout = view.findViewById(R.id.apa_previewRelativeLayout);
+
+//        text views
+        views_tv = view.findViewById(R.id.apa_views);
+        likes_tv = view.findViewById(R.id.apa_likes);
+        subscribers_tv = view.findViewById(R.id.apa_subscribers);
+
+//        fancy buttons
+        submitAd_btn = view.findViewById(R.id.apa_postAdButton);
+        cancelAd_btn = view.findViewById(R.id.apa_cancelAdButton);
         //preview
 
         submit.setOnClickListener(this);
@@ -126,6 +137,8 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         cancelImage_btn.setOnClickListener(this);
         backButton.setOnClickListener(this);
         cancelPreviewButton.setOnClickListener(this);
+        submitAd_btn.setOnClickListener(this);
+        cancelAd_btn.setOnClickListener(this);
 
         return view;
     }
@@ -166,12 +179,34 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
 
 //        back button
         else if (id == R.id.apa_backButton){
-        try {
-            getFragmentManager().popBackStack();
-        }
-        catch (NullPointerException e){
-            e.printStackTrace();
-        }
+
+            new SweetAlertDialog(getActivity(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                    .setTitleText("Are You sure you do not want to post this ad?")
+                    .setCancelText("No")
+                    .setConfirmText("Stay")
+                    .setCustomImage(R.drawable.ic_warning)
+                    .showCancelButton(true)
+                    .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.cancel();
+                        }
+                    })
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            try {
+                                getFragmentManager().popBackStack();
+                            }
+                            catch (NullPointerException e){
+                                e.printStackTrace();
+                            }
+                            sDialog.cancel();
+                        }
+                    })
+                    .show();
+
+
 
         }//ele if
 
@@ -179,10 +214,21 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         else if(id == R.id.apa_cancelImageButton){
             previewRelativeLayout.setVisibility(View.GONE);
             mainRelativeLayout.setVisibility(View.VISIBLE);
-            sweetAlertForPostAd();
+        }
+
+//        submit ad from preview
+        else if(id == R.id.apa_postAdButton){
+            PostFinalAd();
+        }
+
+//        cancel ad from preiew
+        else if(id == R.id.apa_cancelAdButton){
+            previewRelativeLayout.setVisibility(View.GONE);
+            mainRelativeLayout.setVisibility(View.VISIBLE);
         }
 
     } //onclick
+
 
 //    validations
 
@@ -387,7 +433,11 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
 
         adTitle.setText(title_tx);
 
-        databaseReference.child("users").child(FirebaseAuth.getInstance().getUid())
+        views_tv.setText(views_tx+"\nviews left");
+        likes_tv.setText(likes_tx+"\nLikes left");
+        subscribers_tv.setText(subscribers_tx+"\nSubs left");
+
+        databaseReference.child("users").child(userUid_tx)
                 .addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
@@ -419,6 +469,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
                 .setTitleText("Have a Preview of Ad!")
                 .setCancelText("Preview Ad")
                 .setConfirmText("Post Ad")
+                .setCustomImage(R.drawable.ic_preview_ad)
                 .showCancelButton(true)
                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
@@ -433,13 +484,6 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
                         PostFinalAd();
-                        sDialog.cancel();
-                    }
-                })
-                .setNeutralText("Cancel")
-                .setNeutralClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sDialog) {
                         sDialog.cancel();
                     }
                 })

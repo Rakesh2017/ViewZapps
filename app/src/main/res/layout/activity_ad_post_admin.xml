@@ -126,7 +126,7 @@
                     android:id="@+id/total_youtubeAds"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/ic_user"
+                    android:drawableTop="@drawable/ic_total_ads"
                     android:drawablePadding="@dimen/cardViewPadding4"
                     android:text="total ads:"
                     android:gravity="center"

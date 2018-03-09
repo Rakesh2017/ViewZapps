@@ -37,7 +37,7 @@
         <item name="android:textColorHint">@color/gray90</item>
     </style>
 
-    <style name="EditTextStyle" parent="@android:style/TextAppearance">
+    <style name="EditTextStyleMedium" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/black</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/mediumSize</item>
