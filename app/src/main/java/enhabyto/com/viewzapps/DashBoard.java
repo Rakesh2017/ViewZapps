@@ -3,6 +3,12 @@ package enhabyto.com.viewzapps;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BlurMaskFilter;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
@@ -41,7 +47,8 @@ public class DashBoard extends AppCompatActivity
     TextView name_tv, email_tv, phone_tv, zapNumber_tv;
     String name_tx, email_tx, phone_tx;
 
-    ImageButton youtube_btn, facebook_btn, insta_btn, android_btn, apple_btn, movie_btn;
+    TextView  facebook_btn, insta_btn, android_btn, apple_btn, movie_btn;
+    TextView youtube_btn;
 
 //    database reference
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -73,8 +80,8 @@ public class DashBoard extends AppCompatActivity
         facebook_btn = findViewById(R.id.dash_facebookButton);
         insta_btn = findViewById(R.id.dash_instagramButton);
         android_btn = findViewById(R.id.dash_androidButton);
-        apple_btn = findViewById(R.id.dash_appleButton);
-        movie_btn = findViewById(R.id.dash_moviesButton);
+        //apple_btn = findViewById(R.id.dash_appleButton);
+        movie_btn = findViewById(R.id.dash_movieButton);
 
         //  FontTextView ids
         name_tv = navigationView.getHeaderView(0).findViewById(R.id.header_nameTextView);
@@ -91,23 +98,23 @@ public class DashBoard extends AppCompatActivity
 
 //    load animations
     private void LoadAnimations() {
-        YoYo.with(Techniques.Bounce)
+        YoYo.with(Techniques.BounceIn)
                 .duration(1200)
                 .playOn(youtube_btn);
-        YoYo.with(Techniques.Bounce)
+        YoYo.with(Techniques.BounceIn)
                 .duration(1400)
                 .playOn(facebook_btn);
-        YoYo.with(Techniques.Bounce)
+        YoYo.with(Techniques.BounceIn)
                 .duration(1600)
                 .playOn(insta_btn);
-        YoYo.with(Techniques.Bounce)
+        YoYo.with(Techniques.BounceIn)
                 .duration(1800)
                 .playOn(android_btn);
-        YoYo.with(Techniques.Bounce)
+      //  YoYo.with(Techniques.Bounce)
+              //  .duration(2000)
+              //  .playOn(apple_btn);
+        YoYo.with(Techniques.BounceIn)
                 .duration(2000)
-                .playOn(apple_btn);
-        YoYo.with(Techniques.Bounce)
-                .duration(2200)
                 .playOn(movie_btn);
     }
 
@@ -318,6 +325,7 @@ public class DashBoard extends AppCompatActivity
                                 .show();
     }
 //    logout
+
 
 // end
 }

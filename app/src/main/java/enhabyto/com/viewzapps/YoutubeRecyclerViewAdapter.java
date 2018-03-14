@@ -1,9 +1,9 @@
 package enhabyto.com.viewzapps;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.ColorInt;
-import android.support.v4.graphics.ColorUtils;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,11 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.github.lzyzsd.randomcolor.RandomColor;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +21,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
-import util.android.textviews.FontTextView;
 
 /*
   Created by this on 02-Feb-18.
@@ -43,6 +39,7 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
         this.context = context;
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -52,8 +49,9 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final RecyclerViewInfo UploadInfo = MainImageUploadInfoList.get(position);
 
 
@@ -65,24 +63,25 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
         int alphaColor = ColorUtils.setAlphaComponent(color, alpha);*/
 
         //holder.relativeLayout.setBackgroundColor(context.getResources().getColor(R.color.transparentAppColor));
-        holder.title_tx.setText(UploadInfo.getAdTitle());
+        holder.title_tv.setText(UploadInfo.getAdTitle());
+
+        holder.likes_tv.setText(UploadInfo.getAdLikesLeft()+"\nLikes left");
+        holder.views_tv.setText(UploadInfo.getAdViewsLeft()+"\nviews left");
+        holder.subscribers_tv.setText(UploadInfo.getAdSubscribersLeft()+"\nSubs left");
+
+//        if any of it is empty
+        if (UploadInfo.getAdViewsLeft().isEmpty()) holder.views_tv.setText("0\n Views Left");
+        if (UploadInfo.getAdLikesLeft().isEmpty()) holder.likes_tv.setText("0\n Likes Left");
+        if (UploadInfo.getAdSubscribersLeft().isEmpty()) holder.subscribers_tv.setText("0\n Subs Left");
+//        if ends
+
         //holder.url_tx.setText(UploadInfo.getYoutubeUrl());
 
-//        ad image
-        Picasso.with(context)
-                .load(UploadInfo.getYoutubeAdImageUrl())
-                .placeholder(R.drawable.youtube_placeholder)
-                .error(R.drawable.ic_warning)
-                .fit()
-                .centerCrop()
-                .noFade()
-                .into(holder.adImage_iv);
-
         try {
-            databaseReference.child("users").child(UploadInfo.getUserUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            databaseReference.child("users").child(UploadInfo.getUserUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    holder.uploaderName_tx.setText(dataSnapshot.child("profile_details")
+                    holder.uploaderName_tv.setText(dataSnapshot.child("profile_details")
                             .child("name").getValue(String.class));
 
                     String url = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
@@ -107,6 +106,16 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
             e.printStackTrace();
         }
 
+        //        ad image
+        Picasso.with(context)
+                .load(UploadInfo.getYoutubeAdImageUrl())
+                .placeholder(R.drawable.youtube_placeholder)
+                .error(R.drawable.ic_warning)
+                .fit()
+                .centerCrop()
+                .noFade()
+                .into(holder.adImage_iv);
+
         //first position
         if( position == 0 ){
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
@@ -118,6 +127,7 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
 
 
     }
+
 
     @Override
     public long getItemId(int position) {
@@ -136,7 +146,7 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView title_tx, url_tx, uploaderName_tx;
+        TextView title_tv, uploaderName_tv, likes_tv, views_tv, subscribers_tv;
         ImageView adImage_iv;
         CircleImageView userImage;
         CardView cardView;
@@ -144,13 +154,16 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
         ViewHolder(View itemView) {
             super(itemView);
 
-            title_tx = itemView.findViewById(R.id.rya_titleTextView);
-          //  url_tx = itemView.findViewById(R.id.rya_urlTextView);
+            title_tv = itemView.findViewById(R.id.rya_titleTextView);
 
-            uploaderName_tx = itemView.findViewById(R.id.rya_uploaderNameTextView);
+            uploaderName_tv = itemView.findViewById(R.id.rya_uploaderNameTextView);
             adImage_iv = itemView.findViewById(R.id.rya_adImageView);
             userImage = itemView.findViewById(R.id.rya_profileImage);
             cardView = itemView.findViewById(R.id.rya_cardview);
+
+            likes_tv = itemView.findViewById(R.id.rya_likes);
+            views_tv = itemView.findViewById(R.id.rya_views);
+            subscribers_tv = itemView.findViewById(R.id.rya_subscribers);
         }
 
 

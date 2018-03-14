@@ -186,13 +186,13 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
                     .setConfirmText("Stay")
                     .setCustomImage(R.drawable.ic_warning)
                     .showCancelButton(true)
-                    .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                         @Override
                         public void onClick(SweetAlertDialog sDialog) {
                             sDialog.cancel();
                         }
                     })
-                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                         @Override
                         public void onClick(SweetAlertDialog sDialog) {
                             try {
@@ -436,6 +436,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         views_tv.setText(views_tx+"\nviews left");
         likes_tv.setText(likes_tx+"\nLikes left");
         subscribers_tv.setText(subscribers_tx+"\nSubs left");
+        setZero();
 
         databaseReference.child("users").child(userUid_tx)
                 .addListenerForSingleValueEvent(
@@ -461,6 +462,13 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         );
     }//    AdPreview
 
+//set values to zero if not specified
+    public void setZero(){
+        if (views_tx.isEmpty()) views_tv.setText("0\n Views Left");
+        if (likes_tx.isEmpty()) likes_tv.setText("0\n Likes Left");
+        if (subscribers_tx.isEmpty()) subscribers_tv.setText("0\n Subs Left");
+    }
+//set values to zero if not specified ends
 
 //    posting ad sweet alert
     public void sweetAlertForPostAd(){

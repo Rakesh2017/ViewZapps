@@ -28,7 +28,7 @@
     <string name="submit">Submit</string>
     <string name="cancel">Cancel</string>
     <string name="hintPlaceholderL"><b>_____ __ _________ ______ </b></string>
-    <string name="hintPlaceholderS"><b>______ __________</b></string>
+    <string name="hintPlaceholderS"><b>______ _____</b></string>
     <string name="hintPlaceholderXS"><b>____</b></string>
     <string name="noItem"><b>Oops! There is no video at this moment. We will notify you.</b></string>
     <string name="youtubeDescription">View youtube videos and Earn Zaps!</string>
@@ -36,6 +36,12 @@
     <string name="viewsLeft"><b>\nView Left</b></string>
     <string name="likesLeft"><b>\nLikes Left</b></string>
     <string name="subsLeft"><b>\nSubs Left</b></string>
+    <string name="youtube"><b>Youtube</b></string>
+    <string name="facebook"><b>Facebook</b></string>
+    <string name="instagram"><b>Instagram</b></string>
+    <string name="androidApps"><b>Android Apps</b></string>
+    <string name="appleApps"><b>Apple Apps</b></string>
+    <string name="movieTrailers"><b>Movie Trailers</b></string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

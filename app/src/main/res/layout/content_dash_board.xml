@@ -7,243 +7,149 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:id="@+id/fragment_container_dashboard"
     tools:context="enhabyto.com.viewzapps.DashBoard"
-    android:background="@color/black"
+    android:background="@color/whiteSmoke"
     android:padding="@dimen/padding4"
     tools:showIn="@layout/app_bar_dash_board">
 
-
-    <!--vertical divider-->
-    <android.support.v4.widget.Space
-        android:layout_height="match_parent"
-        android:layout_width="1dp"
-        android:layout_centerInParent="true"
-        android:id="@+id/dash_dividerVertical"
-        />
-
-
-    <!--linear layout 1-->
+    <!--row 1-->
     <LinearLayout
-        android:id="@+id/dash_linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/dash_dividerVertical"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:weightSum="3"
-        android:divider="@drawable/liner_horizontal_divider_3"
-        android:showDividers="middle"
-        android:layout_marginEnd="@dimen/padding2"
+        android:padding="@dimen/padding4"
+        android:id="@+id/dash_LinearLayout1"
+        android:layout_marginTop="@dimen/padding8"
         >
+
         <!--youtube-->
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/youtubeBelow"
             >
-            <ImageButton
+
+            <TextView
                 android:id="@+id/dash_youtubeButton"
-                android:layout_width="@dimen/dashBoardIconHeight"
-                android:layout_height="@dimen/dashBoardIconHeight"
-                android:background="@drawable/ic_youtube"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                tools:ignore="ContentDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/youtube"
+                style="@style/TextStyleSmall"
+                android:drawableTop="@drawable/ic_youtube"
+                android:gravity="center"
+                android:drawablePadding="@dimen/padding4"
                 android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop"
-                />
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@color/youtubeUp"
-                android:text="@string/youtubeDescription"
-                android:gravity="start|center"
-                style="@style/TextStyleSmall"
-                android:textStyle="bold"
-                android:paddingStart="@dimen/cardViewPadding8"
-                android:paddingEnd="@dimen/cardViewPadding8"
-                android:drawablePadding="@dimen/cardViewPadding4"
-                android:drawableEnd="@drawable/ic_youtube_mini1"
+                android:layout_centerInParent="true"
                 />
         </RelativeLayout>
+
+        <!--facebook-->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            >
+
+            <TextView
+                android:id="@+id/dash_facebookButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/facebook"
+                style="@style/TextStyleSmall"
+                android:drawableTop="@drawable/ic_facebook"
+                android:gravity="center"
+                android:drawablePadding="@dimen/padding4"
+                android:elevation="@dimen/elevation_5dp"
+                tools:targetApi="lollipop"
+                android:layout_centerInParent="true"
+                />
+
+        </RelativeLayout>
+
 
         <!--instagram-->
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/instaBelow"
             >
-            <ImageButton
+            <TextView
                 android:id="@+id/dash_instagramButton"
-                android:layout_width="@dimen/dashBoardIconHeight"
-                android:layout_height="@dimen/dashBoardIconHeight"
-                android:background="@drawable/ic_instagram"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                tools:ignore="ContentDescription"
-                android:elevation="@dimen/elevation_5dp"
-                tools:targetApi="lollipop" />
-            <Button
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@color/instaUp"
-                android:text="@string/name"
-                android:gravity="start|center"
+                android:text="@string/instagram"
                 style="@style/TextStyleSmall"
-                android:textStyle="bold"
-                android:paddingStart="@dimen/cardViewPadding8"
-                android:paddingEnd="@dimen/cardViewPadding8"
-                android:drawableEnd="@drawable/ic_photo_camera"
-                />
-        </RelativeLayout>
-
-        <!--apple-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@color/iphoneBelow"
-            >
-            <ImageButton
-                android:id="@+id/dash_appleButton"
-                android:layout_width="@dimen/dashBoardIconHeight"
-                android:layout_height="@dimen/dashBoardIconHeight"
-                android:background="@drawable/ic_apple"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                tools:ignore="ContentDescription"
+                android:drawableTop="@drawable/ic_instagram"
+                android:gravity="center"
+                android:drawablePadding="@dimen/padding4"
                 android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop"
-                />
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@color/iphoneUp"
-                android:text="@string/name"
-                android:gravity="start|center"
-                style="@style/TextStyleSmall"
-                android:textStyle="bold"
-                android:paddingStart="@dimen/cardViewPadding8"
-                android:paddingEnd="@dimen/cardViewPadding8"
-                android:drawableEnd="@drawable/ic_app_store"
+                android:layout_centerInParent="true"
                 />
         </RelativeLayout>
 
     </LinearLayout>
 
+    <!--  - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-    <!--linear layout 2-->
+
     <LinearLayout
-        android:id="@+id/dash_linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/dash_dividerVertical"
-        android:orientation="vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding4"
         android:weightSum="3"
-        android:divider="@drawable/liner_horizontal_divider_3"
-        android:showDividers="middle"
-        android:layout_marginStart="@dimen/padding2"
+        android:id="@+id/dash_LinearLayout2"
+        android:layout_below="@+id/dash_LinearLayout1"
+        android:layout_marginTop="@dimen/padding8"
         >
-        <!--facebook-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@color/facebookBelow"
-            >
-            <ImageButton
-                android:id="@+id/dash_facebookButton"
-                android:layout_width="@dimen/dashBoardIconHeight"
-                android:layout_height="@dimen/dashBoardIconHeight"
-                android:background="@drawable/ic_facebook"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                tools:ignore="ContentDescription"
-                android:elevation="@dimen/elevation_5dp"
-                tools:targetApi="lollipop" />
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@color/facebookUp"
-                android:text="@string/name"
-                android:gravity="start|center"
-                style="@style/TextStyleSmall"
-                android:textStyle="bold"
-                android:paddingStart="@dimen/cardViewPadding8"
-                android:paddingEnd="@dimen/cardViewPadding8"
-                android:drawableEnd="@drawable/ic_facebook_mini"
-                />
-        </RelativeLayout>
 
-        <!--android-->
+        <!--android apps-->
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/androidBelow"
             >
-            <ImageButton
+            <TextView
                 android:id="@+id/dash_androidButton"
-                android:layout_width="@dimen/dashBoardIconHeight"
-                android:layout_height="@dimen/dashBoardIconHeight"
-                android:background="@drawable/ic_android"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                tools:ignore="ContentDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/androidApps"
+                style="@style/TextStyleSmall"
+                android:drawableTop="@drawable/ic_android"
+                android:gravity="center"
+                android:drawablePadding="@dimen/padding4"
                 android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop"
-                />
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@color/androidUp"
-                android:text="@string/name"
-                android:gravity="start|center"
-                style="@style/TextStyleSmall"
-                android:textStyle="bold"
-                android:paddingStart="@dimen/cardViewPadding8"
-                android:paddingEnd="@dimen/cardViewPadding8"
-                android:drawableEnd="@drawable/ic_google_play"
+                android:layout_centerInParent="true"
                 />
         </RelativeLayout>
 
-        <!--movies-->
+
+        <!--Movie Trailers-->
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/moviesBelow"
             >
-            <ImageButton
-                android:id="@+id/dash_moviesButton"
-                android:layout_width="@dimen/dashBoardIconHeight"
-                android:layout_height="@dimen/dashBoardIconHeight"
-                android:background="@drawable/ic_movie"
-                tools:ignore="ContentDescription"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
+            <TextView
+                android:id="@+id/dash_movieButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/movieTrailers"
+                style="@style/TextStyleSmall"
+                android:drawableTop="@drawable/ic_movies"
+                android:gravity="center"
+                android:drawablePadding="@dimen/padding4"
                 android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop"
-                />
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@color/moviesUp"
-                android:text="@string/name"
-                android:gravity="start|center"
-                style="@style/TextStyleSmall"
-                android:textStyle="bold"
-                android:paddingStart="@dimen/cardViewPadding8"
-                android:paddingEnd="@dimen/cardViewPadding8"
-                android:drawableEnd="@drawable/ic_movies_mini"
+                android:layout_centerInParent="true"
                 />
         </RelativeLayout>
+
+
     </LinearLayout>
+
 
 </RelativeLayout>
