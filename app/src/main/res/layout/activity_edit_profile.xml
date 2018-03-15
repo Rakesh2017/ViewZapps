@@ -113,6 +113,9 @@
             android:background="@drawable/custom_rounded_rectangle_edit_text"
             android:drawableEnd="@drawable/ic_email_mini_icon"
             android:inputType="textEmailAddress"
+            android:focusable="false"
+            android:clickable="false"
+            android:textColor="@color/black90"
             android:elevation="@dimen/elevation_5dp"
             tools:targetApi="lollipop"
             tools:ignore="LabelFor" />

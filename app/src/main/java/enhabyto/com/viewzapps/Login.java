@@ -13,6 +13,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
+
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.gms.auth.api.Auth;
@@ -27,6 +29,8 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.victor.loading.rotate.RotateLoading;
 import com.wang.avi.AVLoadingIndicatorView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -192,14 +196,24 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                             // Sign in success, update UI with the signed-in user's information
                           //  Log.d(TAG, "signInWithCredential:success");
                             // opening Dashboard Activity
+//setting profile data
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                            String userUId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                            String name = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                            databaseReference.child("users").child(userUId).child("profile_details").child("email").setValue(email);
+                            databaseReference.child("users").child(userUId).child("profile_details").child("name").setValue(name);
+// start dashBoard
                             startActivity(new Intent(Login.this, DashBoard.class));
                             if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
                                 Auth.GoogleSignInApi.signOut(mGoogleApiClient);
                             }
+//                            setting landing page
                             SharedPreferences sharedpreferences = getSharedPreferences("LogDetail", MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedpreferences.edit();
                             editor.putString("firstScreen", "DashBoard");
                             editor.apply();
+//                            settinng landing page ends
                             Login.this.finish();
 
 

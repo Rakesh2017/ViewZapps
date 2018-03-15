@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,7 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
         holder.likes_tv.setText(UploadInfo.getAdLikesLeft()+"\nLikes left");
         holder.views_tv.setText(UploadInfo.getAdViewsLeft()+"\nviews left");
         holder.subscribers_tv.setText(UploadInfo.getAdSubscribersLeft()+"\nSubs left");
+        holder.uploaderName_tv.setText(UploadInfo.getUserName());
 
 //        if any of it is empty
         if (UploadInfo.getAdViewsLeft().isEmpty()) holder.views_tv.setText("0\n Views Left");
@@ -77,8 +79,8 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
 
         //holder.url_tx.setText(UploadInfo.getYoutubeUrl());
 
-        try {
-            databaseReference.child("users").child(UploadInfo.getUserUid()).addValueEventListener(new ValueEventListener() {
+      /*  try {
+            databaseReference.child("users").child(UploadInfo.getUserUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     holder.uploaderName_tv.setText(dataSnapshot.child("profile_details")
@@ -104,7 +106,7 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
         }
         catch (NullPointerException e){
             e.printStackTrace();
-        }
+        } */
 
         //        ad image
         Picasso.with(context)
@@ -115,6 +117,24 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
                 .centerCrop()
                 .noFade()
                 .into(holder.adImage_iv);
+//        ad image
+
+        //                    user image
+        String profileImageUrl = UploadInfo.getProfileImageUrl();
+        try {
+            Picasso.with(context)
+                    .load(UploadInfo.getProfileImageUrl())
+                    .placeholder(R.drawable.ic_profile_image_placeholder)
+                    .error(R.drawable.ic_warning)
+                    .noFade()
+                    .into(holder.userImage);
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+        } //user image
+
+
+
 
         //first position
         if( position == 0 ){

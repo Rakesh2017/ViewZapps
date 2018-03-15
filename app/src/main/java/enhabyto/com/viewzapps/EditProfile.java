@@ -1,16 +1,10 @@
 package enhabyto.com.viewzapps;
 
-import android.annotation.SuppressLint;
-import android.app.DownloadManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -65,6 +59,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     private static final String EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"(),:;<>@\\[\\]\\\\]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$";
     private Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 
+    String imageUploadUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +90,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
     public void onStart(){
         super.onStart();
-        loadProfileData();
+        LoadProfileData();
     }
 
     // on click method
@@ -124,6 +120,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                 databaseReference.child("users").child(mAuth.getUid()).child("profile_details").child("name").setValue(name_tx);
                 databaseReference.child("users").child(mAuth.getUid()).child("profile_details").child("email").setValue(email_tx);
                 databaseReference.child("users").child(mAuth.getUid()).child("profile_details").child("phone_number").setValue(phone_tx);
+                changeUserNameInAds();
                 rotateLoading.stop();
                 new SweetAlertDialog(EditProfile.this, SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText("Profile Updated")
@@ -183,12 +180,12 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                                @SuppressWarnings("VisibleForTests")
-                                String imageUploadUrl = taskSnapshot.getDownloadUrl().toString();
+                                imageUploadUrl = taskSnapshot.getDownloadUrl().toString();
+                                databaseReference.child("users").child(uid).child("profile_image").child("profile_image_url").setValue(imageUploadUrl);
+                                changeProfileImageUrlInAds();
 
-                                databaseReference.child("users").child(uid).child("profile_image").child("profile_image_url")
-                                        .setValue(imageUploadUrl);
                                 rotateLoadingImage.stop();
+
                                 try {
                                     new SweetAlertDialog(EditProfile.this, SweetAlertDialog.SUCCESS_TYPE)
                                             .setTitleText("Picture Updated!")
@@ -197,7 +194,6 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                                 catch (NullPointerException e){
                                     e.printStackTrace();
                                 }
-
 
                             }
                         })  // addOnSuccessListener ends
@@ -326,7 +322,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     }//stop loading ends
 
     //    loading user details from firebase
-    public void loadProfileData(){
+    public void LoadProfileData(){
         SharedPreferences sharedpreferences = getSharedPreferences("profileDetails", MODE_PRIVATE);
         name_tx = sharedpreferences.getString("name","");
         email_tx = sharedpreferences.getString("email","");
@@ -369,12 +365,68 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                     }
                 });
     }
+    //    loading user details from firebase ends
+
 
     //    validate email
     public boolean validateEmail(String email) {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
+
+//    change data in ads
+    public void changeUserNameInAds(){
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("ads").child("youtubeAds");
+        final String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() { // setting  values
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){ //for starts
+                    String userUidInAd = snapshot.child("userUid").getValue(String.class);
+                    if (TextUtils.equals(userUid, userUidInAd)){ // if starts
+                        String adKey = snapshot.getKey();
+                        databaseReference.child(adKey).child("userName").setValue(name_tx);
+                    } //if ends
+
+                } //for ends
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        }); // setting values
+
+    }
+    //    change data in ads
+
+
+    //    change profile pic url in ads
+    public void changeProfileImageUrlInAds(){
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("ads").child("youtubeAds");
+        final String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() { // setting  values
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){ //for starts
+                    String userUidInAd = snapshot.child("userUid").getValue(String.class);
+                    if (TextUtils.equals(userUid, userUidInAd)){ // if starts
+                        String adKey = snapshot.getKey();
+                        databaseReference.child(adKey).child("profileImageUrl").setValue(imageUploadUrl);
+                    } //if ends
+
+                } //for ends
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        }); // setting values
+
+    }
+    //    change data in ads
+
 
 // end
 }

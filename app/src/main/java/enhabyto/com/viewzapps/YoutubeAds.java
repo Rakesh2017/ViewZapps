@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +14,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,6 +44,8 @@ public class YoutubeAds extends AppCompatActivity implements View.OnClickListene
     SwipeRefreshLayout swipeRefreshLayout;
     RotateLoading loading;
 
+    LinearLayoutManager mLayoutManager;
+
     Boolean check = true;
 
     @Override
@@ -56,14 +61,12 @@ public class YoutubeAds extends AppCompatActivity implements View.OnClickListene
 
         backButton_ib = findViewById(R.id.rya_backButton);
 
-        recyclerView.setCameraDistance(2);
-
         recyclerView.setHasFixedSize(true);
-        recyclerView.isDuplicateParentStateEnabled();
 
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(YoutubeAds.this);
+        mLayoutManager = new LinearLayoutManager(YoutubeAds.this);
         mLayoutManager.setReverseLayout(true);
         mLayoutManager.setStackFromEnd(true);
+
 
         // Setting RecyclerView layout as LinearLayout.
         recyclerView.setLayoutManager(mLayoutManager);
@@ -105,10 +108,9 @@ public class YoutubeAds extends AppCompatActivity implements View.OnClickListene
     public void Refresh(){
         if (check) loading.start();
 
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-
                 if(list!=null) {
                     list.clear();  // v v v v important (eliminate duplication of data)
                 }
@@ -120,7 +122,7 @@ public class YoutubeAds extends AppCompatActivity implements View.OnClickListene
 
                 adapter = new YoutubeRecyclerViewAdapter(YoutubeAds.this, list);
                 //   Collections.reverse(list);
-                adapter.notifyDataSetChanged();
+               // adapter.notifyDataSetChanged();
                 recyclerView.setAdapter(adapter);
 
                 if (adapter.getItemCount() == 0){

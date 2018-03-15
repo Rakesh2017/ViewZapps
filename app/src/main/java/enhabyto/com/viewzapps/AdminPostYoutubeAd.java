@@ -373,37 +373,77 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
                         sDialog.dismissWithAnimation();
                         loading.start();
 
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                        key = databaseReference.push().getKey();
-                        databaseReference = databaseReference.child("ads").child("youtubeAds").child(key);
+                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+                        //getting user profile image and profile name
+                         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                String profileImageUrl = dataSnapshot.child("users").child(userUid_tx).child("profile_image").child("profile_image_url").getValue(String.class);
+                                String user_name = dataSnapshot.child("users").child(userUid_tx).child("profile_details").child("name").getValue(String.class);
+
+                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                                key = databaseReference.push().getKey();
+
+                                databaseReference = databaseReference.child("ads").child("youtubeAds").child(key);
 
 //                            posting ad
-                        databaseReference.child("adUrl").setValue(url_tx);
-                        databaseReference.child("adTitle").setValue(title_tx);
-                        databaseReference.child("adViewsLeft").setValue(views_tx);
-                        databaseReference.child("adLikesLeft").setValue(likes_tx);
-                        databaseReference.child("adSubscribersLeft").setValue(subscribers_tx);
-                        databaseReference.child("youtubeAdKey").setValue(key);
-                        databaseReference.child("userUid").setValue(userUid_tx);
+                                databaseReference.child("adUrl").setValue(url_tx);
+                                databaseReference.child("adTitle").setValue(title_tx);
+                                databaseReference.child("adViewsLeft").setValue(views_tx);
+                                databaseReference.child("adLikesLeft").setValue(likes_tx);
+                                databaseReference.child("adSubscribersLeft").setValue(subscribers_tx);
+                                databaseReference.child("youtubeAdKey").setValue(key);
+                                databaseReference.child("userUid").setValue(userUid_tx);
+                                databaseReference.child("userName").setValue(user_name);
+                                databaseReference.child("profileImageUrl").setValue(profileImageUrl);
 
-                        databaseReference = FirebaseDatabase.getInstance().getReference();
-                        databaseReference = databaseReference.child("admin_posted_ads").child("youtubeAds").child(key);
-//                            posting ad
-                        databaseReference.child("adUrl").setValue(url_tx);
-                        databaseReference.child("adTitle").setValue(title_tx);
-                        databaseReference.child("adExpectedViews").setValue(views_tx);
-                        databaseReference.child("adExpectedLikes").setValue(likes_tx);
-                        databaseReference.child("adExpectedSubscribers").setValue(subscribers_tx);
-                        databaseReference.child("youtubeAdKey").setValue(key);
-                        databaseReference.child("userUid").setValue(userUid_tx);
+                                databaseReference = FirebaseDatabase.getInstance().getReference();
+                                databaseReference = databaseReference.child("admin_posted_ads").child("youtubeAds").child(key);
+//                            posting ad for record
+                                databaseReference.child("adUrl").setValue(url_tx);
+                                databaseReference.child("adTitle").setValue(title_tx);
+                                databaseReference.child("adExpectedViews").setValue(views_tx);
+                                databaseReference.child("adExpectedLikes").setValue(likes_tx);
+                                databaseReference.child("adExpectedSubscribers").setValue(subscribers_tx);
+                                databaseReference.child("youtubeAdKey").setValue(key);
+                                databaseReference.child("userUid").setValue(userUid_tx);
 
 
-                        UploadImageFileToFirebaseStorage();
-                        loading.stop();
-                        new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
-                                .setTitleText("Ad Successfully Posted!")
-                                .setConfirmText("Got it!")
-                                .show();
+                                UploadImageFileToFirebaseStorage();
+                                loading.stop();
+//                                sweet alert
+                                SweetAlertDialog pDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
+                                        .setTitleText("Ad Successfully Posted!")
+                                        .setConfirmText("Got it!")
+                                        .setCancelText("Post another Ad")
+                                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                cancelPreviewButton.performClick();
+                                                setEverythingNull();
+                                                sDialog.dismissWithAnimation();
+                                            }
+                                        })
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                startActivity(new Intent(getActivity(), DashBoard.class));
+                                                getActivity().finish();
+                                                sDialog.dismiss();
+                                            }
+                                        });
+                                pDialog.setCancelable(false);
+                                pDialog.show();
+
+//                                sweet alert
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
 
                     }
                 })
@@ -499,6 +539,19 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
     }
     //    posting ad sweet alert
 
+
+//    setting everything null
+    public void setEverythingNull(){
+        title_et.setText(null);
+        url_et.setText(null);
+        views_et.setText(null);
+        likes_et.setText(null);
+        subscribers_et.setText(null);
+        userUid_et.setText(null);
+        ImageFilePath = null;
+        selectedImage_iv.setVisibility(View.GONE);
+    }
+//    setting everything null
 
 //    end
 }
