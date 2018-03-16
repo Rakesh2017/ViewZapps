@@ -20,6 +20,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
+
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -77,36 +80,6 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
         if (UploadInfo.getAdSubscribersLeft().isEmpty()) holder.subscribers_tv.setText("0\n Subs Left");
 //        if ends
 
-        //holder.url_tx.setText(UploadInfo.getYoutubeUrl());
-
-      /*  try {
-            databaseReference.child("users").child(UploadInfo.getUserUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    holder.uploaderName_tv.setText(dataSnapshot.child("profile_details")
-                            .child("name").getValue(String.class));
-
-                    String url = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
-                    Uri uri = Uri.parse(url);
-
-//                    user image
-                    Picasso.with(context)
-                            .load(uri)
-                            .placeholder(R.drawable.ic_profile_image_placeholder)
-                            .error(R.drawable.ic_warning)
-                            .noFade()
-                            .into(holder.userImage);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
-        catch (NullPointerException e){
-            e.printStackTrace();
-        } */
 
         //        ad image
         Picasso.with(context)
@@ -122,19 +95,26 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
         //                    user image
         String profileImageUrl = UploadInfo.getProfileImageUrl();
         try {
-            Picasso.with(context)
-                    .load(UploadInfo.getProfileImageUrl())
-                    .placeholder(R.drawable.ic_profile_image_placeholder)
-                    .error(R.drawable.ic_warning)
-                    .noFade()
-                    .into(holder.userImage);
+//            if else
+            if (profileImageUrl.isEmpty()){
+                Picasso.with(context)
+                        .load(R.drawable.ic_profile_image_placeholder)
+                        .noFade()
+                        .into(holder.userImage);
+            }
+            else {
+                Picasso.with(context)
+                        .load(profileImageUrl)
+                        .placeholder(R.drawable.ic_profile_image_placeholder)
+                        .error(R.drawable.ic_warning)
+                        .noFade()
+                        .into(holder.userImage);
+            }
+//       if else ends
         }
         catch (NullPointerException e){
             e.printStackTrace();
         } //user image
-
-
-
 
         //first position
         if( position == 0 ){
@@ -144,10 +124,7 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
             params.setMargins(0,(int) context.getResources().getDimension(R.dimen.cardViewPadding12),0,(int) context.getResources().getDimension(R.dimen.cardViewPadding12));
             holder.cardView.setLayoutParams(params);
         }
-
-
     }
-
 
     @Override
     public long getItemId(int position) {
@@ -185,9 +162,6 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
             views_tv = itemView.findViewById(R.id.rya_views);
             subscribers_tv = itemView.findViewById(R.id.rya_subscribers);
         }
-
-
     }
-
 //end
 }

@@ -13,10 +13,13 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -54,7 +57,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     EditText name_et, email_et, phone_et;
     String name_tx, email_tx, phone_tx;
     FancyButton submit_btn;
-    ImageButton backButton_ib;
+    ImageButton backButton_ib, removeProfilePic_ib;
 
     private static final String EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"(),:;<>@\\[\\]\\\\]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$";
     private Pattern pattern = Pattern.compile(EMAIL_PATTERN);
@@ -68,6 +71,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
         //image button
         backButton_ib = findViewById(R.id.profile_backButton);
+        removeProfilePic_ib = findViewById(R.id.profile_removeProfilePicImageButton);
 
         //circular image
         profileImage = findViewById(R.id.profile_profileImage);
@@ -86,6 +90,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         profileImage.setOnClickListener(this);
         submit_btn.setOnClickListener(this);
         backButton_ib.setOnClickListener(this);
+        removeProfilePic_ib.setOnClickListener(this);
     }//on create end
 
     public void onStart(){
@@ -128,9 +133,58 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                         .show();
             }
         }//else if
+
+//        back button
         else if (id == R.id.profile_backButton){
             super.onBackPressed();
         }
+//        back button
+
+//        remove pic
+        else if (id == R.id.profile_removeProfilePicImageButton){
+            new SweetAlertDialog(EditProfile.this, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                    .setTitleText("Are you sure to remove your profile pic!")
+                    .setCancelText("No")
+                    .setConfirmText("Yes")
+                    .setCustomImage(R.drawable.ic_delete)
+                    .showCancelButton(true)
+                    .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                        }
+                    })
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(final SweetAlertDialog sDialog) {
+                            rotateLoading.start();
+                            String uid = mAuth.getUid();
+                            databaseReference.child("users").child(uid).child("profile_image").setValue(null);
+                            storageReference = storageReference.child("users").child(uid).child("profile_image").child("user_image.jpg");
+                            storageReference.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    deleteProfilePicFromAds();
+                                    sDialog.dismissWithAnimation();
+                                    rotateLoading.stop();
+                                    removeProfilePic_ib.setVisibility(View.GONE);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+
+                                }
+                            });
+
+                        }
+                    })
+                    .show();
+        }
+//        remove pic ends
+
+
+//        remove pic
+
     }
 
 
@@ -234,11 +288,13 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     //    setting image
     public void setImage(){
         databaseReference.child("users").child(mAuth.getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String imagePath = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
-
+                        if (!TextUtils.isEmpty(imagePath)){
+                            removeProfilePic_ib.setVisibility(View.VISIBLE);
+                        }
                         Picasso.with(getApplicationContext())
                                 .load(imagePath)
                                 .placeholder(R.drawable.ic_profile_image_placeholder)
@@ -356,9 +412,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                         catch (NullPointerException e){
                             e.printStackTrace();
                         }
-
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
@@ -390,7 +444,6 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
                 } //for ends
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -413,6 +466,32 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                     if (TextUtils.equals(userUid, userUidInAd)){ // if starts
                         String adKey = snapshot.getKey();
                         databaseReference.child(adKey).child("profileImageUrl").setValue(imageUploadUrl);
+                    } //if ends
+
+                } //for ends
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        }); // setting values
+
+    }
+    //    change data in ads
+
+    //    change profile pic url in ads
+    public void deleteProfilePicFromAds(){
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("ads").child("youtubeAds");
+        final String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() { // setting  values
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){ //for starts
+                    String userUidInAd = snapshot.child("userUid").getValue(String.class);
+                    if (TextUtils.equals(userUid, userUidInAd)){ // if starts
+                        String adKey = snapshot.getKey();
+                        databaseReference.child(adKey).child("profileImageUrl").setValue(null);
                     } //if ends
 
                 } //for ends

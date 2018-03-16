@@ -48,8 +48,7 @@ public class DashBoard extends AppCompatActivity
     TextView name_tv, email_tv, phone_tv, zapNumber_tv;
     String name_tx, email_tx, phone_tx;
 
-    TextView  facebook_btn, insta_btn, android_btn, apple_btn, movie_btn;
-    TextView youtube_btn;
+    CircularImageView youtube_btn, facebook_btn, insta_btn, android_btn, apple_btn, movie_btn;
 
 //    database reference
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -78,12 +77,12 @@ public class DashBoard extends AppCompatActivity
                 .into(profileImageMainPage_iv);
 
 //        Image button iss
-        youtube_btn = findViewById(R.id.dash_youtubeButton);
-        facebook_btn = findViewById(R.id.dash_facebookButton);
-        insta_btn = findViewById(R.id.dash_instagramButton);
-        android_btn = findViewById(R.id.dash_androidButton);
+        youtube_btn = findViewById(R.id.dash_youtubeImageButton);
+        facebook_btn = findViewById(R.id.dash_facebookImageButton);
+        insta_btn = findViewById(R.id.dash_instagramImageButton);
+        android_btn = findViewById(R.id.dash_androidImageButton);
         //apple_btn = findViewById(R.id.dash_appleButton);
-        movie_btn = findViewById(R.id.dash_movieButton);
+        movie_btn = findViewById(R.id.dash_moviesImageButton);
 
         //  FontTextView ids
         name_tv = navigationView.getHeaderView(0).findViewById(R.id.header_nameTextView);
@@ -242,7 +241,7 @@ public class DashBoard extends AppCompatActivity
 
         switch (id){
 //                youtube
-            case R.id.dash_youtubeButton:
+            case R.id.dash_youtubeImageButton:
                 Intent intent = new Intent(DashBoard.this, YoutubeAds.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);

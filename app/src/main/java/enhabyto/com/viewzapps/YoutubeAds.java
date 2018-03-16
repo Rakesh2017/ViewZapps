@@ -1,22 +1,15 @@
 package enhabyto.com.viewzapps;
 
-import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,8 +19,6 @@ import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import pl.droidsonroids.gif.GifTextView;
 
 public class YoutubeAds extends AppCompatActivity implements View.OnClickListener {
 
@@ -44,7 +35,7 @@ public class YoutubeAds extends AppCompatActivity implements View.OnClickListene
     SwipeRefreshLayout swipeRefreshLayout;
     RotateLoading loading;
 
-    LinearLayoutManager mLayoutManager;
+    LinearLayoutManager recylerViewLayoutManager;
 
     Boolean check = true;
 
@@ -63,13 +54,12 @@ public class YoutubeAds extends AppCompatActivity implements View.OnClickListene
 
         recyclerView.setHasFixedSize(true);
 
-        mLayoutManager = new LinearLayoutManager(YoutubeAds.this);
-        mLayoutManager.setReverseLayout(true);
-        mLayoutManager.setStackFromEnd(true);
-
+        recylerViewLayoutManager = new LinearLayoutManager(YoutubeAds.this);
+        recylerViewLayoutManager.setReverseLayout(true);
+        recylerViewLayoutManager.setStackFromEnd(true);
 
         // Setting RecyclerView layout as LinearLayout.
-        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setLayoutManager(recylerViewLayoutManager);
 
         //calling functions
         Refresh();
@@ -108,7 +98,7 @@ public class YoutubeAds extends AppCompatActivity implements View.OnClickListene
     public void Refresh(){
         if (check) loading.start();
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if(list!=null) {
@@ -122,7 +112,9 @@ public class YoutubeAds extends AppCompatActivity implements View.OnClickListene
 
                 adapter = new YoutubeRecyclerViewAdapter(YoutubeAds.this, list);
                 //   Collections.reverse(list);
-               // adapter.notifyDataSetChanged();
+                //adapter.notifyDataSetChanged();
+
+
                 recyclerView.setAdapter(adapter);
 
                 if (adapter.getItemCount() == 0){
@@ -136,14 +128,10 @@ public class YoutubeAds extends AppCompatActivity implements View.OnClickListene
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
                 // Hiding the progress dialog.
                 if (check) loading.stop();
-
-
             }
         });
     }
-
     //end
 }

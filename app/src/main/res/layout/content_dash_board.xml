@@ -8,7 +8,6 @@
     android:id="@+id/fragment_container_dashboard"
     tools:context="enhabyto.com.viewzapps.DashBoard"
     android:background="@color/whiteSmoke"
-    android:padding="@dimen/padding4"
     tools:showIn="@layout/app_bar_dash_board">
 
     <!--row 1-->
@@ -17,9 +16,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="3"
-        android:padding="@dimen/padding4"
         android:id="@+id/dash_LinearLayout1"
-        android:layout_marginTop="@dimen/padding8"
         >
 
         <!--youtube-->
@@ -28,19 +25,32 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             >
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:layout_width="@dimen/dashBoardIconDimensions"
+                android:layout_height="@dimen/dashBoardIconDimensions"
+                android:layout_centerInParent="true"
+                android:src="@drawable/youtube"
+                app:civ_shadow="true"
+                app:civ_border="false"
+                app:civ_shadow_radius="7"
+                app:civ_shadow_color="@color/black"
+                android:id="@+id/dash_youtubeImageButton"
+                android:onClick="onClick"
+                />
 
             <TextView
-                android:id="@+id/dash_youtubeButton"
+                android:id="@+id/dash_youtubeTextView"
+                android:layout_below="@+id/dash_youtubeImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/youtube"
                 style="@style/TextStyleSmall"
-                android:drawableTop="@drawable/ic_youtube"
                 android:gravity="center"
                 android:drawablePadding="@dimen/padding4"
                 android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop"
-                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/padding12"
                 />
         </RelativeLayout>
 
@@ -51,18 +61,32 @@
             android:layout_weight="1"
             >
 
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:layout_width="@dimen/dashBoardIconDimensions"
+                android:layout_height="@dimen/dashBoardIconDimensions"
+                android:layout_centerInParent="true"
+                android:src="@drawable/facebook"
+                app:civ_shadow="true"
+                app:civ_border="false"
+                app:civ_shadow_radius="7"
+                app:civ_shadow_color="@color/black"
+                android:id="@+id/dash_facebookImageButton"
+                android:onClick="onClick"
+                />
+
             <TextView
-                android:id="@+id/dash_facebookButton"
+                android:id="@+id/dash_facebookTextView"
+                android:layout_below="@+id/dash_facebookImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/facebook"
                 style="@style/TextStyleSmall"
-                android:drawableTop="@drawable/ic_facebook"
                 android:gravity="center"
                 android:drawablePadding="@dimen/padding4"
                 android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop"
-                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/padding12"
                 />
 
         </RelativeLayout>
@@ -74,18 +98,32 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             >
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:layout_width="@dimen/dashBoardIconDimensions"
+                android:layout_height="@dimen/dashBoardIconDimensions"
+                android:layout_centerInParent="true"
+                android:src="@drawable/instagram"
+                app:civ_shadow="true"
+                app:civ_border="false"
+                app:civ_shadow_radius="7"
+                app:civ_shadow_color="@color/black"
+                android:id="@+id/dash_instagramImageButton"
+                android:onClick="onClick"
+                />
+
             <TextView
-                android:id="@+id/dash_instagramButton"
+                android:id="@+id/dash_instagramTextView"
+                android:layout_below="@+id/dash_instagramImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/instagram"
                 style="@style/TextStyleSmall"
-                android:drawableTop="@drawable/ic_instagram"
                 android:gravity="center"
                 android:drawablePadding="@dimen/padding4"
                 android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop"
-                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/padding12"
                 />
         </RelativeLayout>
 
@@ -102,7 +140,6 @@
         android:weightSum="3"
         android:id="@+id/dash_LinearLayout2"
         android:layout_below="@+id/dash_LinearLayout1"
-        android:layout_marginTop="@dimen/padding8"
         >
 
         <!--android apps-->
@@ -111,18 +148,32 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             >
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:layout_width="@dimen/dashBoardIconDimensions"
+                android:layout_height="@dimen/dashBoardIconDimensions"
+                android:layout_centerInParent="true"
+                android:src="@drawable/android"
+                app:civ_shadow="true"
+                app:civ_border="false"
+                app:civ_shadow_radius="7"
+                app:civ_shadow_color="@color/black"
+                android:id="@+id/dash_androidImageButton"
+                android:onClick="onClick"
+                />
+
             <TextView
-                android:id="@+id/dash_androidButton"
+                android:id="@+id/dash_androidTextView"
+                android:layout_below="@+id/dash_androidImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/androidApps"
                 style="@style/TextStyleSmall"
-                android:drawableTop="@drawable/ic_android"
                 android:gravity="center"
                 android:drawablePadding="@dimen/padding4"
                 android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop"
-                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/padding12"
                 />
         </RelativeLayout>
 
@@ -133,18 +184,32 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             >
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:layout_width="@dimen/dashBoardIconDimensions"
+                android:layout_height="@dimen/dashBoardIconDimensions"
+                android:layout_centerInParent="true"
+                android:src="@drawable/movies"
+                app:civ_shadow="true"
+                app:civ_border="false"
+                app:civ_shadow_radius="7"
+                app:civ_shadow_color="@color/black"
+                android:id="@+id/dash_moviesImageButton"
+                android:onClick="onClick"
+                />
+
             <TextView
-                android:id="@+id/dash_movieButton"
+                android:id="@+id/dash_moviesTextView"
+                android:layout_below="@+id/dash_moviesImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/movieTrailers"
                 style="@style/TextStyleSmall"
-                android:drawableTop="@drawable/ic_movies"
                 android:gravity="center"
                 android:drawablePadding="@dimen/padding4"
                 android:elevation="@dimen/elevation_5dp"
                 tools:targetApi="lollipop"
-                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/padding12"
                 />
         </RelativeLayout>
 

@@ -39,6 +39,17 @@
                 android:onClick="onClick"
                 />
 
+            <!--remove photo-->
+            <ImageButton
+                android:id="@+id/profile_removeProfilePicImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_cancel_button"
+                android:layout_alignEnd="@+id/profile_profileImage"
+                tools:ignore="ContentDescription"
+                android:visibility="gone"
+                />
+
             <!--loading image-->
             <com.victor.loading.rotate.RotateLoading
                 android:id="@+id/profile_rotateLoadingImage"

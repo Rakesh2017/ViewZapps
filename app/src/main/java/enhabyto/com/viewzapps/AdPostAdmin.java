@@ -4,10 +4,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class AdPostAdmin extends AppCompatActivity implements View.OnClickListener {
 
     ImageButton youtube_btn, back_btn;
+    TextView youtubeAdminAds_tv, youtubeUserAds_tv, youtubeTotalAds_tv;
+    String youtubeAdminAds_tx, youtubeUserAds_tx, youtubeTotalAds_tx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

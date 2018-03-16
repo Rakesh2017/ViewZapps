@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/appColor"
@@ -12,128 +10,62 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/header_appLogoImageView"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        tools:ignore="ContentDescription,UnusedAttribute"
-        android:elevation="@dimen/elevation_5dp"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        app:civ_border_width="1dp"
-        app:civ_border_color="@color/black"
-        android:background="@drawable/viewzaps_app_bar_logo"
-        />
-
-
     <!--name-->
-    <TextView
-        android:id="@+id/header_name1TextView"
-        android:layout_toEndOf="@+id/header_appLogoImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/name"
-        style="@style/EditTextStyleSmall"
-        android:layout_marginStart="@dimen/activity_start_margin"
-        android:fontFamily="ubuntu"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        />
 
     <TextView
         android:id="@+id/header_nameTextView"
-        android:layout_toEndOf="@+id/header_name1TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/NA"
         style="@style/EditTextStyleSmallNavHeaderWhite"
-        android:layout_marginStart="@dimen/marginBetweenTags"
+        android:layout_marginStart="@dimen/padding12"
         android:layout_marginEnd="@dimen/marginBetweenTags"
         android:fontFamily="ubuntu"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/padding8"
         />
 
 
     <!--email-->
     <TextView
-        android:id="@+id/header_email1TextView"
-        android:layout_toEndOf="@+id/header_appLogoImageView"
-        android:layout_below="@+id/header_nameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/email"
-        style="@style/EditTextStyleSmall"
-        android:layout_marginStart="@dimen/activity_start_margin"
-        android:fontFamily="ubuntu"
-        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
-        />
-
-    <TextView
         android:id="@+id/header_emailTextView"
-        android:layout_toEndOf="@+id/header_email1TextView"
         android:layout_below="@+id/header_nameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/NA"
         style="@style/EditTextStyleSmallNavHeaderWhite"
-        android:layout_marginStart="@dimen/marginBetweenTags"
         android:layout_marginEnd="@dimen/marginBetweenTags"
         android:fontFamily="ubuntu"
-        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+        android:layout_marginTop="@dimen/padding4"
+        android:layout_alignStart="@+id/header_nameTextView"
         />
 
     <!--phone-->
-    <TextView
-        android:id="@+id/header_phone1TextView"
-        android:layout_toEndOf="@+id/header_appLogoImageView"
-        android:layout_below="@+id/header_emailTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/phoneNumber"
-        style="@style/EditTextStyleSmall"
-        android:layout_marginStart="@dimen/activity_start_margin"
-        android:fontFamily="ubuntu"
-        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
-        />
 
     <TextView
         android:id="@+id/header_phoneTextView"
-        android:layout_toEndOf="@+id/header_phone1TextView"
         android:layout_below="@+id/header_emailTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/NA"
         style="@style/EditTextStyleSmallNavHeaderWhite"
-        android:layout_marginStart="@dimen/marginBetweenTags"
         android:layout_marginEnd="@dimen/marginBetweenTags"
         android:fontFamily="ubuntu"
-        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+        android:layout_marginTop="@dimen/padding4"
+        android:layout_alignStart="@+id/header_nameTextView"
         />
 
-    <!--phone-->
-    <TextView
-        android:id="@+id/header_zap1TextView"
-        android:layout_toEndOf="@+id/header_appLogoImageView"
-        android:layout_below="@+id/header_phoneTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/zapNumber"
-        style="@style/EditTextStyleSmall"
-        android:layout_marginStart="@dimen/activity_start_margin"
-        android:fontFamily="ubuntu"
-        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
-        />
-
+    <!--zaps-->
     <TextView
         android:id="@+id/header_zapTextView"
-        android:layout_toEndOf="@+id/header_zap1TextView"
         android:layout_below="@+id/header_phoneTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/NA"
         style="@style/EditTextStyleSmallNavHeaderWhite"
-        android:layout_marginStart="@dimen/marginBetweenTags"
         android:layout_marginEnd="@dimen/marginBetweenTags"
         android:fontFamily="ubuntu"
-        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+        android:layout_marginTop="@dimen/padding4"
+        android:layout_alignStart="@+id/header_nameTextView"
         />
 
 

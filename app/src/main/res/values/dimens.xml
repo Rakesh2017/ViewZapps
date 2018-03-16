@@ -22,7 +22,8 @@
     <dimen name="padding2">2dp</dimen>
     <dimen name="padding3">3dp</dimen>
     <dimen name="padding8">8dp</dimen>
+    <dimen name="padding12">12dp</dimen>
     <dimen name="padding4">4dp</dimen>
-    <dimen name="dashBoardIconDimensions">90dp</dimen>
+    <dimen name="dashBoardIconDimensions">92dp</dimen>
 
 </resources>

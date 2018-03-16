@@ -32,7 +32,9 @@
                 android:layout_centerVertical="true"
                 app:civ_shadow="true"
                 app:civ_shadow_radius="5"
-                app:civ_border="false"
+                app:civ_border="true"
+                app:civ_border_color="@color/whiteSmoke"
+                app:civ_border_width="2dp"
                 app:civ_shadow_color="@color/black"
                 android:layout_toEndOf="@+id/toolbar"
                 />
@@ -54,23 +56,28 @@
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 tools:ignore="RelativeOverlap,RtlSymmetry" />
 
-
-
-            <TextView
-                android:id="@+id/bar_zapsTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/TextStyleMedium"
+            <me.itangqi.waveloadingview.WaveLoadingView
+                android:id="@+id/waveLoadingView"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:wlv_borderColor="@color/whiteSmoke"
+                app:wlv_borderWidth="2dp"
+                app:wlv_progressValue="80"
+                app:wlv_shapeType="circle"
+                app:wlv_titleCenter="100000"
+                app:wlv_titleCenterSize="14sp"
+                style="@style/TextStyleSmallBold"
+                app:wlv_titleCenterColor="@android:color/black"
+                app:wlv_waveAmplitude="70"
+                app:wlv_waveColor="@color/colorAccent"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
-                android:text="0 zaps"
-                android:textStyle="bold"
                 android:layout_marginEnd="12dp"
                 android:drawablePadding="4dp"
                 android:padding="2dp"
                 android:elevation="@dimen/elevation_5dp"
-                tools:targetApi="lollipop" />
-
+                tools:targetApi="lollipop"
+                />
 
 
         </RelativeLayout>
