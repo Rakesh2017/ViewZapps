@@ -6,11 +6,19 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 public class AdPostAdmin extends AppCompatActivity implements View.OnClickListener {
 
     ImageButton youtube_btn, back_btn;
     TextView youtubeAdminAds_tv, youtubeUserAds_tv, youtubeTotalAds_tv;
-    String youtubeAdminAds_tx, youtubeUserAds_tx, youtubeTotalAds_tx;
+    int youtubeAdminAds_i, youtubeUserAds_i, youtubeTotalAds_i;
+
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +28,8 @@ public class AdPostAdmin extends AppCompatActivity implements View.OnClickListen
 //        ids
         youtube_btn = findViewById(R.id.aap_youtubeImageButton);
         back_btn = findViewById(R.id.aap_backButton);
+
+        youtubeAdminAds_tv = findViewById(R.id.aap_youtubeAdsByAdmin);
 
 //        on click
         youtube_btn.setOnClickListener(this);
@@ -42,6 +52,30 @@ public class AdPostAdmin extends AppCompatActivity implements View.OnClickListen
         }//switch
 
     }//onclick
+
+    public void onStart() {
+        super.onStart();
+        youtubeAdsCount();
+    }
+
+//    getting number of ads
+    public void youtubeAdsCount(){
+
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+               youtubeAdminAds_i =  (int)(dataSnapshot.child("admin_posted_ads").child("youtubeAds").getChildrenCount());
+
+               youtubeAdminAds_tv.setText(youtubeAdminAds_tv.getText()+"\n"+youtubeAdminAds_i);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+//    getting number of ads
 
     //end
 }

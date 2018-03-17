@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
         android:allowBackup="true"
@@ -39,9 +40,10 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity android:name=".EditProfile" />
-        <activity android:name=".AdPostAdmin"
-            android:windowSoftInputMode="adjustResize"
-            />
+        <activity
+            android:name=".AdPostAdmin"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".youtubeVideoAd"></activity>
     </application>
 
 </manifest>
