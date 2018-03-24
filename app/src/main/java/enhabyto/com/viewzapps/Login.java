@@ -210,10 +210,14 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                             }
 //                            setting landing page
                             SharedPreferences sharedpreferences = getSharedPreferences("LogDetail", MODE_PRIVATE);
+                            SharedPreferences sharedpreferencesAccountEmail = getSharedPreferences("UserAccountEmail", MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedpreferences.edit();
+                            SharedPreferences.Editor editorAccountEmail = sharedpreferencesAccountEmail.edit();
                             editor.putString("firstScreen", "DashBoard");
+                            editorAccountEmail.putString("email", email);
                             editor.apply();
-//                            settinng landing page ends
+                            editorAccountEmail.apply();
+//                            setting landing page ends
                             Login.this.finish();
 
 

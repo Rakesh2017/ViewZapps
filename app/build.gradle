@@ -79,6 +79,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:11.8.0'
     //youtube data api
     compile 'pub.devrel:easypermissions:0.3.0'
+    compile group: 'com.google.oauth-client', name: 'google-oauth-client-jetty', version: '1.22.0'
     compile('com.google.apis:google-api-services-youtube:v3-rev193-1.23.0') {
         exclude group: 'org.apache.httpcomponents'
     }
