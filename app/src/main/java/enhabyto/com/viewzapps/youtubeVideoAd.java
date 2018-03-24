@@ -7,9 +7,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,27 +22,18 @@ import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeScopes;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -60,28 +52,13 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
-    private static final String BUTTON_TEXT = "Call YouTube Data API";
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String USER_ACCOUNT_EMAIL = "UserAccountEmail";
     private static final String[] SCOPES = { YouTubeScopes.YOUTUBE_READONLY
             , YouTubeScopes.YOUTUBE_FORCE_SSL, YouTubeScopes.YOUTUBEPARTNER, YouTubeScopes.YOUTUBE
     , Scopes.PROFILE };
 
-    Credential credential;
-    GoogleClientSecrets clientSecrets;
-
     private static final String APPLICATION_NAME = "viewZapps";
-    private static final java.io.File DATA_STORE_DIR =
-            new java.io.File(Environment.getExternalStorageDirectory().getAbsolutePath(), ".credentials/java-youtube-api-tests");
-
-
-    private static FileDataStoreFactory DATA_STORE_FACTORY;
-
-    private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-
-    private static HttpTransport HTTP_TRANSPORT;
-
-    private static final Collection<String> SCOPES1 = Arrays.asList("YouTubeScopes.https://www.googleapis.com/auth/youtube.force-ssl YouTubeScopes.https://www.googleapis.com/auth/youtubepartner", YouTubeScopes.YOUTUBE);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,78 +98,6 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
 //        authenticate youtube user
         getResultsFromApi();
 
-        try {
-            HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
-            DATA_STORE_FACTORY = new FileDataStoreFactory(DATA_STORE_DIR);
-            Log.w("raky1", String.valueOf(HTTP_TRANSPORT));
-        } catch (Exception t) {
-            t.printStackTrace();
-            Log.w("raky2", t.getLocalizedMessage());
-        }
-
-        Reader r = new StringReader("{\"installed\":{\"client_id\":\"1094700917534-61sc62n1vbfuq34rus5oqdevt1d2jsah.apps.googleusercontent.com\",\"project_id\":\"viewzapps\",\"auth_uri\":\"https://accounts.google.com/o/oauth2/auth\",\"token_uri\":\"https://accounts.google.com/o/oauth2/token\",\"auth_provider_x509_cert_url\":\"https://www.googleapis.com/oauth2/v1/certs\",\"redirect_uris\":[\"urn:ietf:wg:oauth:2.0:oob\",\"http://localhost\"]}}");
-        InputStream in = youtubeVideoAd.class.getResourceAsStream("/client_secret.json");
-
-        try {
-            clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, r);
-            Log.w("raky3", String.valueOf(clientSecrets));
-        } catch (IOException | NullPointerException e) {
-            e.printStackTrace();
-            Log.w("raky3", "kk"+ e.getLocalizedMessage());
-        }
-
-
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-
-                // Build flow and trigger user authorization request.
-                GoogleAuthorizationCodeFlow flow = null;
-                try {
-                    flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES1)
-                            .setDataStoreFactory(DATA_STORE_FACTORY)
-                            .setAccessType("offline")
-                            .build();
-                } catch (IOException | NullPointerException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    credential = new AuthorizationCodeInstalledApp(
-                            flow, new LocalServerReceiver()).authorize("enhabyto.rakesh@gmail.com");
-
-                } catch (IOException | NullPointerException | NoClassDefFoundError e) {
-                   // Log.w("raky7", e.getLocalizedMessage());
-                    e.printStackTrace();
-                }
-                System.out.println(
-                        "Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
-
-                final YouTube youTube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, mCredential).setApplicationName(APPLICATION_NAME).build();
-                Log.w("raky4", String.valueOf(youTube));
-
-                final HashMap<String, String> parameters = new HashMap<>();
-                parameters.put("id", "E6UTz_Doic8");
-                parameters.put("rating", "like");
-
-
-                YouTube.Videos.Rate videosRateRequest = null;
-                try {
-                    videosRateRequest = youTube.videos().rate(parameters.get("id"), parameters.get("rating"));
-                    videosRateRequest.execute();
-                } catch (GoogleJsonResponseException e) {
-                    e.printStackTrace();
-                    Log.w("raky5", String.valueOf(e.getDetails().getCode()) + e.getDetails().getMessage());
-                    System.err.println("There was a service error: " + e.getDetails().getCode() + " : " + e.getDetails().getMessage());
-                } catch (Exception t) {
-                    t.printStackTrace();
-                    Log.w("raky6", "hello "+ t.getCause().getLocalizedMessage());
-                }
-            }
-        };
-        thread.start();
-
-
-
     }
 //onCreate ends
 
@@ -207,6 +112,9 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                     .show();
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
+        }
+        else {
+            new MakeRequestTask(mCredential).execute();
         }
     }
 // get Result for authentication
@@ -230,7 +138,7 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                     .getString(PREF_ACCOUNT_NAME, null);
             if (accountName != null) {
                 mCredential.setSelectedAccountName(accountName);
-                Toast.makeText(this, ""+accountName, Toast.LENGTH_SHORT).show();
+                Log.w("raky", "accName: "+mCredential.getSelectedAccountName());
                 getResultsFromApi();
             } else {
                 // Start a dialog from which the user can choose an account
@@ -358,6 +266,91 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
     }
 //    getting permissions
 
+
+
+    /**
+     * An asynchronous task that handles the YouTube Data API call.
+     * Placing the API calls in their own task ensures the UI stays responsive.
+     */
+    private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
+        private com.google.api.services.youtube.YouTube mService = null;
+        private Exception mLastError = null;
+
+        MakeRequestTask(GoogleAccountCredential credential) {
+            HttpTransport transport = AndroidHttp.newCompatibleTransport();
+            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+            mService = new com.google.api.services.youtube.YouTube.Builder(
+                    transport, jsonFactory, credential)
+                    .setApplicationName(APPLICATION_NAME)
+                    .build();
+        }
+
+        /**
+         * Background task to call YouTube Data API.
+         * @param params no parameters needed for this task.
+         */
+        @Override
+        protected List<String> doInBackground(Void... params) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Log.w("raky", "acc name: "+mService.videos().rate("I6IYqx-U1uk" ,"none").execute());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.w("raky", e.getLocalizedMessage());
+                    }
+
+                }
+            });
+            thread.start();
+            return null;
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+           // mOutputText.setText("");
+           // mProgress.show();
+        }
+
+        @Override
+        protected void onPostExecute(List<String> output) {
+           // mProgress.hide();
+            if (output == null || output.size() == 0) {
+            //    mOutputText.setText("No results returned.");
+                Log.w("raky", "No results returned.");
+            } else {
+                output.add(0, "Data retrieved using the YouTube Data API:");
+                //mOutputText.setText(TextUtils.join("\n", output));
+                Log.w("raky", TextUtils.join("\n", output));
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+           // mProgress.hide();
+            if (mLastError != null) {
+                if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
+                    showGooglePlayServicesAvailabilityErrorDialog(
+                            ((GooglePlayServicesAvailabilityIOException) mLastError)
+                                    .getConnectionStatusCode());
+                } else if (mLastError instanceof UserRecoverableAuthIOException) {
+                    startActivityForResult(
+                            ((UserRecoverableAuthIOException) mLastError).getIntent(),
+                            youtubeVideoAd.REQUEST_AUTHORIZATION);
+                } else {
+                //    mOutputText.setText("The following error occurred:\n"
+                          //  + mLastError.getMessage());
+                    Log.w("raky", ("The following error occurred:\n"
+                            + mLastError.getMessage()));
+                }
+            } else {
+               // mOutputText.setText("Request cancelled.");
+                Log.w("raky", "request  Cancelled");
+            }
+        }
+    }
 
 //    ends
 }

@@ -18,10 +18,13 @@ import android.widget.Toast;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.credentials.Credential;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -80,7 +83,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         //Animation id
         slideDown = AnimationUtils.loadAnimation(Login.this, R.anim.slide_down);
 
-        //google signin button
+        //google sign in button
         //signInButton = findViewById(R.id.sign_in_button);
 
         layoutAnimations();
@@ -92,6 +95,9 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
+
+
+        String[] SCOPES = {Scopes.PROFILE};
 
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleApiClient = new GoogleApiClient.Builder(Login.this)
