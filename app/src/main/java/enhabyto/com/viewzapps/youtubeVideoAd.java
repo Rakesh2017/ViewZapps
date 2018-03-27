@@ -27,13 +27,19 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.LowLevelHttpRequest;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeScopes;
+import com.google.api.services.youtube.model.ResourceId;
+import com.google.api.services.youtube.model.Subscription;
+import com.google.api.services.youtube.model.SubscriptionSnippet;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -54,9 +60,7 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
 
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String USER_ACCOUNT_EMAIL = "UserAccountEmail";
-    private static final String[] SCOPES = { YouTubeScopes.YOUTUBE_READONLY
-            , YouTubeScopes.YOUTUBE_FORCE_SSL, YouTubeScopes.YOUTUBEPARTNER, YouTubeScopes.YOUTUBE
-    , Scopes.PROFILE };
+    private static final String[] SCOPES = { YouTubeScopes.YOUTUBE_READONLY };
 
     private static final String APPLICATION_NAME = "viewZapps";
 
@@ -66,7 +70,7 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
         setContentView(R.layout.activity_youtube_video_ad);
 
         button = findViewById(R.id.button2);
-        youTubePlayerView = findViewById(R.id.youPlayer);
+        youTubePlayerView = findViewById(R.id.yva_youTubePlayer);
 
 
 
@@ -98,6 +102,7 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
 //        authenticate youtube user
         getResultsFromApi();
 
+
     }
 //onCreate ends
 
@@ -105,15 +110,14 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
     private void getResultsFromApi() {
         if (! isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
+        } else if (mCredential.getSelectedAccountName() == null) {
+            chooseAccount();
         } else if (! isDeviceOnline()) {
             new SweetAlertDialog(this)
                     .setCustomImage(R.drawable.no_internet_icon)
                     .setTitleText("No network connection available.")
                     .show();
-        } else if (mCredential.getSelectedAccountName() == null) {
-            chooseAccount();
-        }
-        else {
+        } else {
             new MakeRequestTask(mCredential).execute();
         }
     }
@@ -142,7 +146,7 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                 getResultsFromApi();
             } else {
                 // Start a dialog from which the user can choose an account
-               /* SharedPreferences shared = getSharedPreferences(USER_ACCOUNT_EMAIL, MODE_PRIVATE);
+              /*  SharedPreferences shared = getSharedPreferences(USER_ACCOUNT_EMAIL, MODE_PRIVATE);
                 accountName = shared.getString("email", null);
                 mCredential.setSelectedAccountName(accountName);
                 if (accountName != null) {
@@ -164,6 +168,7 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                     "This app needs to access your Google account (via Contacts).",
                     REQUEST_PERMISSION_GET_ACCOUNTS,
                     android.Manifest.permission.GET_ACCOUNTS);
+            Log.w("raky", "This also hit");
         }
     }
 //    permissions to access account of user
@@ -223,16 +228,15 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
             case REQUEST_ACCOUNT_PICKER:
                 if (resultCode == RESULT_OK && data != null &&
                         data.getExtras() != null) {
-                    String accountName =
-                            data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                    String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {
-                        SharedPreferences settings =
-                                getPreferences(Context.MODE_PRIVATE);
+                        SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putString(PREF_ACCOUNT_NAME, accountName);
                         editor.apply();
                         mCredential.setSelectedAccountName(accountName);
                         getResultsFromApi();
+
                     }
                 }
                 break;
@@ -294,11 +298,34 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
+
                     try {
-                        Log.w("raky", "acc name: "+mService.videos().rate("I6IYqx-U1uk" ,"none").execute());
+                        mService.videos().rate("Iix0awnFDS0", "like").execute();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Log.w("raky", "io: "+e.getCause());
+                    }
+                    try {
+
+                        HashMap<String, String> parameters = new HashMap<>();
+                        parameters.put("part", "snippet");
+                        Subscription subscription = new Subscription();
+                        SubscriptionSnippet subscriptionSnippet = new SubscriptionSnippet();
+                        ResourceId resourceId = new ResourceId();
+                        resourceId.set("channelId", "UCW2Ji4Ok_oBgsMpfcjKxiCQ");
+                        resourceId.set("kind", "youtube#channel");
+                        subscriptionSnippet.setResourceId(resourceId);
+                        subscription.setSnippet(subscriptionSnippet);
+
+
+                        YouTube.Subscriptions.Insert subscriptionsInsertRequest = mService.subscriptions().insert(parameters.get("part"), subscription);
+
+                        Subscription response = subscriptionsInsertRequest.execute();
+                        Log.w("raky", "response: "+response);
+
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Log.w("raky", e.getLocalizedMessage());
+                        Log.w("raky", "error: "+e.getCause());
                     }
 
                 }
