@@ -1,23 +1,37 @@
 package enhabyto.com.viewzapps;
 
+import android.Manifest;
 import android.accounts.AccountManager;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Contacts;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDialog;
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.Scopes;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -27,17 +41,19 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.LowLevelHttpRequest;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeScopes;
+import com.google.api.services.youtube.model.Channel;
+import com.google.api.services.youtube.model.ChannelListResponse;
 import com.google.api.services.youtube.model.ResourceId;
 import com.google.api.services.youtube.model.Subscription;
 import com.google.api.services.youtube.model.SubscriptionSnippet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -60,9 +76,14 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
 
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String USER_ACCOUNT_EMAIL = "UserAccountEmail";
-    private static final String[] SCOPES = { YouTubeScopes.YOUTUBE_READONLY };
+    private static final String[] SCOPES = { YouTubeScopes.YOUTUBE_READONLY, YouTubeScopes.YOUTUBE_FORCE_SSL, YouTubeScopes.YOUTUBE };
 
     private static final String APPLICATION_NAME = "viewZapps";
+
+    private TextView mOutputText;
+    private Button mCallApiButton;
+    ProgressDialog mProgress;
+    private static final String BUTTON_TEXT = "Call YouTube Data API";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,68 +116,76 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
             }
         });
 
+        LinearLayout activityLayout = new LinearLayout(this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        activityLayout.setLayoutParams(lp);
+        activityLayout.setOrientation(LinearLayout.VERTICAL);
+        activityLayout.setPadding(16, 16, 16, 16);
+
+        ViewGroup.LayoutParams tlp = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        mCallApiButton = new Button(this);
+        mCallApiButton.setText(BUTTON_TEXT);
+        mCallApiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallApiButton.setEnabled(false);
+                mOutputText.setText("");
+                getResultsFromApi();
+                mCallApiButton.setEnabled(true);
+            }
+        });
+        activityLayout.addView(mCallApiButton);
+
+        mOutputText = new TextView(this);
+        mOutputText.setLayoutParams(tlp);
+        mOutputText.setPadding(16, 16, 16, 16);
+        mOutputText.setVerticalScrollBarEnabled(true);
+        mOutputText.setMovementMethod(new ScrollingMovementMethod());
+        mOutputText.setText(
+                "Click the \'" + BUTTON_TEXT +"\' button to test the API.");
+        activityLayout.addView(mOutputText);
+
+        mProgress = new ProgressDialog(this);
+        mProgress.setMessage("Calling YouTube Data API ...");
+
+        setContentView(activityLayout);
+
         // Initialize credentials and service object.
-        mCredential = GoogleAccountCredential.usingOAuth2(getApplicationContext(), Arrays.asList(SCOPES))
+        mCredential = GoogleAccountCredential.usingOAuth2(
+                getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
-
-//        authenticate youtube user
-        getResultsFromApi();
-
 
     }
 //onCreate ends
 
-    // get Result for authentication
     private void getResultsFromApi() {
         if (! isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
         } else if (! isDeviceOnline()) {
-            new SweetAlertDialog(this)
-                    .setCustomImage(R.drawable.no_internet_icon)
-                    .setTitleText("No network connection available.")
-                    .show();
+            mOutputText.setText("No network connection available.");
         } else {
             new MakeRequestTask(mCredential).execute();
         }
     }
-// get Result for authentication
 
-
-// to check if wifi or mobile data is connected
-    private boolean isDeviceOnline() {
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
-    }
-// to check if wifi or mobile data is connected
-
-
-//    permissions to access account of user
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private void chooseAccount() {
         if (EasyPermissions.hasPermissions(
-                this, android.Manifest.permission.GET_ACCOUNTS)) {
+                this, Manifest.permission.GET_ACCOUNTS)) {
             String accountName = getPreferences(Context.MODE_PRIVATE)
                     .getString(PREF_ACCOUNT_NAME, null);
             if (accountName != null) {
                 mCredential.setSelectedAccountName(accountName);
-                Log.w("raky", "accName: "+mCredential.getSelectedAccountName());
                 getResultsFromApi();
             } else {
                 // Start a dialog from which the user can choose an account
-              /*  SharedPreferences shared = getSharedPreferences(USER_ACCOUNT_EMAIL, MODE_PRIVATE);
-                accountName = shared.getString("email", null);
-                mCredential.setSelectedAccountName(accountName);
-                if (accountName != null) {
-                    SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString(PREF_ACCOUNT_NAME, accountName);
-                    editor.apply();
-                    mCredential.setSelectedAccountName(accountName);
-                    getResultsFromApi();
-                }*/
                 startActivityForResult(
                         mCredential.newChooseAccountIntent(),
                         REQUEST_ACCOUNT_PICKER);
@@ -167,47 +196,20 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                     this,
                     "This app needs to access your Google account (via Contacts).",
                     REQUEST_PERMISSION_GET_ACCOUNTS,
-                    android.Manifest.permission.GET_ACCOUNTS);
-            Log.w("raky", "This also hit");
+                    Manifest.permission.GET_ACCOUNTS);
         }
     }
-//    permissions to access account of user
 
-//    is google play services are available
-    private boolean isGooglePlayServicesAvailable() {
-        GoogleApiAvailability apiAvailability =
-                GoogleApiAvailability.getInstance();
-        final int connectionStatusCode =
-                apiAvailability.isGooglePlayServicesAvailable(this);
-        return connectionStatusCode == ConnectionResult.SUCCESS;
-    }
-//    is google play services are available
-
-//    if google play services not available then acquire
-    private void acquireGooglePlayServices() {
-        GoogleApiAvailability apiAvailability =
-                GoogleApiAvailability.getInstance();
-        final int connectionStatusCode =
-                apiAvailability.isGooglePlayServicesAvailable(this);
-        if (apiAvailability.isUserResolvableError(connectionStatusCode)) {
-            showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode);
-        }
-    }
-//    if google play services not available then acquire
-
-//    googlePlayServices Error
-    void showGooglePlayServicesAvailabilityErrorDialog(
-            final int connectionStatusCode) {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        Dialog dialog = apiAvailability.getErrorDialog(
-                youtubeVideoAd.this,
-                connectionStatusCode,
-                REQUEST_GOOGLE_PLAY_SERVICES);
-        dialog.show();
-    }
-//    googlePlayServices Error
-
-//    handling the result
+    /**
+     * Called when an activity launched here (specifically, AccountPicker
+     * and authorization) exits, giving you the requestCode you started it with,
+     * the resultCode it returned, and any additional data from it.
+     * @param requestCode code indicating which activity result is incoming.
+     * @param resultCode code indicating the result of the incoming
+     *     activity result.
+     * @param data Intent (containing result data) returned by incoming
+     *     activity result.
+     */
     @Override
     protected void onActivityResult(
             int requestCode, int resultCode, Intent data) {
@@ -215,12 +217,9 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
         switch(requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
-                    new SweetAlertDialog(this)
-                            .setCustomImage(R.drawable.ic_warning)
-                            .setTitleText("Google Play Services required!")
-                            .setContentText("This app requires Google Play Services. Please install " +
-                                    "Google Play Services on your device and relaunch this app.")
-                            .show();
+                    mOutputText.setText(
+                            "This app requires Google Play Services. Please install " +
+                                    "Google Play Services on your device and relaunch this app.");
                 } else {
                     getResultsFromApi();
                 }
@@ -228,15 +227,16 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
             case REQUEST_ACCOUNT_PICKER:
                 if (resultCode == RESULT_OK && data != null &&
                         data.getExtras() != null) {
-                    String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                    String accountName =
+                            data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {
-                        SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
+                        SharedPreferences settings =
+                                getPreferences(Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putString(PREF_ACCOUNT_NAME, accountName);
                         editor.apply();
                         mCredential.setSelectedAccountName(accountName);
                         getResultsFromApi();
-
                     }
                 }
                 break;
@@ -247,10 +247,15 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                 break;
         }
     }
-    //    handling the result
 
-
-//    getting permissions
+    /**
+     * Respond to requests for permissions at runtime for API 23 and above.
+     * @param requestCode The request code passed in
+     *     requestPermissions(android.app.Activity, String, int, String[])
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions
+     *     which is either PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
@@ -260,17 +265,84 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                 requestCode, permissions, grantResults, this);
     }
 
+    /**
+     * Callback for when a permission is granted using the EasyPermissions
+     * library.
+     * @param requestCode The request code associated with the requested
+     *         permission
+     * @param list The requested permission list. Never null.
+     */
     @Override
     public void onPermissionsGranted(int requestCode, List<String> list) {
-//        do nothing
+        // Do nothing.
     }
+
+    /**
+     * Callback for when a permission is denied using the EasyPermissions
+     * library.
+     * @param requestCode The request code associated with the requested
+     *         permission
+     * @param list The requested permission list. Never null.
+     */
     @Override
     public void onPermissionsDenied(int requestCode, List<String> list) {
-        Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
+        // Do nothing.
     }
-//    getting permissions
+
+    /**
+     * Checks whether the device currently has a network connection.
+     * @return true if the device has a network connection, false otherwise.
+     */
+    private boolean isDeviceOnline() {
+        ConnectivityManager connMgr =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
+
+    /**
+     * Check that Google Play services APK is installed and up to date.
+     * @return true if Google Play Services is available and up to
+     *     date on this device; false otherwise.
+     */
+    private boolean isGooglePlayServicesAvailable() {
+        GoogleApiAvailability apiAvailability =
+                GoogleApiAvailability.getInstance();
+        final int connectionStatusCode =
+                apiAvailability.isGooglePlayServicesAvailable(this);
+        return connectionStatusCode == ConnectionResult.SUCCESS;
+    }
+
+    /**
+     * Attempt to resolve a missing, out-of-date, invalid or disabled Google
+     * Play Services installation via a user dialog, if possible.
+     */
+    private void acquireGooglePlayServices() {
+        GoogleApiAvailability apiAvailability =
+                GoogleApiAvailability.getInstance();
+        final int connectionStatusCode =
+                apiAvailability.isGooglePlayServicesAvailable(this);
+        if (apiAvailability.isUserResolvableError(connectionStatusCode)) {
+            showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode);
+        }
+    }
 
 
+    /**
+     * Display an error dialog showing that Google Play Services is missing
+     * or out of date.
+     * @param connectionStatusCode code describing the presence (or lack of)
+     *     Google Play Services on this device.
+     */
+    void showGooglePlayServicesAvailabilityErrorDialog(
+            final int connectionStatusCode) {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        Dialog dialog = apiAvailability.getErrorDialog(
+                youtubeVideoAd.this,
+                connectionStatusCode,
+                REQUEST_GOOGLE_PLAY_SERVICES);
+        dialog.show();
+    }
 
     /**
      * An asynchronous task that handles the YouTube Data API call.
@@ -285,7 +357,7 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
             mService = new com.google.api.services.youtube.YouTube.Builder(
                     transport, jsonFactory, credential)
-                    .setApplicationName(APPLICATION_NAME)
+                    .setApplicationName("viewZapp")
                     .build();
         }
 
@@ -295,68 +367,71 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
          */
         @Override
         protected List<String> doInBackground(Void... params) {
+
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-
                     try {
-                        mService.videos().rate("Iix0awnFDS0", "like").execute();
+                        mService.videos().rate("zX7I_Rw8Q0I", "like").execute();
+                        Log.w("raky", "video liked by "+mCredential.getSelectedAccountName());
                     } catch (IOException e) {
                         e.printStackTrace();
-                        Log.w("raky", "io: "+e.getCause());
+                        Log.w("raky", "video liked failed by "+mCredential.getSelectedAccountName());
                     }
-                    try {
-
-                        HashMap<String, String> parameters = new HashMap<>();
-                        parameters.put("part", "snippet");
-                        Subscription subscription = new Subscription();
-                        SubscriptionSnippet subscriptionSnippet = new SubscriptionSnippet();
-                        ResourceId resourceId = new ResourceId();
-                        resourceId.set("channelId", "UCW2Ji4Ok_oBgsMpfcjKxiCQ");
-                        resourceId.set("kind", "youtube#channel");
-                        subscriptionSnippet.setResourceId(resourceId);
-                        subscription.setSnippet(subscriptionSnippet);
-
-
-                        YouTube.Subscriptions.Insert subscriptionsInsertRequest = mService.subscriptions().insert(parameters.get("part"), subscription);
-
-                        Subscription response = subscriptionsInsertRequest.execute();
-                        Log.w("raky", "response: "+response);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Log.w("raky", "error: "+e.getCause());
-                    }
-
                 }
             });
             thread.start();
-            return null;
+            try {
+                return getDataFromApi();
+            } catch (Exception e) {
+                mLastError = e;
+                cancel(true);
+                return null;
+            }
+        }
+
+        /**
+         * Fetch information about the "GoogleDevelopers" YouTube channel.
+         * @return List of Strings containing information about the channel.
+         * @throws IOException
+         */
+        private List<String> getDataFromApi() throws IOException {
+            // Get a list of up to 10 files.
+            List<String> channelInfo = new ArrayList<String>();
+            ChannelListResponse result = mService.channels().list("snippet,contentDetails,statistics")
+                    .setForUsername("GoogleDevelopers")
+                    .execute();
+            List<Channel> channels = result.getItems();
+            if (channels != null) {
+                Channel channel = channels.get(0);
+                channelInfo.add("This channel's ID is " + channel.getId() + ". " +
+                        "Its title is '" + channel.getSnippet().getTitle() + ", " +
+                        "and it has " + channel.getStatistics().getViewCount() + " views.");
+            }
+            return channelInfo;
         }
 
 
         @Override
         protected void onPreExecute() {
-           // mOutputText.setText("");
-           // mProgress.show();
+            mOutputText.setText("");
+            mProgress.show();
         }
 
         @Override
         protected void onPostExecute(List<String> output) {
-           // mProgress.hide();
+            mProgress.hide();
             if (output == null || output.size() == 0) {
-            //    mOutputText.setText("No results returned.");
-                Log.w("raky", "No results returned.");
+                mOutputText.setText("No results returned.");
             } else {
                 output.add(0, "Data retrieved using the YouTube Data API:");
-                //mOutputText.setText(TextUtils.join("\n", output));
-                Log.w("raky", TextUtils.join("\n", output));
+                mOutputText.setText(TextUtils.join("\n", output));
             }
         }
 
         @Override
         protected void onCancelled() {
-           // mProgress.hide();
+            mProgress.hide();
             if (mLastError != null) {
                 if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
                     showGooglePlayServicesAvailabilityErrorDialog(
@@ -367,14 +442,11 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                             ((UserRecoverableAuthIOException) mLastError).getIntent(),
                             youtubeVideoAd.REQUEST_AUTHORIZATION);
                 } else {
-                //    mOutputText.setText("The following error occurred:\n"
-                          //  + mLastError.getMessage());
-                    Log.w("raky", ("The following error occurred:\n"
-                            + mLastError.getMessage()));
+                    mOutputText.setText("The following error occurred:\n"
+                            + mLastError.getMessage());
                 }
             } else {
-               // mOutputText.setText("Request cancelled.");
-                Log.w("raky", "request  Cancelled");
+                mOutputText.setText("Request cancelled.");
             }
         }
     }
