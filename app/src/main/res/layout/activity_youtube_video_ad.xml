@@ -21,4 +21,14 @@
         android:layout_centerVertical="true"
         android:text="play" />
 
+
+    <Button
+        android:id="@+id/yva_youTubePlayerAuthenticate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="73dp"
+        android:text="authenticate" />
+
 </RelativeLayout>

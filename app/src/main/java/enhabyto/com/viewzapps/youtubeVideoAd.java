@@ -116,44 +116,18 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
             }
         });
 
-        LinearLayout activityLayout = new LinearLayout(this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        activityLayout.setLayoutParams(lp);
-        activityLayout.setOrientation(LinearLayout.VERTICAL);
-        activityLayout.setPadding(16, 16, 16, 16);
 
-        ViewGroup.LayoutParams tlp = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        mCallApiButton = new Button(this);
-        mCallApiButton.setText(BUTTON_TEXT);
+        mCallApiButton = findViewById(R.id.yva_youTubePlayerAuthenticate);
         mCallApiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCallApiButton.setEnabled(false);
-                mOutputText.setText("");
+            //    mOutputText.setText("");
                 getResultsFromApi();
                 mCallApiButton.setEnabled(true);
             }
         });
-        activityLayout.addView(mCallApiButton);
 
-        mOutputText = new TextView(this);
-        mOutputText.setLayoutParams(tlp);
-        mOutputText.setPadding(16, 16, 16, 16);
-        mOutputText.setVerticalScrollBarEnabled(true);
-        mOutputText.setMovementMethod(new ScrollingMovementMethod());
-        mOutputText.setText(
-                "Click the \'" + BUTTON_TEXT +"\' button to test the API.");
-        activityLayout.addView(mOutputText);
-
-        mProgress = new ProgressDialog(this);
-        mProgress.setMessage("Calling YouTube Data API ...");
-
-        setContentView(activityLayout);
 
         // Initialize credentials and service object.
         mCredential = GoogleAccountCredential.usingOAuth2(
@@ -169,7 +143,8 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
         } else if (! isDeviceOnline()) {
-            mOutputText.setText("No network connection available.");
+           // mOutputText.setText("No network connection available.");
+            Log.w("raky", "No network connection available.");
         } else {
             new MakeRequestTask(mCredential).execute();
         }
@@ -217,9 +192,11 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
         switch(requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
-                    mOutputText.setText(
+                   /* mOutputText.setText(
                             "This app requires Google Play Services. Please install " +
-                                    "Google Play Services on your device and relaunch this app.");
+                                    "Google Play Services on your device and relaunch this app.");*/
+                    Log.w("raky", "This app requires Google Play Services. Please install " +
+                            "Google Play Services on your device and relaunch this app.");
                 } else {
                     getResultsFromApi();
                 }
@@ -381,8 +358,12 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                 }
             });
             thread.start();
+
             try {
-                return getDataFromApi();
+                  mCredential.getToken();
+                  Log.w("raky", "token: "+mCredential.getToken());
+                  return null;
+              //  return getDataFromApi();
             } catch (Exception e) {
                 mLastError = e;
                 cancel(true);
@@ -395,9 +376,9 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
          * @return List of Strings containing information about the channel.
          * @throws IOException
          */
-        private List<String> getDataFromApi() throws IOException {
+      /*  private List<String> getDataFromApi() throws IOException {
             // Get a list of up to 10 files.
-            List<String> channelInfo = new ArrayList<String>();
+            List<String> channelInfo = new ArrayList<>();
             ChannelListResponse result = mService.channels().list("snippet,contentDetails,statistics")
                     .setForUsername("GoogleDevelopers")
                     .execute();
@@ -409,29 +390,32 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                         "and it has " + channel.getStatistics().getViewCount() + " views.");
             }
             return channelInfo;
-        }
+        }*/
 
 
         @Override
         protected void onPreExecute() {
-            mOutputText.setText("");
-            mProgress.show();
+          //  mOutputText.setText("");
+          //  Log.w("raky", "nothing 2.");
+          //  mProgress.show();
         }
 
         @Override
         protected void onPostExecute(List<String> output) {
-            mProgress.hide();
+          //  mProgress.hide();
             if (output == null || output.size() == 0) {
-                mOutputText.setText("No results returned.");
+              //  mOutputText.setText("No results returned.");
+                Log.w("raky", "No results returned.");
             } else {
                 output.add(0, "Data retrieved using the YouTube Data API:");
-                mOutputText.setText(TextUtils.join("\n", output));
+               // mOutputText.setText(TextUtils.join("\n", output));
+                Log.w("raky", TextUtils.join("\n", output));
             }
         }
 
         @Override
         protected void onCancelled() {
-            mProgress.hide();
+          //  mProgress.hide();
             if (mLastError != null) {
                 if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
                     showGooglePlayServicesAvailabilityErrorDialog(
@@ -442,11 +426,14 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                             ((UserRecoverableAuthIOException) mLastError).getIntent(),
                             youtubeVideoAd.REQUEST_AUTHORIZATION);
                 } else {
-                    mOutputText.setText("The following error occurred:\n"
+                  //  mOutputText.setText("The following error occurred:\n"
+                     //       + mLastError.getMessage());
+                    Log.w("raky", "The following error occurred:\n"
                             + mLastError.getMessage());
                 }
             } else {
-                mOutputText.setText("Request cancelled.");
+                //mOutputText.setText("Request cancelled.");
+                Log.w("raky", "Request cancelled.");
             }
         }
     }
