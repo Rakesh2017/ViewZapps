@@ -1,35 +1,23 @@
 package enhabyto.com.viewzapps;
 
 import android.Manifest;
-import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Contacts;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDialog;
 import android.text.TextUtils;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.auth.GoogleAuthException;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.youtube.player.YouTubeBaseActivity;
@@ -44,20 +32,19 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeScopes;
-import com.google.api.services.youtube.model.Channel;
-import com.google.api.services.youtube.model.ChannelListResponse;
-import com.google.api.services.youtube.model.ResourceId;
-import com.google.api.services.youtube.model.Subscription;
-import com.google.api.services.youtube.model.SubscriptionSnippet;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.mikhaellopez.circularimageview.CircularImageView;
+import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -66,6 +53,7 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
     Button button;
     YouTubePlayerView youTubePlayerView;
     YouTubePlayer.OnInitializedListener onInitializedListener;
+    private FirebaseUser mAuth = FirebaseAuth.getInstance().getCurrentUser();
 
     GoogleAccountCredential mCredential;
 
@@ -75,15 +63,22 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
     private static final String PREF_ACCOUNT_NAME = "accountName";
+    private static final String PROFILE_DETAIL_NAME = "profile_detail_name_yva";
     private static final String USER_ACCOUNT_EMAIL = "UserAccountEmail";
     private static final String[] SCOPES = { YouTubeScopes.YOUTUBE_READONLY, YouTubeScopes.YOUTUBE_FORCE_SSL, YouTubeScopes.YOUTUBE };
 
     private static final String APPLICATION_NAME = "viewZapps";
 
-    private TextView mOutputText;
+    private TextView mOutputText, name_tv;
+    String name_tx;
     private Button mCallApiButton;
     ProgressDialog mProgress;
     private static final String BUTTON_TEXT = "Call YouTube Data API";
+
+    CircularImageView profileImage_civ;
+
+    //    database reference
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +87,18 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
 
         button = findViewById(R.id.button2);
         youTubePlayerView = findViewById(R.id.yva_youTubePlayer);
+
+//        Circular image view
+        profileImage_civ = findViewById(R.id.yva_profileImage);
+//        placeholder
+        Glide.with(youtubeVideoAd.this)
+                .load(R.drawable.ic_profile_image_placeholder)
+                .into(profileImage_civ);
+//        circular image view
+
+//        text view
+        name_tv = findViewById(R.id.yva_nameTextView);
+//        text view
 
 
 
@@ -137,6 +144,14 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
     }
 //onCreate ends
 
+    public void onStart(){
+        super.onStart();
+
+        setProfileData();
+        setImage();
+    }
+
+    //getResultFromApi
     private void getResultsFromApi() {
         if (! isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
@@ -148,8 +163,9 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
         } else {
             new MakeRequestTask(mCredential).execute();
         }
-    }
+    }//getResultFromApi
 
+//    getting permission from user
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private void chooseAccount() {
         if (EasyPermissions.hasPermissions(
@@ -161,9 +177,19 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                 getResultsFromApi();
             } else {
                 // Start a dialog from which the user can choose an account
-                startActivityForResult(
+                accountName = "rk6039387@gmail.com";
+                mCredential.setSelectedAccountName(accountName);
+
+                    SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString(PREF_ACCOUNT_NAME, accountName);
+                    editor.apply();
+                    mCredential.setSelectedAccountName(accountName);
+                    getResultsFromApi();
+
+              /*  startActivityForResult(
                         mCredential.newChooseAccountIntent(),
-                        REQUEST_ACCOUNT_PICKER);
+                        REQUEST_ACCOUNT_PICKER); */
             }
         } else {
             // Request the GET_ACCOUNTS permission via a user dialog
@@ -174,17 +200,10 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                     Manifest.permission.GET_ACCOUNTS);
         }
     }
+    //    getting permission from user
 
-    /**
-     * Called when an activity launched here (specifically, AccountPicker
-     * and authorization) exits, giving you the requestCode you started it with,
-     * the resultCode it returned, and any additional data from it.
-     * @param requestCode code indicating which activity result is incoming.
-     * @param resultCode code indicating the result of the incoming
-     *     activity result.
-     * @param data Intent (containing result data) returned by incoming
-     *     activity result.
-     */
+
+//    handling onActivity Result
     @Override
     protected void onActivityResult(
             int requestCode, int resultCode, Intent data) {
@@ -201,7 +220,7 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                     getResultsFromApi();
                 }
                 break;
-            case REQUEST_ACCOUNT_PICKER:
+          /*  case REQUEST_ACCOUNT_PICKER:
                 if (resultCode == RESULT_OK && data != null &&
                         data.getExtras() != null) {
                     String accountName =
@@ -216,7 +235,7 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                         getResultsFromApi();
                     }
                 }
-                break;
+                break;*/
             case REQUEST_AUTHORIZATION:
                 if (resultCode == RESULT_OK) {
                     getResultsFromApi();
@@ -224,15 +243,9 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                 break;
         }
     }
+//    handling onActivity Result
 
-    /**
-     * Respond to requests for permissions at runtime for API 23 and above.
-     * @param requestCode The request code passed in
-     *     requestPermissions(android.app.Activity, String, int, String[])
-     * @param permissions The requested permissions. Never null.
-     * @param grantResults The grant results for the corresponding permissions
-     *     which is either PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
-     */
+//    requesting permission
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
@@ -242,46 +255,29 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                 requestCode, permissions, grantResults, this);
     }
 
-    /**
-     * Callback for when a permission is granted using the EasyPermissions
-     * library.
-     * @param requestCode The request code associated with the requested
-     *         permission
-     * @param list The requested permission list. Never null.
-     */
+
     @Override
     public void onPermissionsGranted(int requestCode, List<String> list) {
         // Do nothing.
     }
 
-    /**
-     * Callback for when a permission is denied using the EasyPermissions
-     * library.
-     * @param requestCode The request code associated with the requested
-     *         permission
-     * @param list The requested permission list. Never null.
-     */
     @Override
     public void onPermissionsDenied(int requestCode, List<String> list) {
         // Do nothing.
     }
+//    requesting permission
 
-    /**
-     * Checks whether the device currently has a network connection.
-     * @return true if the device has a network connection, false otherwise.
-     */
+
+//    checking if device is online
     private boolean isDeviceOnline() {
         ConnectivityManager connMgr =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
     }
+//    checking if device is online
 
-    /**
-     * Check that Google Play services APK is installed and up to date.
-     * @return true if Google Play Services is available and up to
-     *     date on this device; false otherwise.
-     */
+    //    checking if googlePlayServices is Available
     private boolean isGooglePlayServicesAvailable() {
         GoogleApiAvailability apiAvailability =
                 GoogleApiAvailability.getInstance();
@@ -289,11 +285,9 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                 apiAvailability.isGooglePlayServicesAvailable(this);
         return connectionStatusCode == ConnectionResult.SUCCESS;
     }
+    //    checking if googlePlayServices is Available
 
-    /**
-     * Attempt to resolve a missing, out-of-date, invalid or disabled Google
-     * Play Services installation via a user dialog, if possible.
-     */
+//    if googlePlayServices not available, then acquire
     private void acquireGooglePlayServices() {
         GoogleApiAvailability apiAvailability =
                 GoogleApiAvailability.getInstance();
@@ -303,14 +297,9 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
             showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode);
         }
     }
+//    if googlePlayServices not available, then acquire
 
-
-    /**
-     * Display an error dialog showing that Google Play Services is missing
-     * or out of date.
-     * @param connectionStatusCode code describing the presence (or lack of)
-     *     Google Play Services on this device.
-     */
+//    show error if google play services not available
     void showGooglePlayServicesAvailabilityErrorDialog(
             final int connectionStatusCode) {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
@@ -320,11 +309,10 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                 REQUEST_GOOGLE_PLAY_SERVICES);
         dialog.show();
     }
+    //    show error if google play services not available
 
-    /**
-     * An asynchronous task that handles the YouTube Data API call.
-     * Placing the API calls in their own task ensures the UI stays responsive.
-     */
+
+//    making Request to handle youtube data api requests, like, dislike, subscribe
     private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
         private com.google.api.services.youtube.YouTube mService = null;
         private Exception mLastError = null;
@@ -338,60 +326,20 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                     .build();
         }
 
-        /**
-         * Background task to call YouTube Data API.
-         * @param params no parameters needed for this task.
-         */
         @Override
         protected List<String> doInBackground(Void... params) {
 
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        mService.videos().rate("zX7I_Rw8Q0I", "like").execute();
-                        Log.w("raky", "video liked by "+mCredential.getSelectedAccountName());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Log.w("raky", "video liked failed by "+mCredential.getSelectedAccountName());
-                    }
-                }
-            });
-            thread.start();
-
             try {
-                  mCredential.getToken();
-                  Log.w("raky", "token: "+mCredential.getToken());
+                  mService.videos().rate("zX7I_Rw8Q0I", "like").execute();
+                  Log.w("raky", "this is being hit, liked by "+mCredential.getSelectedAccountName());
                   return null;
-              //  return getDataFromApi();
             } catch (Exception e) {
                 mLastError = e;
                 cancel(true);
+                Log.w("raky", "error: "+e.getLocalizedMessage());
                 return null;
             }
         }
-
-        /**
-         * Fetch information about the "GoogleDevelopers" YouTube channel.
-         * @return List of Strings containing information about the channel.
-         * @throws IOException
-         */
-      /*  private List<String> getDataFromApi() throws IOException {
-            // Get a list of up to 10 files.
-            List<String> channelInfo = new ArrayList<>();
-            ChannelListResponse result = mService.channels().list("snippet,contentDetails,statistics")
-                    .setForUsername("GoogleDevelopers")
-                    .execute();
-            List<Channel> channels = result.getItems();
-            if (channels != null) {
-                Channel channel = channels.get(0);
-                channelInfo.add("This channel's ID is " + channel.getId() + ". " +
-                        "Its title is '" + channel.getSnippet().getTitle() + ", " +
-                        "and it has " + channel.getStatistics().getViewCount() + " views.");
-            }
-            return channelInfo;
-        }*/
-
 
         @Override
         protected void onPreExecute() {
@@ -437,6 +385,67 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
             }
         }
     }
+//    making Request to handle youtube data api requests, like, dislike, subscribe
+
+
+    //    setting profile image
+    public void setImage(){
+        databaseReference.child("ads").child("youtubeAds").child("-L79O4JQke2IR4SadROI")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String imagePath = dataSnapshot.child("profileImageUrl").getValue(String.class);
+
+                        Picasso.with(youtubeVideoAd.this)
+                                .load(imagePath)
+                                .placeholder(R.drawable.ic_profile_image_placeholder)
+                                .error(R.drawable.ic_warning)
+                                .into(profileImage_civ);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+    } // set image ends
+
+    //    setting profile data
+    private void setProfileData() {
+        SharedPreferences sharedpreferences = getSharedPreferences(PROFILE_DETAIL_NAME, MODE_PRIVATE);
+        name_tx = sharedpreferences.getString("name","");
+//        setting values
+        name_tv.setText(name_tx);
+        // zapNumber_tv.setText(phone_tx);
+
+        databaseReference.child("ads").child("youtubeAds").child("-L79O4JQke2IR4SadROI")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        getting values
+                        name_tx = dataSnapshot.child("profile_details").child("name").getValue(String.class);
+//                        setting values
+                        name_tv.setText(name_tx);
+//                        storing values in shared preferences
+                        try {
+                            SharedPreferences sharedpreferences = getSharedPreferences(PROFILE_DETAIL_NAME, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putString("name", name_tx);
+                            editor.apply();
+                        }
+                        catch (NullPointerException e){
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+        }//setting profile data
+
 
 //    ends
 }

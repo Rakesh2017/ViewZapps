@@ -191,11 +191,6 @@ public class DashBoard extends AppCompatActivity
 
                     }
                 });//setting profile data
-
-//        setting profile pic
-
-        //setting profile pic
-
     }
 
     @Override

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     tools:context="enhabyto.com.viewzapps.youtubeVideoAd">
 
@@ -11,6 +12,39 @@
         android:id="@+id/yva_youTubePlayer"
         android:layout_width="match_parent"
         android:layout_height="200dp" />
+
+    <!--profile image-->
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/yva_profileImage"
+        android:layout_below="@+id/yva_youTubePlayer"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:civ_shadow="true"
+        app:civ_shadow_radius="7"
+        app:civ_border="false"
+        app:civ_shadow_color="@color/black"
+        />
+    <!--profile pic-->
+
+    <!--user name-->
+    <TextView
+        android:id="@+id/yva_nameTextView"
+        android:layout_toEndOf="@+id/yva_profileImage"
+        android:paddingStart="@dimen/cardViewPadding2"
+        android:layout_alignTop="@+id/yva_profileImage"
+        android:layout_marginTop="@dimen/padding8"
+        android:layout_marginStart="@dimen/padding8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/hintPlaceholderS"
+        style="@style/TextStyleMedium"
+        android:textStyle="bold"
+        tools:ignore="RelativeOverlap,RtlSymmetry" />
+    <!--user name-->
+
+
 
 
     <Button

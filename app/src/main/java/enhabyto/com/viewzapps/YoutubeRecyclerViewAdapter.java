@@ -2,6 +2,7 @@ package enhabyto.com.viewzapps;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -26,6 +27,8 @@ import org.w3c.dom.Text;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /*
   Created by this on 02-Feb-18.
  */
@@ -35,6 +38,9 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
     private Context context;
     private List<RecyclerViewInfo> MainImageUploadInfoList;
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+    private static final String USER_UID_PREF = "user_uid_pref";
+    private static final String USER_UID_NAME = "name";
 
     YoutubeRecyclerViewAdapter(Context context, List<RecyclerViewInfo> TempList) {
 
@@ -72,7 +78,48 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
         holder.likes_tv.setText(UploadInfo.getAdLikesLeft()+"\nLikes left");
         holder.views_tv.setText(UploadInfo.getAdViewsLeft()+"\nviews left");
         holder.subscribers_tv.setText(UploadInfo.getAdSubscribersLeft()+"\nSubs left");
-        holder.uploaderName_tv.setText(UploadInfo.getUserName());
+       // holder.uploaderName_tv.setText(UploadInfo.getUserName());
+
+        final String uid = UploadInfo.getUserUid();
+        databaseReference.child("users").child(uid).child("profile_details")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String name = dataSnapshot.child("name").getValue(String.class);
+                        holder.uploaderName_tv.setText(name);
+
+                        SharedPreferences sharedpreferences = context.getSharedPreferences(USER_UID_PREF, MODE_PRIVATE);
+                        String stored_user_name = sharedpreferences.getString(uid+USER_UID_NAME, name);
+
+
+                        //                    user image
+                        String profileImageUrl = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
+                        try {
+//            if else
+                            if (profileImageUrl.isEmpty()){
+                                Picasso.with(context)
+                                        .load(R.drawable.ic_profile_image_placeholder)
+                                        .into(holder.userImage);
+                            }
+                            else {
+                                Picasso.with(context)
+                                        .load(profileImageUrl)
+                                        .placeholder(R.drawable.ic_profile_image_placeholder)
+                                        .error(R.drawable.ic_warning)
+                                        .into(holder.userImage);
+                            }
+//       if else ends
+                        }
+                        catch (NullPointerException e){
+                            e.printStackTrace();
+                        } //user image
+                    }//onDataChange
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
 //        if any of it is empty
         if (UploadInfo.getAdViewsLeft().isEmpty()) holder.views_tv.setText("0\n Views Left");
@@ -88,7 +135,6 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
                 .error(R.drawable.ic_warning)
                 .fit()
                 .centerCrop()
-                .noFade()
                 .into(holder.adImage_iv);
 //        ad image
 
@@ -99,7 +145,6 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
             if (profileImageUrl.isEmpty()){
                 Picasso.with(context)
                         .load(R.drawable.ic_profile_image_placeholder)
-                        .noFade()
                         .into(holder.userImage);
             }
             else {
@@ -107,7 +152,6 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
                         .load(profileImageUrl)
                         .placeholder(R.drawable.ic_profile_image_placeholder)
                         .error(R.drawable.ic_warning)
-                        .noFade()
                         .into(holder.userImage);
             }
 //       if else ends
