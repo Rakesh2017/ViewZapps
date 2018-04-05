@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,9 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import com.victor.loading.rotate.RotateLoading;
 import java.io.File;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
@@ -55,7 +59,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
     private View view;
 
     EditText title_et, url_et, views_et, likes_et, subscribers_et, userUid_et;
-    String title_tx, url_tx, views_tx, likes_tx, subscribers_tx, key, userUid_tx;
+    String title_tx, url_tx, views_tx, likes_tx, subscribers_tx, key, userUid_tx, watchId_tx;
 
     FancyButton selectImage_btn, cancelImage_btn, submitAd_btn, cancelAd_btn;
     TextView likes_tv, views_tv, subscribers_tv;
@@ -64,6 +68,8 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
     ImageButton backButton;
 
     Uri ImageFilePath;
+
+    final static int WATCH_LENGTH = 11;
 
     //preview material
     CircleImageView profileImage;
@@ -158,9 +164,11 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
             subscribers_tx = subscribers_et.getText().toString().trim();
 
             if (Validations()) {
-                sweetAlertForPostAd();
+                watchId_tx = getVideoId(url_tx);
+                if (ValidateWatchId(watchId_tx)){
+                    sweetAlertForPostAd();
+                }
             }
-
         }//if ends
 
 //        select image
@@ -205,9 +213,6 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
                         }
                     })
                     .show();
-
-
-
         }//ele if
 
 //        cancel Preview
@@ -231,7 +236,6 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
 
 
 //    validations
-
     public boolean Validations(){
         if (userUid_tx.isEmpty()){
             new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
@@ -272,6 +276,17 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         return true;
     }
 //    validations
+
+//    validate watch id
+    public boolean ValidateWatchId(String watchId_11){
+        if (watchId_11.length() != WATCH_LENGTH){
+            new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Please recheck youtube video url.")
+                    .show();
+            return false;
+        }
+        else return true;
+    }
 
 //selecting image
     @Override
@@ -375,33 +390,23 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
 
                          DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
-                        //getting user profile image and profile name
-                         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                String profileImageUrl = dataSnapshot.child("users").child(userUid_tx).child("profile_image").child("profile_image_url").getValue(String.class);
-                                String user_name = dataSnapshot.child("users").child(userUid_tx).child("profile_details").child("name").getValue(String.class);
-
-                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                                 key = databaseReference.push().getKey();
 
                                 databaseReference = databaseReference.child("ads").child("youtubeAds").child(key);
 
 //                            posting ad
-                                databaseReference.child("adUrl").setValue(url_tx);
+                                databaseReference.child("watchId").setValue(watchId_tx);
                                 databaseReference.child("adTitle").setValue(title_tx);
                                 databaseReference.child("adViewsLeft").setValue(views_tx);
                                 databaseReference.child("adLikesLeft").setValue(likes_tx);
                                 databaseReference.child("adSubscribersLeft").setValue(subscribers_tx);
                                 databaseReference.child("youtubeAdKey").setValue(key);
                                 databaseReference.child("userUid").setValue(userUid_tx);
-                                databaseReference.child("userName").setValue(user_name);
-                                databaseReference.child("profileImageUrl").setValue(profileImageUrl);
 
                                 databaseReference = FirebaseDatabase.getInstance().getReference();
                                 databaseReference = databaseReference.child("admin_posted_ads").child("youtubeAds").child(key);
 //                            posting ad for record
-                                databaseReference.child("adUrl").setValue(url_tx);
+                                databaseReference.child("watchId").setValue(watchId_tx);
                                 databaseReference.child("adTitle").setValue(title_tx);
                                 databaseReference.child("adExpectedViews").setValue(views_tx);
                                 databaseReference.child("adExpectedLikes").setValue(likes_tx);
@@ -437,13 +442,7 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
                                 pDialog.show();
 
 //                                sweet alert
-                            }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
 
                     }
                 })
@@ -552,6 +551,18 @@ public class AdminPostYoutubeAd extends Fragment implements View.OnClickListener
         selectedImage_iv.setVisibility(View.GONE);
     }
 //    setting everything null
+
+//    getting watch id
+    public static String getVideoId(@NonNull String videoUrl) {
+        String reg = "(?:youtube(?:-nocookie)?\\.com\\/(?:[^\\/\\n\\s]+\\/\\S+\\/|(?:v|e(?:mbed)?)\\/|\\S*?[?&]v=)|youtu\\.be\\/)([a-zA-Z0-9_-]{11})";
+        Pattern pattern = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(videoUrl);
+
+        if (matcher.find())
+            return matcher.group(1);
+        return null;
+    }
+//    getting watch id
 
 //    end
 }

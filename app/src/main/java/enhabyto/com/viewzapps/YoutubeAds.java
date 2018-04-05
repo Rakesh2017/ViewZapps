@@ -98,6 +98,7 @@ public class YoutubeAds extends AppCompatActivity implements View.OnClickListene
     public void Refresh(){
         if (check) loading.start();
 
+
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -111,9 +112,6 @@ public class YoutubeAds extends AppCompatActivity implements View.OnClickListene
                 }
 
                 adapter = new YoutubeRecyclerViewAdapter(YoutubeAds.this, list);
-                //   Collections.reverse(list);
-                //adapter.notifyDataSetChanged();
-
 
                 recyclerView.setAdapter(adapter);
 

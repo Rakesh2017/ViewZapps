@@ -77,8 +77,17 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
 
     CircularImageView profileImage_civ;
 
+    private static final String YOUTUBE_AD_ITEM_PREF = "youtube_ad_item_pref";
+    private static final String AD_KEY = "ad_key";
+    private static final String ADS = "ads";
+    private static final String AD_URL = "adUrl";
+    private static final String YOUTUBE_ADS = "youtubeAds";
+    private static final String API_KEY = "AIzaSyCcE1PubW2vHl4slJGvxaPi1bStuFKUKlI";
+    private String ad_key;
     //    database reference
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,25 +110,10 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
 //        text view
 
 
-
-        onInitializedListener = new YouTubePlayer.OnInitializedListener() {
-                @Override
-                public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-                    youTubePlayer.loadVideo("4M4R-dwnTQw");
-                    youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
-                    youTubePlayer.setManageAudioFocus(true);
-                }
-
-                @Override
-                public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-
-                }
-        };
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                youTubePlayerView.initialize("AIzaSyCcE1PubW2vHl4slJGvxaPi1bStuFKUKlI", onInitializedListener);
+                youTubePlayerView.initialize(API_KEY, onInitializedListener);
             }
         });
 
@@ -144,9 +138,45 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
     }
 //onCreate ends
 
+//    getting ad data
+    public void getAdData(){
+        //shared preferences get ad key
+        final SharedPreferences sharedpreferences = getSharedPreferences(YOUTUBE_AD_ITEM_PREF, MODE_PRIVATE);
+        final  String ad_key = sharedpreferences.getString(AD_KEY, "");
+        //shared preferences
+
+        databaseReference.child(ADS).child(YOUTUBE_ADS)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        onInitializedListener = new YouTubePlayer.OnInitializedListener() {
+                            @Override
+                            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
+                                final String ad_url = dataSnapshot.child(ad_key).child("watchId").getValue(String.class);
+                                youTubePlayer.loadVideo(ad_url);
+                                youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
+                                youTubePlayer.setManageAudioFocus(true);
+                            }
+                            @Override
+                            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+
+                            }
+                        }; // onInitializedListener  ends
+
+                    }//onDataChange ends
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }); //databaseReference ends
+    }
+    //    getting ad data
+
     public void onStart(){
         super.onStart();
 
+        getAdData();
         setProfileData();
         setImage();
     }

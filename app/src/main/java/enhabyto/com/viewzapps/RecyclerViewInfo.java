@@ -6,7 +6,7 @@ package enhabyto.com.viewzapps;
 
 public class RecyclerViewInfo {
 
-    String adUrl, adTitle, youtubeAdImageUrl, userUid, adSubscribersLeft, adViewsLeft, adLikesLeft, userName, profileImageUrl;
+    String adUrl, adTitle, youtubeAdImageUrl, userUid, adSubscribersLeft, adViewsLeft, adLikesLeft, userName, profileImageUrl, youtubeAdKey;
 
     public RecyclerViewInfo(){
 
@@ -31,6 +31,8 @@ public class RecyclerViewInfo {
     public String getUserName(){ return userName; }
 
     public String getProfileImageUrl(){ return profileImageUrl; }
+
+    public String getYoutubeAdKey(){ return youtubeAdKey; }
 
 
 }

@@ -2,12 +2,12 @@ package enhabyto.com.viewzapps;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -39,8 +37,8 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
     private List<RecyclerViewInfo> MainImageUploadInfoList;
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
-    private static final String USER_UID_PREF = "user_uid_pref";
-    private static final String USER_UID_NAME = "name";
+    private static final String YOUTUBE_AD_ITEM_PREF = "youtube_ad_item_pref";
+    private static final String AD_KEY = "ad_key";
 
     YoutubeRecyclerViewAdapter(Context context, List<RecyclerViewInfo> TempList) {
 
@@ -65,37 +63,25 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
         final RecyclerViewInfo UploadInfo = MainImageUploadInfoList.get(position);
 
 
-        /*generating random color
-        RandomColor randomColor = new RandomColor();
-        int color = randomColor.randomColor();
-        int alpha = 200; //between 0-255
-        @ColorInt
-        int alphaColor = ColorUtils.setAlphaComponent(color, alpha);*/
-
-        //holder.relativeLayout.setBackgroundColor(context.getResources().getColor(R.color.transparentAppColor));
         holder.title_tv.setText(UploadInfo.getAdTitle());
 
         holder.likes_tv.setText(UploadInfo.getAdLikesLeft()+"\nLikes left");
         holder.views_tv.setText(UploadInfo.getAdViewsLeft()+"\nviews left");
         holder.subscribers_tv.setText(UploadInfo.getAdSubscribersLeft()+"\nSubs left");
-       // holder.uploaderName_tv.setText(UploadInfo.getUserName());
 
         final String uid = UploadInfo.getUserUid();
-        databaseReference.child("users").child(uid).child("profile_details")
+        databaseReference.child("users").child(uid)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        String name = dataSnapshot.child("name").getValue(String.class);
+                        String name = dataSnapshot.child("profile_details").child("name").getValue(String.class);
                         holder.uploaderName_tv.setText(name);
 
-                        SharedPreferences sharedpreferences = context.getSharedPreferences(USER_UID_PREF, MODE_PRIVATE);
-                        String stored_user_name = sharedpreferences.getString(uid+USER_UID_NAME, name);
-
-
-                        //                    user image
+//                    user image
                         String profileImageUrl = dataSnapshot.child("profile_image").child("profile_image_url").getValue(String.class);
                         try {
 //            if else
+                            Log.w("raky", "imageUrl: "+profileImageUrl);
                             if (profileImageUrl.isEmpty()){
                                 Picasso.with(context)
                                         .load(R.drawable.ic_profile_image_placeholder)
@@ -168,6 +154,19 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
             params.setMargins(0,(int) context.getResources().getDimension(R.dimen.cardViewPadding12),0,(int) context.getResources().getDimension(R.dimen.cardViewPadding12));
             holder.cardView.setLayoutParams(params);
         }
+
+        holder.adImage_iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String ad_key = UploadInfo.getYoutubeAdKey();
+                final SharedPreferences sharedpreferences = context.getSharedPreferences(YOUTUBE_AD_ITEM_PREF, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString(AD_KEY, ad_key);
+                editor.apply();
+
+                context.startActivity(new Intent(context, youtubeVideoAd.class));
+            }
+        });
     }
 
     @Override
