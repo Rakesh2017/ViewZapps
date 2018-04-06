@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     tools:context="enhabyto.com.viewzapps.youtubeVideoAd">
 
@@ -13,11 +14,55 @@
         android:layout_width="match_parent"
         android:layout_height="200dp" />
 
+
+    <LinearLayout
+        android:id="@+id/yva_linearLayoutControlButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_below="@+id/yva_youTubePlayer"
+        android:layout_marginTop="@dimen/padding8"
+        android:layout_marginStart="@dimen/activity_vertical_margin"
+        android:layout_marginEnd="@dimen/activity_vertical_margin"
+        >
+
+        <ImageButton
+            android:id="@+id/yva_initializeVideoImageButton"
+            android:layout_width="@dimen/youtubePlay"
+            android:layout_height="@dimen/youtubePlay"
+            android:background="@drawable/ic_initialize_video"
+            android:elevation="@dimen/elevation_5dp"
+            tools:targetApi="lollipop" />
+
+
+        <ImageButton
+            android:id="@+id/yva_playImageButton"
+            android:layout_width="@dimen/youtubePlay"
+            android:layout_height="@dimen/youtubePlay"
+            android:background="@drawable/ic_play_button"
+            android:elevation="@dimen/elevation_5dp"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            tools:targetApi="lollipop" />
+
+        <ImageButton
+            android:id="@+id/yva_pauseImageButton"
+            android:layout_width="@dimen/youtubePlay"
+            android:layout_height="@dimen/youtubePlay"
+            android:background="@drawable/ic_pause"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:elevation="@dimen/elevation_5dp"
+            tools:targetApi="lollipop" />
+
+    </LinearLayout>
+
+
+
     <!--profile image-->
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/yva_profileImage"
-        android:layout_below="@+id/yva_youTubePlayer"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_below="@+id/yva_linearLayoutControlButton"
+        android:layout_marginTop="@dimen/cardViewPadding20"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -44,16 +89,6 @@
         tools:ignore="RelativeOverlap,RtlSymmetry" />
     <!--user name-->
 
-
-
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="play" />
 
 
     <Button

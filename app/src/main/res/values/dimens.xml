@@ -18,6 +18,7 @@
     <dimen name="cardViewPadding2">2dp</dimen>
     <dimen name="cardViewPadding8">8dp</dimen>
     <dimen name="cardViewPadding12">12dp</dimen>
+    <dimen name="cardViewPadding20">20dp</dimen>
     <dimen name="selectImageSize">200dp</dimen>
     <dimen name="padding2">2dp</dimen>
     <dimen name="padding3">3dp</dimen>
@@ -25,5 +26,6 @@
     <dimen name="padding12">12dp</dimen>
     <dimen name="padding4">4dp</dimen>
     <dimen name="dashBoardIconDimensions">92dp</dimen>
+    <dimen name="youtubePlay">22dp</dimen>
 
 </resources>

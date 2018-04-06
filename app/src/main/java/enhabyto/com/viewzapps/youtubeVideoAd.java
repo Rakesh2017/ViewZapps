@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -48,9 +49,9 @@ import java.util.List;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissions.PermissionCallbacks {
+public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissions.PermissionCallbacks, View.OnClickListener {
 
-    Button button;
+    ImageButton playVideo_ib, pauseVideo_ib, initializeVideo_ib;
     YouTubePlayerView youTubePlayerView;
     YouTubePlayer.OnInitializedListener onInitializedListener;
     private FirebaseUser mAuth = FirebaseAuth.getInstance().getCurrentUser();
@@ -64,6 +65,12 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
 
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String PROFILE_DETAIL_NAME = "profile_detail_name_yva";
+    private static final String PROFILE_DETAILS = "profile_details";
+    private static final String EMAIL = "email";
+    private static final String NAME = "name";
+    private static final String USER_UID = "userUid";
+    private static final String PROFILE_IMAGE = "profile_image";
+    private static final String PROFILE_IMAGE_URL = "profile_image_url";
     private static final String USER_ACCOUNT_EMAIL = "UserAccountEmail";
     private static final String[] SCOPES = { YouTubeScopes.YOUTUBE_READONLY, YouTubeScopes.YOUTUBE_FORCE_SSL, YouTubeScopes.YOUTUBE };
 
@@ -79,22 +86,28 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
 
     private static final String YOUTUBE_AD_ITEM_PREF = "youtube_ad_item_pref";
     private static final String AD_KEY = "ad_key";
+    private static final String USERS = "users";
     private static final String ADS = "ads";
     private static final String AD_URL = "adUrl";
     private static final String YOUTUBE_ADS = "youtubeAds";
     private static final String API_KEY = "AIzaSyCcE1PubW2vHl4slJGvxaPi1bStuFKUKlI";
-    private String ad_key;
+
     //    database reference
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_youtube_video_ad);
 
-        button = findViewById(R.id.button2);
+
+
+//        image button
+        playVideo_ib = findViewById(R.id.yva_playImageButton);
+        pauseVideo_ib = findViewById(R.id.yva_pauseImageButton);
+        initializeVideo_ib = findViewById(R.id.yva_initializeVideoImageButton);
+//        image button
+
         youTubePlayerView = findViewById(R.id.yva_youTubePlayer);
 
 //        Circular image view
@@ -108,15 +121,6 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
 //        text view
         name_tv = findViewById(R.id.yva_nameTextView);
 //        text view
-
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                youTubePlayerView.initialize(API_KEY, onInitializedListener);
-            }
-        });
-
 
         mCallApiButton = findViewById(R.id.yva_youTubePlayerAuthenticate);
         mCallApiButton.setOnClickListener(new View.OnClickListener() {
@@ -135,33 +139,54 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
 
-    }
-//onCreate ends
+        playVideo_ib.setOnClickListener(this);
+        initializeVideo_ib.setOnClickListener(this);
 
-//    getting ad data
-    public void getAdData(){
-        //shared preferences get ad key
-        final SharedPreferences sharedpreferences = getSharedPreferences(YOUTUBE_AD_ITEM_PREF, MODE_PRIVATE);
-        final  String ad_key = sharedpreferences.getString(AD_KEY, "");
-        //shared preferences
+    }
+    //onCreate ends
+
+
+//    initialise video, play video as activity starts
+    private void PlayVideoAfterInitialization() {
 
         databaseReference.child(ADS).child(YOUTUBE_ADS)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(final DataSnapshot dataSnapshot) {
+//                        playing video
+
+
+                        final SharedPreferences sharedpreferences = getSharedPreferences(YOUTUBE_AD_ITEM_PREF, MODE_PRIVATE);
+                        final  String ad_key = sharedpreferences.getString(AD_KEY, "");
+
+
                         onInitializedListener = new YouTubePlayer.OnInitializedListener() {
                             @Override
-                            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
+
+                            public void onInitializationSuccess(YouTubePlayer.Provider provider, final YouTubePlayer youTubePlayer, boolean b) {
                                 final String ad_url = dataSnapshot.child(ad_key).child("watchId").getValue(String.class);
+                                youTubePlayer.setFullscreen(false);
                                 youTubePlayer.loadVideo(ad_url);
-                                youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
+                                youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL);
                                 youTubePlayer.setManageAudioFocus(true);
+
+                                pauseVideo_ib.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        youTubePlayer.pause();
+                                    }
+                                });
+
+
+                                if (youTubePlayer.isPlaying()){
+                                    Log.w("raky", "yes playing");
+                                }
                             }
                             @Override
                             public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
 
                             }
-                        }; // onInitializedListener  ends
+                        };
 
                     }//onDataChange ends
 
@@ -170,16 +195,93 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
 
                     }
                 }); //databaseReference ends
+
     }
-    //    getting ad data
+//    initialise video, play video as activity starts
+
 
     public void onStart(){
         super.onStart();
 
-        getAdData();
-        setProfileData();
+
+        PlayVideoAfterInitialization();
         setImage();
+        setDataOfAdPoster();
+
     }
+
+    //    onclick
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+
+        switch (id){
+//            initialize video
+            case R.id.yva_initializeVideoImageButton:
+                youTubePlayerView.initialize(API_KEY, onInitializedListener);
+                break;
+
+
+        }
+    }
+    //    onclick ends
+
+//   getting and setting name and profile pic
+    private void setDataOfAdPoster() {
+        databaseReference.child(ADS).child(YOUTUBE_ADS)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+
+                        final SharedPreferences sharedpreferences = getSharedPreferences(YOUTUBE_AD_ITEM_PREF, MODE_PRIVATE);
+                        final  String ad_key = sharedpreferences.getString(AD_KEY, "");
+
+                        final String user_uid = dataSnapshot.child(ad_key).child(USER_UID).getValue(String.class);
+
+                        if (!TextUtils.isEmpty(user_uid)){
+                            databaseReference.child(USERS).child(user_uid)
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            final String user_name = dataSnapshot.child(PROFILE_DETAILS).child(NAME).getValue(String.class);
+                                            final String profile_image = dataSnapshot.child(PROFILE_IMAGE).child(PROFILE_IMAGE_URL).getValue(String.class);
+//                                          setting ad user name
+                                            if (!TextUtils.isEmpty(user_name)){
+                                                name_tv.setText(user_name);
+                                            }Log.w("raky", "image url: "+profile_image);
+//                                            setting ad profile image
+                                            if (!TextUtils.isEmpty(profile_image)){
+                                                Picasso.with(youtubeVideoAd.this)
+                                                        .load(profile_image)
+                                                        .placeholder(R.drawable.ic_profile_image_placeholder)
+                                                        .error(R.drawable.ic_warning)
+                                                        .into(profileImage_civ);
+                                            }
+                                            else {
+                                                Picasso.with(youtubeVideoAd.this)
+                                                        .load(R.drawable.ic_profile_image_placeholder)
+                                                        .into(profileImage_civ);
+                                            }
+
+                                        } //onData change ends
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+                        }//  ad user profile if
+
+                    }//onDataChange ends
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }); //databaseReference ends
+    }
+//   getting and setting name and profile pic
+
+
 
     //getResultFromApi
     private void getResultsFromApi() {
@@ -339,6 +441,10 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                 REQUEST_GOOGLE_PLAY_SERVICES);
         dialog.show();
     }
+
+
+
+
     //    show error if google play services not available
 
 
@@ -441,40 +547,7 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
 
     } // set image ends
 
-    //    setting profile data
-    private void setProfileData() {
-        SharedPreferences sharedpreferences = getSharedPreferences(PROFILE_DETAIL_NAME, MODE_PRIVATE);
-        name_tx = sharedpreferences.getString("name","");
-//        setting values
-        name_tv.setText(name_tx);
-        // zapNumber_tv.setText(phone_tx);
 
-        databaseReference.child("ads").child("youtubeAds").child("-L79O4JQke2IR4SadROI")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        getting values
-                        name_tx = dataSnapshot.child("profile_details").child("name").getValue(String.class);
-//                        setting values
-                        name_tv.setText(name_tx);
-//                        storing values in shared preferences
-                        try {
-                            SharedPreferences sharedpreferences = getSharedPreferences(PROFILE_DETAIL_NAME, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedpreferences.edit();
-                            editor.putString("name", name_tx);
-                            editor.apply();
-                        }
-                        catch (NullPointerException e){
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-        }//setting profile data
 
 
 //    ends
