@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     tools:context="enhabyto.com.viewzapps.youtubeVideoAd">
 
@@ -53,6 +53,18 @@
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:elevation="@dimen/elevation_5dp"
             tools:targetApi="lollipop" />
+
+        <com.daimajia.numberprogressbar.NumberProgressBar
+            android:id="@+id/yva_videoProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_gravity="center"
+            custom:progress_unreached_color="@color/redWrong"
+            custom:progress_reached_color="@color/greenRight"
+            custom:progress_text_color="@color/black"
+            custom:progress_current="0"
+            />
 
     </LinearLayout>
 

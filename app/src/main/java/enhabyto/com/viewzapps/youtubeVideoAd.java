@@ -10,6 +10,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -19,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.youtube.player.YouTubeBaseActivity;
@@ -30,6 +33,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.LowLevelHttpRequest;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
@@ -75,6 +79,7 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
     private static final String[] SCOPES = { YouTubeScopes.YOUTUBE_READONLY, YouTubeScopes.YOUTUBE_FORCE_SSL, YouTubeScopes.YOUTUBE };
 
     private static final String APPLICATION_NAME = "viewZapps";
+    private static int FORTY_FIVE_000 = 45000;
 
     private TextView mOutputText, name_tv;
     String name_tx;
@@ -91,22 +96,31 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
     private static final String AD_URL = "adUrl";
     private static final String YOUTUBE_ADS = "youtubeAds";
     private static final String API_KEY = "AIzaSyCcE1PubW2vHl4slJGvxaPi1bStuFKUKlI";
+    NumberProgressBar videoProgress;
+
+    YouTubePlayer myYouTubePlayer = null;
 
     //    database reference
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+    int i = 0;
+    boolean check = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_youtube_video_ad);
 
-
-
 //        image button
         playVideo_ib = findViewById(R.id.yva_playImageButton);
         pauseVideo_ib = findViewById(R.id.yva_pauseImageButton);
         initializeVideo_ib = findViewById(R.id.yva_initializeVideoImageButton);
+        initializeVideo_ib.setEnabled(false); // onclick disable untl listener is ready, otherwise null pointer exception
 //        image button
+
+//        Progress bar
+        videoProgress = findViewById(R.id.yva_videoProgress);
+//        progress bar
 
         youTubePlayerView = findViewById(R.id.yva_youTubePlayer);
 
@@ -155,7 +169,6 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                     public void onDataChange(final DataSnapshot dataSnapshot) {
 //                        playing video
 
-
                         final SharedPreferences sharedpreferences = getSharedPreferences(YOUTUBE_AD_ITEM_PREF, MODE_PRIVATE);
                         final  String ad_key = sharedpreferences.getString(AD_KEY, "");
 
@@ -164,23 +177,134 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                             @Override
 
                             public void onInitializationSuccess(YouTubePlayer.Provider provider, final YouTubePlayer youTubePlayer, boolean b) {
+                                myYouTubePlayer = youTubePlayer;
+
                                 final String ad_url = dataSnapshot.child(ad_key).child("watchId").getValue(String.class);
                                 youTubePlayer.setFullscreen(false);
                                 youTubePlayer.loadVideo(ad_url);
-                                youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL);
+                                youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS);
                                 youTubePlayer.setManageAudioFocus(true);
 
+//checking if user watched the video for 45 seconds and reward zap
+                              final CountDownTimer countDownTimer = new CountDownTimer(FORTY_FIVE_000, 500)
+                                {
+                                    public void onTick(long millisUntilFinished)
+                                    {
+                                        try{
+                                            i = youTubePlayer.getCurrentTimeMillis();
+                                            int value = Math.abs(i * 100 / FORTY_FIVE_000);
+                                            Log.w("raky", "value of i: "+i);
+                                            videoProgress.setProgress(value);
+                                            if (i  >= 45000) {
+                                                videoProgress.setProgress(100);
+                                                cancel();
+                                            }
+                                        }
+                                        catch (Exception e){
+                                            cancel();
+                                        }
+
+                                    }
+
+                                    public void onFinish()
+                                    {
+                                        Log.w("raky", "finished!");
+                                        if (i < 45000){
+                                            start();
+                                        }
+                                    }
+                                };
+//checking if user watched the video for 45 seconds and reward zap ENDS
+
+//                                Player State changed
+                                youTubePlayer.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
+                                    @Override
+                                    public void onLoading() {
+
+                                        Log.w("raky", "onLoading");
+                                    }
+
+                                    @Override
+                                    public void onLoaded(String s) {
+                                        Log.w("raky", "onLoaded "+s);
+                                    }
+
+                                    @Override
+                                    public void onAdStarted() {
+                                        Log.w("raky", "adStarted");
+
+                                    }
+
+                                    @Override
+                                    public void onVideoStarted() {
+                                        Log.w("raky", "videoStarted");
+                                        countDownTimer.start();
+                                    }
+
+                                    @Override
+                                    public void onVideoEnded() {
+                                        Log.w("raky", "videoEndede");
+                                    }
+
+                                    @Override
+                                    public void onError(YouTubePlayer.ErrorReason errorReason) {
+                                        Log.w("raky", "error"+ errorReason);
+                                    }
+                                });
+
+//                                Player State changed ends
+
+//                                playback event listener
+                                youTubePlayer.setPlaybackEventListener(new YouTubePlayer.PlaybackEventListener() {
+
+                                    @Override
+                                    public void onPlaying() {
+                                        Log.w("raky", "isPlaying");
+
+                                    }
+                                    @Override
+                                    public void onPaused() {
+                                        // i = youTubePlayer.getCurrentTimeMillis();
+                                        Log.w("raky", "paused");
+                                    }
+
+                                    @Override
+                                    public void onStopped() {
+                                        Log.w("raky", "stopped");
+                                    }
+
+                                    @Override
+                                    public void onBuffering(boolean b) {
+                                        Log.w("raky", "buffering");
+                                    }
+
+                                    @Override
+                                    public void onSeekTo(int i) {
+
+                                    }
+
+                                });
+
+
+// pause video
                                 pauseVideo_ib.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         youTubePlayer.pause();
                                     }
                                 });
+// pause video
 
 
-                                if (youTubePlayer.isPlaying()){
-                                    Log.w("raky", "yes playing");
-                                }
+//                                play video
+                                playVideo_ib.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        youTubePlayer.play();
+                                    }
+                                });
+//                                play video
+
                             }
                             @Override
                             public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
@@ -203,10 +327,10 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
     public void onStart(){
         super.onStart();
 
-
         PlayVideoAfterInitialization();
         setImage();
         setDataOfAdPoster();
+        initializeVideo_ib.setEnabled(true); // onclick enabled once listener is ready, otherwise null pointer exception
 
     }
 
