@@ -75,6 +75,7 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
     private static final String USER_UID = "userUid";
     private static final String PROFILE_IMAGE = "profile_image";
     private static final String PROFILE_IMAGE_URL = "profile_image_url";
+    private static final String AD_TITLE = "ad_title";
     private static final String USER_ACCOUNT_EMAIL = "UserAccountEmail";
     private static final String[] SCOPES = { YouTubeScopes.YOUTUBE_READONLY, YouTubeScopes.YOUTUBE_FORCE_SSL, YouTubeScopes.YOUTUBE };
 
@@ -98,7 +99,11 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
     private static final String API_KEY = "AIzaSyCcE1PubW2vHl4slJGvxaPi1bStuFKUKlI";
     NumberProgressBar videoProgress;
 
+    TextView adTitle_tv;
+
     YouTubePlayer myYouTubePlayer = null;
+
+    SharedPreferences sharedpreferences;
 
     //    database reference
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -110,6 +115,13 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_youtube_video_ad);
+
+        sharedpreferences = getSharedPreferences(YOUTUBE_AD_ITEM_PREF, MODE_PRIVATE);
+
+
+//        Text view
+        adTitle_tv = findViewById(R.id.yva_adTitleTextView);
+//        text view
 
 //        image button
         playVideo_ib = findViewById(R.id.yva_playImageButton);
@@ -169,7 +181,6 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                     public void onDataChange(final DataSnapshot dataSnapshot) {
 //                        playing video
 
-                        final SharedPreferences sharedpreferences = getSharedPreferences(YOUTUBE_AD_ITEM_PREF, MODE_PRIVATE);
                         final  String ad_key = sharedpreferences.getString(AD_KEY, "");
 
 
@@ -184,6 +195,7 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                                 youTubePlayer.loadVideo(ad_url);
                                 youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS);
                                 youTubePlayer.setManageAudioFocus(true);
+                                youTubePlayer.addFullscreenControlFlag(0);
 
 //checking if user watched the video for 45 seconds and reward zap
                               final CountDownTimer countDownTimer = new CountDownTimer(FORTY_FIVE_000, 500)
@@ -198,6 +210,7 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                                             if (i  >= 45000) {
                                                 videoProgress.setProgress(100);
                                                 cancel();
+                                                youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
                                             }
                                         }
                                         catch (Exception e){
@@ -329,10 +342,19 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
 
         PlayVideoAfterInitialization();
         setImage();
+        adDetails();
         setDataOfAdPoster();
         initializeVideo_ib.setEnabled(true); // onclick enabled once listener is ready, otherwise null pointer exception
 
     }
+
+//    ad details
+    private void adDetails() {
+
+        final String ad_title = sharedpreferences.getString(AD_TITLE, "");
+        adTitle_tv.setText(ad_title);
+    }
+//ad details
 
     //    onclick
     @Override
@@ -357,7 +379,6 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                     @Override
                     public void onDataChange(final DataSnapshot dataSnapshot) {
 
-                        final SharedPreferences sharedpreferences = getSharedPreferences(YOUTUBE_AD_ITEM_PREF, MODE_PRIVATE);
                         final  String ad_key = sharedpreferences.getString(AD_KEY, "");
 
                         final String user_uid = dataSnapshot.child(ad_key).child(USER_UID).getValue(String.class);

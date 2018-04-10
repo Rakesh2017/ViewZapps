@@ -6,8 +6,19 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     tools:context="enhabyto.com.viewzapps.youtubeVideoAd">
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50sp"
+        android:background="#a40404"
+        android:visibility="invisible"
+        android:id="@+id/yva_verticalDivider"
+        />
 
     <com.google.android.youtube.player.YouTubePlayerView
         android:id="@+id/yva_youTubePlayer"
@@ -33,7 +44,8 @@
             android:layout_height="@dimen/youtubePlay"
             android:background="@drawable/ic_initialize_video"
             android:elevation="@dimen/elevation_5dp"
-            tools:targetApi="lollipop" />
+            tools:targetApi="lollipop"
+            tools:ignore="ContentDescription" />
 
 
         <ImageButton
@@ -43,7 +55,9 @@
             android:background="@drawable/ic_play_button"
             android:elevation="@dimen/elevation_5dp"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
-            tools:targetApi="lollipop" />
+            tools:targetApi="lollipop"
+            tools:ignore="ContentDescription"
+            />
 
         <ImageButton
             android:id="@+id/yva_pauseImageButton"
@@ -52,7 +66,9 @@
             android:background="@drawable/ic_pause"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:elevation="@dimen/elevation_5dp"
-            tools:targetApi="lollipop" />
+            tools:targetApi="lollipop"
+            tools:ignore="ContentDescription"
+            />
 
         <com.daimajia.numberprogressbar.NumberProgressBar
             android:id="@+id/yva_videoProgress"
@@ -69,12 +85,91 @@
     </LinearLayout>
 
 
+    <!--ad title-->
+    <TextView
+        android:id="@+id/yva_adTitleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/yva_linearLayoutControlButton"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:hint="@string/hintPlaceholderL"
+        style="@style/TextStyleMedium"
+        android:textStyle="bold"
+        />
+    <!--ad title-->
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/padding8"
+        android:layout_below="@+id/yva_adTitleTextView"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:id="@+id/yva_linearLayout1"
+        >
+
+        <!--like-->
+        <TextView
+            android:id="@+id/yva_likeTextView"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/like"
+            style="@style/TextStyleSmall"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:drawableEnd="@drawable/ic_like"
+            android:background="@drawable/button_drawable_golden"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            />
+        <!--like-->
+
+        <!--subscribe-->
+        <TextView
+            android:id="@+id/yva_subscribeTextView"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/subscribeChannel"
+            style="@style/TextStyleSmall"
+            android:background="@drawable/button_drawable_blue"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:drawableEnd="@drawable/ic_subscribe"
+            android:drawablePadding="@dimen/padding8"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            />
+    <!--subscribe-->
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/yva_linearLayout1"
+        android:background="@color/gray90"
+        android:id="@+id/yva_hLine1"
+        android:layout_marginTop="@dimen/padding8"
+        />
+
 
     <!--profile image-->
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/yva_profileImage"
-        android:layout_below="@+id/yva_linearLayoutControlButton"
-        android:layout_marginTop="@dimen/cardViewPadding20"
+        android:layout_below="@+id/yva_hLine1"
+        android:layout_marginTop="@dimen/padding8"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -101,6 +196,16 @@
         tools:ignore="RelativeOverlap,RtlSymmetry" />
     <!--user name-->
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/yva_profileImage"
+        android:background="@color/gray90"
+        android:id="@+id/yva_hLine2"
+        android:layout_marginTop="@dimen/padding8"
+        />
 
 
     <Button

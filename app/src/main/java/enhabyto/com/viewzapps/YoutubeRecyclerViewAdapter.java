@@ -39,6 +39,8 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
 
     private static final String YOUTUBE_AD_ITEM_PREF = "youtube_ad_item_pref";
     private static final String AD_KEY = "ad_key";
+    private static final String AD_TITLE = "ad_title";
+    private static final String AD_WATCH_ID = "watch_id";
 
     YoutubeRecyclerViewAdapter(Context context, List<RecyclerViewInfo> TempList) {
 
@@ -159,9 +161,13 @@ public class YoutubeRecyclerViewAdapter extends RecyclerView.Adapter<YoutubeRecy
             @Override
             public void onClick(View v) {
                 String ad_key = UploadInfo.getYoutubeAdKey();
+                String ad_tile = UploadInfo.getAdTitle();
+                String watch_id = UploadInfo.getWatchId();
                 final SharedPreferences sharedpreferences = context.getSharedPreferences(YOUTUBE_AD_ITEM_PREF, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.putString(AD_KEY, ad_key);
+                editor.putString(AD_TITLE, ad_tile);
+                editor.putString(AD_WATCH_ID, watch_id);
                 editor.apply();
 
                 context.startActivity(new Intent(context, youtubeVideoAd.class));

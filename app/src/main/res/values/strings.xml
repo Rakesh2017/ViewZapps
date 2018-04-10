@@ -42,6 +42,9 @@
     <string name="instagram"><b>Instagram</b></string>
     <string name="androidApps"><b>Android Apps</b></string>
     <string name="appleApps"><b>Apple Apps</b></string>
+    <string name="view"><b>View</b></string>
+    <string name="like"><b>Like</b></string>
+    <string name="subscribeChannel"><b>Subscribe</b></string>
     <string name="movieTrailers"><b>Movie Trailers</b></string>
 
 
