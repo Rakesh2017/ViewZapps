@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.daimajia.numberprogressbar.NumberProgressBar;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.youtube.player.YouTubeBaseActivity;
@@ -37,7 +39,12 @@ import com.google.api.client.http.LowLevelHttpRequest;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeScopes;
+import com.google.api.services.youtube.model.ResourceId;
+import com.google.api.services.youtube.model.Subscription;
+import com.google.api.services.youtube.model.SubscriptionListResponse;
+import com.google.api.services.youtube.model.SubscriptionSnippet;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -48,7 +55,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -454,7 +463,7 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                 getResultsFromApi();
             } else {
                 // Start a dialog from which the user can choose an account
-                accountName = "rk6039387@gmail.com";
+                accountName = "rakeshsince1994@gmail.com";
                 mCredential.setSelectedAccountName(accountName);
 
                     SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
@@ -587,9 +596,6 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
         dialog.show();
     }
 
-
-
-
     //    show error if google play services not available
 
 
@@ -597,7 +603,6 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
     private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
         private com.google.api.services.youtube.YouTube mService = null;
         private Exception mLastError = null;
-
         MakeRequestTask(GoogleAccountCredential credential) {
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
@@ -610,7 +615,7 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
         @Override
         protected List<String> doInBackground(Void... params) {
 
-            try {
+            /*try {
                   mService.videos().rate("zX7I_Rw8Q0I", "like").execute();
                   Log.w("raky", "this is being hit, liked by "+mCredential.getSelectedAccountName());
                   return null;
@@ -619,7 +624,100 @@ public class youtubeVideoAd extends YouTubeBaseActivity implements EasyPermissio
                 cancel(true);
                 Log.w("raky", "error: "+e.getLocalizedMessage());
                 return null;
+            }*/
+
+            try {
+                String channelId = "UCW2Ji4Ok_oBgsMpfcjKxiCQ";
+                Log.w("raky", "You chose " + channelId + " to subscribe.");
+
+                // Create a resourceId that identifies the channel ID.
+                ResourceId resourceId = new ResourceId();
+                resourceId.setChannelId(channelId);
+                resourceId.setKind("youtube#channel");
+
+                // Create a snippet that contains the resourceId.
+                SubscriptionSnippet snippet = new SubscriptionSnippet();
+                snippet.setResourceId(resourceId);
+
+                // Create a request to add the subscription and send the request.
+                // The request identifies subscription metadata to insert as well
+                // as information that the API server should return in its response.
+                Subscription subscription = new Subscription();
+                subscription.setSnippet(snippet);
+
+                YouTube.Subscriptions.Insert subscriptionInsert = mService.subscriptions().insert("snippet,contentDetails", subscription);
+                Subscription returnedSubscription = subscriptionInsert.execute();
+
+
+                // Print information from the API response.
+                Log.w("raky", "\n================== Returned Subscription ==================\n");
+                Log.w("raky", "  - Id: " + returnedSubscription.getId());
+                Log.w("raky", "  - Title: " + returnedSubscription.getSnippet().getTitle());
+                Log.w("raky", "  - sdsa: " + returnedSubscription.getSnippet());
+                Log.w("raky", "  - user: " + mCredential.getSelectedAccountName());
+
+                return null;
             }
+            catch (Exception e){
+                mLastError = e;
+                cancel(true);
+                Log.w("raky", "sub error: "+e.getLocalizedMessage());
+                return null;
+            }
+
+
+
+
+         /*   try {
+                HashMap<String, String> parameters = new HashMap<>();
+                parameters.put("part", "subscriberSnippet");
+                parameters.put("channelId", "UCW2Ji4Ok_oBgsMpfcjKxiCQ");
+                parameters.put("mine", "true");
+
+                YouTube.Subscriptions.List subscriptionsListByChannelIdRequest = mService.subscriptions().list(parameters.get("part"));
+                if (parameters.containsKey("channelId") && parameters.get("channelId") != "") {
+                    subscriptionsListByChannelIdRequest.setChannelId(parameters.get("channelId"));
+                }
+
+                SubscriptionListResponse response = subscriptionsListByChannelIdRequest.execute();
+              //  System.out.println(response);
+                Log.w("raky", "subscriber name: "+mCredential.getSelectedAccountName());
+                Log.w("raky", "subscriber list: "+response);
+                return null;
+            } catch (Exception e) {
+                mLastError = e;
+                cancel(true);
+                Log.w("raky", "sub error: "+e.getLocalizedMessage());
+                return null;
+            }
+
+            try {
+
+                HashMap<String, String> parameters = new HashMap<>();
+                parameters.put("part", "snippet");
+                Subscription subscription = new Subscription();
+                SubscriptionSnippet subscriptionSnippet = new SubscriptionSnippet();
+                ResourceId resourceId = new ResourceId();
+                resourceId.set("channelId", "UCW2Ji4Ok_oBgsMpfcjKxiCQ");
+                resourceId.set("kind", "youtube#channel");
+                subscriptionSnippet.setResourceId(resourceId);
+                subscription.setSnippet(subscriptionSnippet);
+
+
+                YouTube.Subscriptions.Insert subscriptionsInsertRequest = mService.subscriptions().insert(parameters.get("part"), subscription);
+
+                Subscription response = subscriptionsInsertRequest.execute();
+                Log.w("raky", "response: "+response);
+                return null;
+
+            } catch (Exception e) {
+                mLastError = e;
+                cancel(true);
+                Log.w("raky", "error: "+e.getCause());
+                return null;
+            }*/
+
+
         }
 
         @Override
